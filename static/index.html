@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AulaIA — Tutor Académico Inteligente</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            },
+            dark: {
+              900: '#090d16',
+              800: '#0f172a',
+              700: '#1e293b',
+              600: '#334155'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Marked.js para Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Mermaid.js para grafos y autómatas -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      securityLevel: 'loose',
+      themeVariables: {
+        darkMode: true,
+        background: '#0f172a',
+        primaryColor: '#0284c7',
+        primaryTextColor: '#f8fafc',
+        lineColor: '#38bdf8'
+      }
+    });
+  </script>
+
+  <style>
+    /* Scrollbar estilizada */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #090d16; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* Estilos de Markdown generado */
+    .prose-custom p { margin-bottom: 0.85rem; line-height: 1.65; color: #e2e8f0; }
+    .prose-custom ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 0.85rem; }
+    .prose-custom ol { list-style-type: decimal; margin-left: 1.25rem; margin-bottom: 0.85rem; }
+    .prose-custom li { margin-bottom: 0.3rem; }
+    .prose-custom h1, .prose-custom h2, .prose-custom h3 { font-weight: 700; color: #f8fafc; margin-top: 1.2rem; margin-bottom: 0.6rem; }
+    .prose-custom pre { background: #090d16; border: 1px solid #1e293b; border-radius: 0.5rem; padding: 0.9rem; overflow-x: auto; margin-bottom: 1rem; }
+    .prose-custom code { font-family: monospace; font-size: 0.9em; background: #1e293b; padding: 0.15rem 0.35rem; border-radius: 0.25rem; color: #38bdf8; }
+    .prose-custom pre code { background: transparent; padding: 0; color: #e2e8f0; }
+    .prose-custom blockquote { border-left: 3px solid #0284c7; padding-left: 0.85rem; color: #94a3b8; margin-bottom: 0.85rem; font-style: italic; }
+    .prose-custom table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    .prose-custom th, .prose-custom td { border: 1px solid #1e293b; padding: 0.5rem 0.75rem; text-align: left; }
+    .prose-custom th { background: #1e293b; color: #f8fafc; }
+  </style>
+</head>
+<body class="bg-dark-900 text-slate-100 flex flex-col h-screen overflow-hidden font-sans antialiased">
+
+  <!-- ======================================================== -->
+  <!-- HEADER / BARRA DE NAVEGACIÓN SUPERIOR                    -->
+  <!-- ======================================================== -->
+  <header class="border-b border-dark-700 bg-dark-800/80 backdrop-blur px-6 py-3 flex items-center justify-between z-20">
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-sky-400 flex items-center justify-center shadow-lg shadow-sky-500/20">
+          <span class="text-white font-bold text-lg">A</span>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-sky-400 bg-clip-text text-transparent">AulaIA</h1>
+          <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Tutor RAG Académico</p>
+        </div>
+      </div>
+
+      <!-- Badge de Salud del Backend -->
+      <div id="statusBadge" class="hidden sm:flex items-center space-x-2 px-2.5 py-1 rounded-full bg-dark-700/60 border border-dark-600 text-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="statusText" class="text-slate-300 font-medium">Verificando...</span>
+      </div>
+    </div>
+
+    <!-- Controles rápidos del Header -->
+    <div class="flex items-center space-x-3">
+      <!-- Selector de Nivel Pedagógico -->
+      <div class="flex items-center bg-dark-700/80 p-0.5 rounded-lg border border-dark-600 text-xs">
+        <button onclick="setNivel('formal')" id="btnFormal" class="px-2.5 py-1.5 rounded-md transition font-medium bg-brand-600 text-white shadow">📚 Formal</button>
+        <button onclick="setNivel('intuitivo')" id="btnIntuitivo" class="px-2.5 py-1.5 rounded-md transition font-medium text-slate-400 hover:text-white">💡 Intuitivo</button>
+        <button onclick="setNivel('codigo')" id="btnCodigo" class="px-2.5 py-1.5 rounded-md transition font-medium text-slate-400 hover:text-white">💻 Código</button>
+      </div>
+
+      <!-- Filtro por Tema / Clase -->
+      <select id="topicFilter" class="hidden md:block bg-dark-700 border border-dark-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500 max-w-[180px] truncate">
+        <option value="">Todas las Clases</option>
+      </select>
+
+      <!-- Botón para abrir el Modal de Quiz -->
+      <button onclick="openQuizModal()" class="flex items-center space-x-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md shadow-indigo-600/20 transition">
+        <span>📝</span>
+        <span>Simulador Quiz</span>
+      </button>
+
+      <!-- Botón Reiniciar Chat -->
+      <button onclick="clearChat()" title="Limpiar conversación" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-dark-700 border border-dark-600 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- CONTENEDOR PRINCIPAL DE MENSAJES (CHAT STREAMING)        -->
+  <!-- ======================================================== -->
+  <main id="chatContainer" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-4xl w-full mx-auto">
+    <!-- Pantalla de bienvenida (se oculta al enviar el primer mensaje) -->
+    <div id="welcomeView" class="py-8 text-center space-y-6 my-auto">
+      <div class="inline-flex p-3 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-400">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-white tracking-tight">¿En qué puedo ayudarte hoy?</h2>
+        <p class="text-sm text-slate-400 mt-1 max-w-md mx-auto">Tutor con Búsqueda Híbrida (FAISS + BM25). Cada respuesta incluye citas exactas y diagramas de estados.</p>
+      </div>
+
+      <!-- Preguntas sugeridas de 1 clic -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto pt-2 text-left">
+        <button onclick="sendQuickPrompt(this.innerText)" class="p-3.5 rounded-xl bg-dark-800 border border-dark-700 hover:border-brand-500/60 hover:bg-dark-700/60 transition text-xs text-slate-300 hover:text-white group">
+          <span class="font-semibold text-brand-400 block mb-1">Teoría de Autómatas</span>
+          ¿Cuáles son los componentes de la 5-tupla formal de un autómata finito?
+        </button>
+        <button onclick="sendQuickPrompt(this.innerText)" class="p-3.5 rounded-xl bg-dark-800 border border-dark-700 hover:border-brand-500/60 hover:bg-dark-700/60 transition text-xs text-slate-300 hover:text-white group">
+          <span class="font-semibold text-brand-400 block mb-1">Conversión AFND a AFD</span>
+          ¿Cómo funciona el método de subconjuntos para transformar un AFND en AFD?
+        </button>
+        <button onclick="sendQuickPrompt(this.innerText)" class="p-3.5 rounded-xl bg-dark-800 border border-dark-700 hover:border-brand-500/60 hover:bg-dark-700/60 transition text-xs text-slate-300 hover:text-white group">
+          <span class="font-semibold text-brand-400 block mb-1">Autómatas a Pila</span>
+          ¿Cómo opera la memoria de pila LIFO en un autómata a pila para a^n b^n?
+        </button>
+        <button onclick="sendQuickPrompt(this.innerText)" class="p-3.5 rounded-xl bg-dark-800 border border-dark-700 hover:border-brand-500/60 hover:bg-dark-700/60 transition text-xs text-slate-300 hover:text-white group">
+          <span class="font-semibold text-brand-400 block mb-1">Máquinas de Turing</span>
+          ¿Cómo funciona la cinta infinita y el cabezal de una Máquina de Turing?
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de mensajes dinámicos -->
+    <div id="messagesList" class="space-y-6"></div>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE ENTRADA INFERIOR (INPUT EXPANDIBLE)             -->
+  <!-- ======================================================== -->
+  <footer class="border-t border-dark-700 bg-dark-800/90 backdrop-blur p-4">
+    <div class="max-w-4xl mx-auto">
+      <form id="chatForm" onsubmit="handleChatSubmit(event)" class="relative flex items-center">
+        <textarea
+          id="userInput"
+          rows="1"
+          placeholder="Formula una duda sobre autómatas, máquinas de Turing o ejercicios..."
+          class="w-full bg-dark-900 border border-dark-600 focus:border-brand-500 rounded-xl px-4 py-3 pr-14 text-sm text-slate-100 placeholder-slate-500 resize-none focus:outline-none focus:ring-1 focus:ring-brand-500/50 shadow-inner"
+          onkeydown="handleKeyDown(event)"
+        ></textarea>
+        
+        <button
+          type="submit"
+          id="sendBtn"
+          class="absolute right-2 p-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white disabled:opacity-40 disabled:cursor-not-allowed transition shadow"
+        >
+          <svg id="sendIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <div id="spinIcon" class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        </button>
+      </form>
+      <div class="flex items-center justify-between text-[11px] text-slate-500 mt-2 px-1">
+        <span><b>Enter</b> para enviar • <b>Shift + Enter</b> para nueva línea</span>
+        <span>Respaldado por las diapositivas oficiales de clase</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: SIMULADOR DE QUIZ INTERACTIVO                     -->
+  <!-- ======================================================== -->
+  <div id="quizModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-dark-800 border border-dark-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl">📝</span>
+          <h3 class="text-lg font-bold text-white">Simulador de Examen y Autoevaluación</h3>
+        </div>
+        <button onclick="closeQuizModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Configuración del Quiz -->
+      <div id="quizSetup" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Selecciona el tema de la evaluación:</label>
+          <select id="quizTopic" class="w-full bg-dark-900 border border-dark-600 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+            <option value="Autómatas Finitos No Deterministas (AFND)">Autómatas Finitos No Deterministas (AFND)</option>
+            <option value="Autómatas Finitos con Transiciones Épsilon">Autómatas Finitos con Transiciones Épsilon</option>
+            <option value="Autómatas a Pila">Autómatas a Pila (PDA)</option>
+            <option value="Máquinas de Turing">Máquinas de Turing</option>
+            <option value="Lenguajes y Jerarquía de Chomsky">Lenguajes y Jerarquía de Chomsky</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Número de preguntas:</label>
+          <input type="number" id="quizCount" value="3" min="1" max="5" class="w-24 bg-dark-900 border border-dark-600 rounded-lg p-2 text-sm text-slate-200">
+        </div>
+
+        <button onclick="startQuiz()" id="startQuizBtn" class="w-full py-2.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm transition shadow-lg shadow-sky-600/20">
+          🚀 Iniciar Evaluación
+        </button>
+      </div>
+
+      <!-- Contenedor dinámico de preguntas -->
+      <div id="quizQuestionsContainer" class="hidden overflow-y-auto space-y-5 flex-1 pr-1"></div>
+
+      <!-- Footer del Quiz -->
+      <div id="quizFooter" class="hidden border-t border-dark-700 pt-3 flex justify-between items-center text-xs">
+        <span id="quizScoreText" class="font-bold text-slate-200"></span>
+        <button onclick="closeQuizModal()" class="px-4 py-1.5 rounded-lg bg-dark-700 hover:bg-dark-600 text-white transition">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- CLIENTE JAVASCRIPT: SSE, MARKED, MERMAID & QUIZ         -->
+  <!-- ======================================================== -->
+  <script>
+    let currentNivel = 'formal';
+    let isStreaming = false;
+
+    // 1. Inicialización y Healthcheck
+    window.addEventListener('DOMContentLoaded', async () => {
+      checkBackendHealth();
+      loadTopics();
+    });
+
+    async function checkBackendHealth() {
+      const badge = document.getElementById('statusBadge');
+      const text = document.getElementById('statusText');
+      try {
+        const res = await fetch('/api/health');
+        const data = await res.json();
+        if (data.status === 'healthy') {
+          badge.classList.remove('hidden');
+          text.innerText = `${data.total_chunks} slides indexadas (Híbrido)`;
+        }
+      } catch (e) {
+        badge.classList.remove('hidden');
+        text.innerText = 'Backend Desconectado';
+        badge.querySelector('span').classList.replace('bg-emerald-400', 'bg-rose-500');
+      }
+    }
+
+    async function loadTopics() {
+      try {
+        const res = await fetch('/api/topics');
+        const topics = await res.json();
+        const select = document.getElementById('topicFilter');
+        topics.forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t;
+          opt.innerText = t.replace('.pptx', '').replace('.pdf', '');
+          select.appendChild(opt);
+        });
+      } catch (e) {}
+    }
+
+    function setNivel(nivel) {
+      currentNivel = nivel;
+      ['formal', 'intuitivo', 'codigo'].forEach(n => {
+        const btn = document.getElementById('btn' + n.charAt(0).toUpperCase() + n.slice(1));
+        if (n === nivel) {
+          btn.className = "px-2.5 py-1.5 rounded-md transition font-medium bg-brand-600 text-white shadow";
+        } else {
+          btn.className = "px-2.5 py-1.5 rounded-md transition font-medium text-slate-400 hover:text-white";
+        }
+      });
+    }
+
+    function sendQuickPrompt(text) {
+      document.getElementById('userInput').value = text;
+      handleChatSubmit(new Event('submit'));
+    }
+
+    function handleKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleChatSubmit(e);
+      }
+    }
+
+    function clearChat() {
+      document.getElementById('messagesList').innerHTML = '';
+      document.getElementById('welcomeView').classList.remove('hidden');
+    }
+
+    // ========================================================
+    // ENVÍO DE MENSAJE Y PARSER SERVER-SENT EVENTS (SSE)
+    // ========================================================
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      if (isStreaming) return;
+
+      const input = document.getElementById('userInput');
+      const query = input.value.trim();
+      if (!query) return;
+
+      input.value = '';
+      document.getElementById('welcomeView').classList.add('hidden');
+
+      // 1. Renderizar mensaje del usuario
+      appendUserMessage(query);
+
+      // 2. Preparar placeholder de AulaIA
+      const assistantMsg = createAssistantMessagePlaceholder();
+      const textContainer = assistantMsg.querySelector('.bot-text');
+      const sourcesContainer = assistantMsg.querySelector('.bot-sources');
+
+      setStreamingState(true);
+
+      const topicFilter = document.getElementById('topicFilter').value || null;
+
+      try {
+        const response = await fetch('/api/chat/stream', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pregunta: query,
+            nivel: currentNivel,
+            tema_filtro: topicFilter
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error en el servidor: ${response.statusText}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let fullAnswer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const events = buffer.split('\n\n');
+          buffer = events.pop(); // Mantener fragmento incompleto
+
+          for (const ev of events) {
+            if (!ev.trim()) continue;
+            let eventType = 'message';
+            let eventData = '';
+
+            ev.split('\n').forEach(line => {
+              if (line.startsWith('event:')) eventType = line.replace('event:', '').trim();
+              if (line.startsWith('data:')) eventData = line.replace('data:', '').trim();
+            });
+
+            if (eventData) {
+              const parsed = JSON.parse(eventData);
+
+              // Evento 1: Fuentes y Citas
+              if (eventType === 'sources') {
+                renderSourcesList(sourcesContainer, parsed);
+              }
+              // Evento 2: Token de texto
+              else if (eventType === 'token') {
+                fullAnswer += parsed.text;
+                textContainer.innerHTML = marked.parse(fullAnswer);
+                scrollToBottom();
+              }
+              // Evento 3: Finalización
+              else if (eventType === 'done') {
+                // Post-procesar diagramas Mermaid si los hay
+                renderMermaidBlocks(textContainer);
+              }
+              // Evento 4: Error controlado
+              else if (eventType === 'error') {
+                textContainer.innerHTML += `<div class="p-3 my-2 rounded bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">${parsed.error}</div>`;
+              }
+            }
+          }
+        }
+
+      } catch (err) {
+        textContainer.innerHTML = `<div class="text-rose-400 text-sm">❌ Error al conectar con el asistente: ${err.message}</div>`;
+      } finally {
+        setStreamingState(false);
+        scrollToBottom();
+      }
+    }
+
+    // ========================================================
+    // HELPERS DEL DOM Y RENDERIZADO
+    // ========================================================
+    function appendUserMessage(text) {
+      const container = document.getElementById('messagesList');
+      const div = document.createElement('div');
+      div.className = "flex justify-end";
+      div.innerHTML = `
+        <div class="max-w-[85%] bg-dark-700/80 border border-dark-600 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-slate-100 shadow">
+          ${text.replace(/\n/g, '<br>')}
+        </div>
+      `;
+      container.appendChild(div);
+      scrollToBottom();
+    }
+
+    function createAssistantMessagePlaceholder() {
+      const container = document.getElementById('messagesList');
+      const div = document.createElement('div');
+      div.className = "flex space-x-3 items-start";
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-sky-400 flex-shrink-0 flex items-center justify-center shadow">
+          <span class="text-white font-bold text-xs">AI</span>
+        </div>
+        <div class="flex-1 bg-dark-800 border border-dark-700 rounded-2xl rounded-tl-sm p-4 text-sm text-slate-200 shadow-lg space-y-3">
+          <div class="bot-text prose-custom">
+            <span class="inline-block w-2 h-4 bg-brand-400 animate-pulse"></span>
+          </div>
+          <div class="bot-sources hidden pt-2 border-t border-dark-700/60"></div>
+        </div>
+      `;
+      container.appendChild(div);
+      return div;
+    }
+
+    function renderSourcesList(container, sources) {
+      if (!sources || sources.length === 0) return;
+      container.classList.remove('hidden');
+      container.innerHTML = `
+        <details class="group cursor-pointer">
+          <summary class="text-xs font-semibold text-slate-400 hover:text-brand-400 list-none flex items-center justify-between">
+            <span class="flex items-center space-x-1.5">
+              <span>🔍</span>
+              <span>Fuentes consultadas (${sources.length} diapositivas)</span>
+            </span>
+            <span class="text-[10px] bg-dark-700 px-2 py-0.5 rounded text-slate-300">Ver citas</span>
+          </summary>
+          <div class="grid grid-cols-1 gap-2 pt-3">
+            ${sources.map(s => `
+              <div class="p-2.5 rounded-lg bg-dark-900/60 border border-dark-700 text-xs">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-semibold text-brand-400 truncate max-w-[70%]">${s.archivo}</span>
+                  <span class="px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-400 text-[10px]">Slide ${s.slide}</span>
+                </div>
+                <p class="text-slate-400 text-[11px] line-clamp-2 italic">${s.extracto}</p>
+              </div>
+            `).join('')}
+          </div>
+        </details>
+      `;
+    }
+
+    async function renderMermaidBlocks(container) {
+      const codeBlocks = container.querySelectorAll('pre code');
+      for (const block of codeBlocks) {
+        if (block.innerText.startsWith('mermaid') || block.classList.contains('language-mermaid')) {
+          const rawMermaid = block.innerText.replace(/^mermaid\n?/, '').trim();
+          const mermaidDiv = document.createElement('pre');
+          mermaidDiv.className = 'mermaid text-center my-4 p-4 bg-dark-900 border border-dark-700 rounded-xl overflow-x-auto';
+          mermaidDiv.textContent = rawMermaid;
+          block.parentElement.replaceWith(mermaidDiv);
+        }
+      }
+      try {
+        await mermaid.run();
+      } catch (e) {
+        console.warn("Mermaid render note:", e);
+      }
+    }
+
+    function setStreamingState(streaming) {
+      isStreaming = streaming;
+      document.getElementById('sendIcon').classList.toggle('hidden', streaming);
+      document.getElementById('spinIcon').classList.toggle('hidden', !streaming);
+      document.getElementById('sendBtn').disabled = streaming;
+    }
+
+    function scrollToBottom() {
+      const main = document.getElementById('chatContainer');
+      main.scrollTo({ top: main.scrollHeight, behavior: 'smooth' });
+    }
+
+    // ========================================================
+    // LÓGICA DEL SIMULADOR DE QUIZ
+    // ========================================================
+    function openQuizModal() {
+      document.getElementById('quizModal').classList.remove('hidden');
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quizModal').classList.add('hidden');
+    }
+
+    async function startQuiz() {
+      const topic = document.getElementById('quizTopic').value;
+      const count = parseInt(document.getElementById('quizCount').value) || 3;
+      const btn = document.getElementById('startQuizBtn');
+      const setup = document.getElementById('quizSetup');
+      const questionsContainer = document.getElementById('quizQuestionsContainer');
+      const footer = document.getElementById('quizFooter');
+
+      btn.disabled = true;
+      btn.innerText = "⏳ Generando preguntas con Gemini...";
+
+      try {
+        const res = await fetch('/api/quiz/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tema: topic, num_preguntas: count })
+        });
+        const questions = await res.json();
+
+        if (!Array.isArray(questions) || questions.length === 0) {
+          throw new Error("No se recibieron preguntas del servidor.");
+        }
+
+        setup.classList.add('hidden');
+        questionsContainer.classList.remove('hidden');
+        footer.classList.remove('hidden');
+
+        let answeredCount = 0;
+        let correctCount = 0;
+
+        questionsContainer.innerHTML = questions.map((q, idx) => `
+          <div class="p-4 rounded-xl bg-dark-900/80 border border-dark-700 space-y-3" id="quizCard_${q.id}">
+            <div class="flex items-start justify-between">
+              <span class="text-xs font-bold text-brand-400">Pregunta ${idx + 1} de ${questions.length}</span>
+              <span class="text-[10px] text-slate-500">${q.fuente}</span>
+            </div>
+            <p class="text-sm font-medium text-white">${q.pregunta}</p>
+            <div class="space-y-2">
+              ${q.opciones.map(opt => `
+                <button
+                  onclick="selectQuizOption(${q.id}, '${opt.charAt(0)}', '${q.respuesta_correcta}', '${escapeHtml(q.explicacion)}')"
+                  class="quiz-opt-btn w-full text-left p-2.5 rounded-lg bg-dark-800 border border-dark-700 hover:border-brand-500/50 text-xs text-slate-200 transition"
+                  data-qid="${q.id}"
+                >
+                  ${opt}
+                </button>
+              `).join('')}
+            </div>
+            <div id="feedback_${q.id}" class="hidden text-xs p-2.5 rounded-lg"></div>
+          </div>
+        `).join('');
+
+        window.currentQuizState = { total: questions.length, answered: 0, correct: 0 };
+        document.getElementById('quizScoreText').innerText = `Aciertos: 0 / ${questions.length}`;
+
+      } catch (err) {
+        alert("Falla al generar quiz: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "🚀 Iniciar Evaluación";
+      }
+    }
+
+    function selectQuizOption(qid, chosenLetter, correctLetter, explanation) {
+      const card = document.getElementById(`quizCard_${qid}`);
+      const buttons = card.querySelectorAll('.quiz-opt-btn');
+      const feedback = document.getElementById(`feedback_${qid}`);
+
+      // Deshabilitar todos los botones de esta pregunta
+      buttons.forEach(b => b.disabled = true);
+
+      const isCorrect = (chosenLetter.toUpperCase() === correctLetter.toUpperCase());
+      if (isCorrect) {
+        window.currentQuizState.correct++;
+        feedback.className = "text-xs p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 block";
+        feedback.innerHTML = `<b>✅ ¡Correcto!</b> ${explanation}`;
+      } else {
+        feedback.className = "text-xs p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 block";
+        feedback.innerHTML = `<b>❌ Incorrecto.</b> La respuesta correcta era <b>${correctLetter}</b>.<br><span class="text-slate-400">${explanation}</span>`;
+      }
+
+      window.currentQuizState.answered++;
+      document.getElementById('quizScoreText').innerText = `Aciertos: ${window.currentQuizState.correct} / ${window.currentQuizState.total}`;
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
+

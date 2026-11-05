@@ -1,0 +1,38 @@
+# Variables de entorno y secretos (¡NUNCA subir a GitHub!)
+.env
+.env.local
+*.env
+!.env.example
+
+# Bytecode y caches de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Caches y herramientas de testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
