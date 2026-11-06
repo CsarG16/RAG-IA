@@ -63,6 +63,7 @@ class ChatStreamRequest(BaseModel):
     pregunta: str = Field(..., description="Pregunta del estudiante")
     nivel: str = Field("formal", description="Nivel pedagógico: 'formal', 'intuitivo' o 'codigo'")
     tema_filtro: Optional[str] = Field(None, description="Filtro opcional por nombre de presentación")
+    historial: List[Dict[str, str]] = Field(default_factory=list, description="Historial de mensajes previos")
 
 
 class QuizRequest(BaseModel):
@@ -113,7 +114,7 @@ async def chat_stream(req: ChatStreamRequest):
             # 1. Recuperar fragmentos y abrir generador en streaming
             stream_gen, sources = rag_engine.ask_stream(
                 query=pregunta,
-                history=[],
+                history=req.historial,
                 level=req.nivel,
                 topic_filter=req.tema_filtro
             )
@@ -185,6 +186,13 @@ async def get_available_topics():
 # =======================================================
 # MONTAJE DE ARCHIVOS ESTÁTICOS Y RUTA RAÍZ
 # =======================================================
+@app.get("/favicon.ico", include_in_schema=False)
+async def serve_favicon():
+    fav_file = STATIC_DIR / "favicon.svg"
+    if fav_file.exists():
+        return FileResponse(fav_file, media_type="image/svg+xml")
+    return JSONResponse(status_code=404, content={"message": "Not found"})
+
 @app.get("/")
 async def serve_index():
     index_file = STATIC_DIR / "index.html"

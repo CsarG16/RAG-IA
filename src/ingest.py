@@ -42,6 +42,24 @@ def extract_table_as_markdown(table) -> str:
     return "\n" + "\n".join(lines) + "\n"
 
 
+def extract_from_shape(shape, elements_list: List[str]):
+    """Extrae texto y tablas de una forma, manejando recursivamente grupos (GroupShape)."""
+    if hasattr(shape, "shapes"):
+        for sub_shape in shape.shapes:
+            extract_from_shape(sub_shape, elements_list)
+        return
+
+    if shape.has_text_frame:
+        for paragraph in shape.text_frame.paragraphs:
+            text = paragraph.text.strip()
+            if text:
+                elements_list.append(text)
+    elif shape.has_table:
+        table_md = extract_table_as_markdown(shape.table)
+        if table_md.strip():
+            elements_list.append(f"\n[Tabla de Transición]:\n{table_md}\n")
+
+
 def extract_text_from_pptx(file_path: Path) -> List[Dict[str, Any]]:
     """Extrae texto, tablas estructuradas y notas diapositiva por diapositiva desde un PPTX."""
     try:
@@ -58,15 +76,7 @@ def extract_text_from_pptx(file_path: Path) -> List[Dict[str, Any]]:
     for idx, slide in enumerate(prs.slides, start=1):
         slide_elements = []
         for shape in slide.shapes:
-            if shape.has_text_frame:
-                for paragraph in shape.text_frame.paragraphs:
-                    text = paragraph.text.strip()
-                    if text:
-                        slide_elements.append(text)
-            elif shape.has_table:
-                table_md = extract_table_as_markdown(shape.table)
-                if table_md.strip():
-                    slide_elements.append(f"\n[Tabla de Transición]:\n{table_md}\n")
+            extract_from_shape(shape, slide_elements)
 
         # Extraer notas del orador si existen
         if slide.has_notes_slide and slide.notes_slide.notes_text_frame:
@@ -74,7 +84,14 @@ def extract_text_from_pptx(file_path: Path) -> List[Dict[str, Any]]:
             if notes and len(notes) > 5 and not notes.lower().startswith("diapositiva"):
                 slide_elements.append(f"\n[Notas de Cátedra]: {notes}")
 
-        slide_content = "\n".join(slide_elements).strip()
+        # Evitar duplicados idénticos consecutivos
+        dedup_elements = []
+        for elem in slide_elements:
+            elem_clean = elem.strip()
+            if elem_clean and (not dedup_elements or dedup_elements[-1] != elem_clean):
+                dedup_elements.append(elem_clean)
+
+        slide_content = "\n".join(dedup_elements).strip()
         if slide_content:
             chunks.append({
                 "id": f"{file_path.stem}_slide_{idx}",

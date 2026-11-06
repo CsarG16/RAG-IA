@@ -1,219 +1,1167 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AulaIA — Tutor Académico Inteligente</title>
+  <title>AulaIA — Tutor Académico Material Design 3</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
   
-  <!-- Tailwind CSS CDN -->
+  <!-- Tipografía Oficial Google: Roboto & Google Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Google Material Symbols Outlined & Filled (Material Design 3) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Tailwind CSS CDN con tokens de Material Design 3 y Soporte Modo Oscuro -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['Roboto', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+          },
           colors: {
-            brand: {
-              50: '#f0f9ff',
-              400: '#38bdf8',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
-            },
-            dark: {
-              900: '#090d16',
-              800: '#0f172a',
-              700: '#1e293b',
-              600: '#334155'
+            m3: {
+              surface: 'var(--md-sys-color-surface)',
+              'surface-container': 'var(--md-sys-color-surface-container)',
+              'surface-container-high': 'var(--md-sys-color-surface-container-high)',
+              primary: 'var(--md-sys-color-primary)',
+              'primary-container': 'var(--md-sys-color-primary-container)',
+              'on-primary-container': 'var(--md-sys-color-on-primary-container)',
+              'secondary-container': 'var(--md-sys-color-secondary-container)',
+              'on-secondary-container': 'var(--md-sys-color-on-secondary-container)',
+              'on-surface': 'var(--md-sys-color-on-surface)',
+              'on-surface-variant': 'var(--md-sys-color-on-surface-variant)',
+              outline: 'var(--md-sys-color-outline)',
+              'outline-variant': 'var(--md-sys-color-outline-variant)',
             }
+          },
+          boxShadow: {
+            'elevation-1': '0px 1px 3px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.12)',
+            'elevation-2': '0px 2px 6px 2px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.12)',
+            'elevation-3': '0px 4px 8px 3px rgba(0, 0, 0, 0.08), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)',
           }
         }
       }
     }
   </script>
 
+  <!-- Script Antidestello (Anti-FOUC) para carga instantánea del Tema Preferido -->
+  <script>
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('aulaia_theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <!-- Marked.js para Markdown -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- KaTeX para renderizar fórmulas matemáticas LaTeX ($ y $$) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
   <!-- Mermaid.js para grafos y autómatas -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'dark',
-      securityLevel: 'loose',
-      themeVariables: {
-        darkMode: true,
-        background: '#0f172a',
-        primaryColor: '#0284c7',
-        primaryTextColor: '#f8fafc',
-        lineColor: '#38bdf8'
+    function getMermaidThemeVariables(isDark) {
+      if (isDark) {
+        return {
+          darkMode: true,
+          background: '#0F172A',
+          primaryColor: '#1E293B',
+          primaryBorderColor: '#38BDF8',
+          primaryTextColor: '#FFFFFF',
+          lineColor: '#94A3B8',
+          secondaryColor: '#0F172A',
+          tertiaryColor: '#1E293B',
+          mainBkg: '#1E293B',
+          nodeBorder: '#38BDF8',
+          clusterBkg: '#0B0F19',
+          clusterBorder: '#334155',
+          titleColor: '#FFFFFF',
+          edgeLabelBackground: '#0F172A',
+          stateLabelColor: '#FFFFFF',
+          stateBkg: '#1E293B',
+          stateBorder: '#38BDF8',
+          labelColor: '#FFFFFF',
+          transitionColor: '#94A3B8',
+          transitionLabelColor: '#FFFFFF',
+          specialStateColor: '#38BDF8',
+          altBackground: '#0F172A'
+        };
       }
-    });
+      return {
+        darkMode: false,
+        background: '#F8FAFC',
+        primaryColor: '#FFFFFF',
+        primaryBorderColor: '#0F172A',
+        primaryTextColor: '#0F172A',
+        lineColor: '#334155',
+        secondaryColor: '#F1F5F9',
+        tertiaryColor: '#FFFFFF',
+        mainBkg: '#FFFFFF',
+        nodeBorder: '#0F172A',
+        clusterBkg: '#F8FAFC',
+        clusterBorder: '#CBD5E1',
+        titleColor: '#0F172A',
+        edgeLabelBackground: '#FFFFFF',
+        stateLabelColor: '#0F172A',
+        stateBkg: '#FFFFFF',
+        stateBorder: '#0F172A',
+        labelColor: '#0F172A',
+        transitionColor: '#334155',
+        transitionLabelColor: '#0F172A',
+        specialStateColor: '#0F172A',
+        altBackground: '#F8FAFC'
+      };
+    }
+
+    function initMermaid(isDark) {
+      if (window.mermaid) {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'base',
+          securityLevel: 'loose',
+          themeVariables: getMermaidThemeVariables(isDark)
+        });
+      }
+    }
+
+    // Inicializar Mermaid acorde al tema detectado
+    initMermaid(document.documentElement.classList.contains('dark'));
   </script>
 
   <style>
-    /* Scrollbar estilizada */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #090d16; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    /* ==========================================================================
+       🏛️ 1. DESIGN TOKENS (MATERIAL DESIGN 3 - MODO CLARO & MODO OSCURO)
+       ========================================================================== */
+    :root {
+      /* Superficies Modo Claro */
+      --md-sys-color-surface: #FFFFFF;
+      --md-sys-color-surface-container: #F0F4F9;
+      --md-sys-color-surface-container-high: #E9EEF6;
+      
+      /* Primarios & Acentos (Monocromo Grafito) */
+      --md-sys-color-primary: #0F172A;
+      --md-sys-color-primary-hover: #1E293B;
+      --md-sys-color-primary-container: #E2E8F0;
+      --md-sys-color-on-primary-container: #0F172A;
+      --md-sys-color-secondary-container: #E2E8F0;
+      --md-sys-color-on-secondary-container: #0F172A;
 
-    /* Estilos de Markdown generado */
-    .prose-custom p { margin-bottom: 0.85rem; line-height: 1.65; color: #e2e8f0; }
-    .prose-custom ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 0.85rem; }
-    .prose-custom ol { list-style-type: decimal; margin-left: 1.25rem; margin-bottom: 0.85rem; }
-    .prose-custom li { margin-bottom: 0.3rem; }
-    .prose-custom h1, .prose-custom h2, .prose-custom h3 { font-weight: 700; color: #f8fafc; margin-top: 1.2rem; margin-bottom: 0.6rem; }
-    .prose-custom pre { background: #090d16; border: 1px solid #1e293b; border-radius: 0.5rem; padding: 0.9rem; overflow-x: auto; margin-bottom: 1rem; }
-    .prose-custom code { font-family: monospace; font-size: 0.9em; background: #1e293b; padding: 0.15rem 0.35rem; border-radius: 0.25rem; color: #38bdf8; }
-    .prose-custom pre code { background: transparent; padding: 0; color: #e2e8f0; }
-    .prose-custom blockquote { border-left: 3px solid #0284c7; padding-left: 0.85rem; color: #94a3b8; margin-bottom: 0.85rem; font-style: italic; }
-    .prose-custom table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
-    .prose-custom th, .prose-custom td { border: 1px solid #1e293b; padding: 0.5rem 0.75rem; text-align: left; }
-    .prose-custom th { background: #1e293b; color: #f8fafc; }
+      /* Tipografía y Bordes */
+      --md-sys-color-on-surface: #1F1F1F;
+      --md-sys-color-on-surface-variant: #444746;
+      --md-sys-color-outline: #747775;
+      --md-sys-color-outline-variant: #E0E2EC;
+
+      /* Motion Tokens M3 */
+      --m3-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+      --m3-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+      --m3-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
+      --m3-duration-short: 150ms;
+      --m3-duration-medium: 250ms;
+      --m3-duration-long: 400ms;
+    }
+
+    /* Tokens Modo Oscuro (Onyx & Slate Profundo de Alta Fidelidad) */
+    html.dark {
+      --md-sys-color-surface: #090D16;
+      --md-sys-color-surface-container: #0F172A;
+      --md-sys-color-surface-container-high: #1E293B;
+      
+      --md-sys-color-primary: #F8FAFC;
+      --md-sys-color-primary-hover: #E2E8F0;
+      --md-sys-color-primary-container: #1E293B;
+      --md-sys-color-on-primary-container: #F8FAFC;
+      --md-sys-color-secondary-container: #1E293B;
+      --md-sys-color-on-secondary-container: #38BDF8;
+
+      --md-sys-color-on-surface: #F8FAFC;
+      --md-sys-color-on-surface-variant: #94A3B8;
+      --md-sys-color-outline: #64748B;
+      --md-sys-color-outline-variant: #1E293B;
+    }
+
+    /* ==========================================================================
+       🌐 2. RESET & TRANSICIÓN FLUIDA DEL TEMA
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow: hidden;
+    }
+
+    /* Transición suave y limpia entre temas (fondos, textos y bordes) */
+    body, aside, main, header, footer,
+    .sidebar-nav-btn, .prose-custom, .katex-display, .mermaid-card,
+    #chatForm, #topicDropdownMenu, #quizModal > div, .welcome-prompt-card,
+    .user-bubble, .bot-avatar, input, textarea, select {
+      transition: background-color 0.28s cubic-bezier(0.2, 0, 0, 1),
+                  color 0.28s cubic-bezier(0.2, 0, 0, 1),
+                  border-color 0.28s cubic-bezier(0.2, 0, 0, 1),
+                  box-shadow 0.28s cubic-bezier(0.2, 0, 0, 1) !important;
+    }
+
+    ::selection {
+      background-color: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-primary);
+    }
+
+    /* Scrollbar Cross-Browser Normalizada Adaptable */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #C4C7C5 transparent;
+    }
+    html.dark * {
+      scrollbar-color: #334155 transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C4C7C5;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--md-sys-color-outline);
+    }
+    html.dark ::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+    html.dark ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* ==========================================================================
+       ✨ 3. ICONOGRAFÍA MATERIAL SYMBOLS NORMALIZADA
+       ========================================================================== */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+      color: var(--md-sys-color-on-surface);
+      user-select: none;
+    }
+
+    .material-symbols-outlined.filled {
+      font-variation-settings: 'FILL' 1, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* ==========================================================================
+       🌌 4. AURORA BOREAL AMBIENTAL (GPU 3D & MODO NOCHE LUMINOSO)
+       ========================================================================== */
+    .aurora-wrapper {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s var(--m3-easing-standard);
+    }
+
+    .aurora-wrapper.aurora-subtle {
+      opacity: 0.12;
+      transform: translate3d(0, 0, 0) scale(1.05);
+    }
+
+    .aurora-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      will-change: transform, opacity;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      transform: translate3d(0, 0, 0);
+      transition: filter 0.4s ease, opacity 0.4s ease;
+    }
+
+    /* En Modo Oscuro, la Aurora pasa a blend screen con brillo cósmico vibrante */
+    html.dark .aurora-blob {
+      mix-blend-mode: screen !important;
+      opacity: 0.60;
+      filter: blur(95px);
+    }
+    html.dark .aurora-wrapper.aurora-subtle {
+      opacity: 0.22 !important;
+    }
+
+    /* Blob 1: Azul Google / Gemini */
+    .aurora-blob-1 {
+      width: 580px;
+      height: 580px;
+      top: -8%;
+      left: 12%;
+      background: radial-gradient(circle, rgba(66, 133, 244, 0.38) 0%, rgba(66, 133, 244, 0.14) 50%, transparent 72%);
+      animation: auroraMove1 24s ease-in-out infinite alternate;
+    }
+
+    /* Blob 2: Violeta / Deep Indigo */
+    .aurora-blob-2 {
+      width: 620px;
+      height: 620px;
+      top: 10%;
+      right: 2%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(147, 51, 234, 0.12) 50%, transparent 70%);
+      animation: auroraMove2 28s ease-in-out infinite alternate;
+    }
+
+    /* Blob 3: Rosa / Coral Cálido */
+    .aurora-blob-3 {
+      width: 540px;
+      height: 540px;
+      bottom: 2%;
+      left: 8%;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.28) 0%, rgba(236, 72, 153, 0.10) 55%, transparent 75%);
+      animation: auroraMove3 22s ease-in-out infinite alternate;
+    }
+
+    /* Blob 4: Cian Eléctrico / Turquesa Suave */
+    .aurora-blob-4 {
+      width: 520px;
+      height: 520px;
+      top: 30%;
+      left: 32%;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.30) 0%, rgba(56, 189, 248, 0.12) 50%, transparent 70%);
+      animation: auroraMove4 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes auroraMove1 {
+      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+      50% { transform: translate3d(75px, 50px, 0) scale(1.15) rotate(45deg); }
+      100% { transform: translate3d(-60px, 35px, 0) scale(0.95) rotate(-30deg); }
+    }
+
+    @keyframes auroraMove2 {
+      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+      50% { transform: translate3d(-85px, 60px, 0) scale(1.2) rotate(-50deg); }
+      100% { transform: translate3d(45px, -35px, 0) scale(0.9) rotate(35deg); }
+    }
+
+    @keyframes auroraMove3 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(65px, -70px, 0) scale(1.12); }
+      100% { transform: translate3d(-45px, -25px, 0) scale(0.98); }
+    }
+
+    @keyframes auroraMove4 {
+      0% { transform: translate3d(0, 0, 0) scale(0.95) rotate(0deg); }
+      50% { transform: translate3d(-55px, -45px, 0) scale(1.18) rotate(60deg); }
+      100% { transform: translate3d(60px, 45px, 0) scale(1.05) rotate(-40deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aurora-blob {
+        animation: none !important;
+      }
+      .aurora-wrapper {
+        opacity: 0.15 !important;
+        transform: none !important;
+      }
+    }
+
+    /* ==========================================================================
+       🎛️ 5. SELECTS & FORM CONTROLS NORMALIZADOS
+       ========================================================================== */
+    .m3-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: var(--md-sys-color-surface);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%23444746'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 0.85rem;
+      padding: 0.45rem 2rem 0.45rem 0.85rem;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+      cursor: pointer;
+      transition: border-color var(--m3-duration-short) var(--m3-easing-standard), box-shadow var(--m3-duration-short) var(--m3-easing-standard);
+    }
+    .m3-select:hover {
+      border-color: var(--md-sys-color-outline);
+    }
+    .m3-select:focus {
+      outline: none;
+      border-color: var(--md-sys-color-primary);
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.12);
+    }
+    html.dark .m3-select {
+      background-color: #1E293B !important;
+      border-color: #334155 !important;
+      color: #F8FAFC !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    }
+
+    /* ==========================================================================
+       🧭 6. SIDEBAR FLOTANTE & TOOLTIPS (TOTALMENTE INVISIBLE EN MODO RETRAÍDO)
+       ========================================================================== */
+    aside#sidebar {
+      width: 64px;
+      background-color: transparent !important;
+      border: none !important;
+      border-right: none !important;
+      box-shadow: none !important;
+      transition: width var(--m3-duration-medium) var(--m3-easing-standard), background-color var(--m3-duration-medium) ease, border-color var(--m3-duration-medium) ease, box-shadow var(--m3-duration-medium) ease;
+    }
+
+    aside#sidebar.sidebar-expanded {
+      width: 270px;
+      background-color: var(--md-sys-color-surface-container) !important;
+      border-right: 1px solid var(--md-sys-color-outline-variant) !important;
+      box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    html.dark aside#sidebar.sidebar-expanded {
+      background-color: #0F172A !important;
+      border-right: 1px solid #1E293B !important;
+      box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.45) !important;
+    }
+
+    /* En modo retraído, las líneas divisorias son invisibles para que los iconos floten libres */
+    aside#sidebar:not(.sidebar-expanded) .sidebar-divider {
+      display: none !important;
+    }
+
+    html.dark .sidebar-divider {
+      background-color: #1E293B !important;
+    }
+
+    /* Ocultar textos cuando está contraído (modo iconos flotantes) */
+    aside#sidebar:not(.sidebar-expanded) .sidebar-label,
+    aside#sidebar:not(.sidebar-expanded) .sidebar-logo-text {
+      display: none !important;
+    }
+
+    /* Estilo base y hover redondo de los botones del sidebar (Círculo flotante) */
+    .sidebar-nav-btn {
+      display: flex;
+      align-items: center;
+      border-radius: 9999px !important;
+      transition: background-color var(--m3-duration-short) var(--m3-easing-standard), color var(--m3-duration-short) var(--m3-easing-standard), transform var(--m3-duration-short) var(--m3-easing-standard);
+    }
+    html.dark .sidebar-nav-btn {
+      color: #CBD5E1;
+    }
+    html.dark .sidebar-nav-btn:hover {
+      background-color: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+
+    /* Tamaño y hover de botones en modo contraído (Círculo perfecto de 42x42) */
+    aside#sidebar:not(.sidebar-expanded) .sidebar-nav-btn {
+      width: 42px !important;
+      height: 42px !important;
+      padding: 0 !important;
+      justify-content: center !important;
+      border-radius: 9999px !important;
+    }
+
+    /* En modo expandido: Píldora redondeada suave M3 */
+    aside#sidebar.sidebar-expanded .sidebar-nav-btn {
+      width: 100% !important;
+      height: auto !important;
+      padding: 10px 16px !important;
+      justify-content: flex-start !important;
+      border-radius: 9999px !important;
+    }
+
+    .sidebar-tooltip {
+      position: absolute;
+      left: calc(100% + 12px);
+      top: 50%;
+      transform: translateY(-50%) translateX(-6px);
+      padding: 5px 11px;
+      background-color: var(--md-sys-color-primary);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      border-radius: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      transition: all 0.16s var(--m3-easing-standard);
+      z-index: 60;
+    }
+
+    html.dark .sidebar-tooltip {
+      background-color: #1E293B !important;
+      border: 1px solid #334155 !important;
+      color: #F8FAFC !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+    }
+
+    .sidebar-tooltip::before {
+      content: '';
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 4px;
+      border-style: solid;
+      border-color: transparent var(--md-sys-color-primary) transparent transparent;
+    }
+    html.dark .sidebar-tooltip::before {
+      border-color: transparent #1E293B transparent transparent !important;
+    }
+
+    .group:hover .sidebar-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(-50%) translateX(0px);
+    }
+
+    aside#sidebar.sidebar-expanded .sidebar-tooltip {
+      display: none !important;
+    }
+
+    /* Posicionamiento adaptativo del menú M3 de Documentos de Clase */
+    aside#sidebar:not(.sidebar-expanded) .topic-wrapper {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto;
+      border-radius: 9999px;
+    }
+
+    aside#sidebar:not(.sidebar-expanded) #topicDropdownMenu {
+      left: calc(100% + 14px) !important;
+      top: -10px !important;
+      width: 290px !important;
+    }
+
+    aside#sidebar.sidebar-expanded #topicDropdownMenu {
+      left: 4px !important;
+      top: calc(100% + 6px) !important;
+      width: calc(100% - 8px) !important;
+    }
+
+    aside#sidebar.sidebar-expanded .topic-icon-only {
+      display: none !important;
+    }
+
+    html.dark #topicDropdownMenu {
+      background-color: rgba(15, 23, 42, 0.98) !important;
+      border-color: #1E293B !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+    }
+    html.dark #topicTriggerExpanded {
+      background-color: #0F172A !important;
+      border-color: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+    html.dark #topicTriggerExpanded:hover {
+      background-color: #1E293B !important;
+      border-color: #334155 !important;
+    }
+
+    /* ==========================================================================
+       📝 7. PROSE / MARKDOWN & TIPOGRAFÍA NORMALIZADA
+       ========================================================================== */
+    .prose-custom {
+      color: var(--md-sys-color-on-surface);
+      line-height: 1.65;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .prose-custom p {
+      margin-bottom: 0.85rem;
+      line-height: 1.65;
+      color: var(--md-sys-color-on-surface);
+    }
+    .prose-custom ul {
+      list-style-type: disc;
+      margin-left: 1.25rem;
+      margin-bottom: 0.85rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .prose-custom ol {
+      list-style-type: decimal;
+      margin-left: 1.25rem;
+      margin-bottom: 0.85rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .prose-custom li {
+      margin-bottom: 0.3rem;
+    }
+    .prose-custom h1, .prose-custom h2, .prose-custom h3 {
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface);
+      margin-top: 1.25rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.015em;
+    }
+    .prose-custom pre {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-surface-container);
+      border-radius: 14px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      font-size: 0.88rem;
+    }
+    html.dark .prose-custom pre {
+      background: #0F172A !important;
+      border: 1px solid #1E293B !important;
+      color: #E2E8F0 !important;
+    }
+    .prose-custom code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.88em;
+      background: var(--md-sys-color-surface-container-high);
+      padding: 0.15rem 0.4rem;
+      border-radius: 6px;
+      color: var(--md-sys-color-primary);
+      font-weight: 500;
+    }
+    html.dark .prose-custom code {
+      background: #1E293B !important;
+      color: #38BDF8 !important;
+    }
+    .prose-custom pre code {
+      background: transparent !important;
+      padding: 0 !important;
+      color: inherit !important;
+      font-weight: 400;
+    }
+    .prose-custom blockquote {
+      border-left: 3px solid var(--md-sys-color-primary);
+      padding-left: 0.85rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 0.85rem;
+      font-style: italic;
+      background: var(--md-sys-color-surface-container);
+      padding-top: 0.4rem;
+      padding-bottom: 0.4rem;
+      border-radius: 0 8px 8px 0;
+    }
+    html.dark .prose-custom blockquote {
+      background: #0F172A !important;
+      border-left-color: #38BDF8 !important;
+      color: #94A3B8 !important;
+    }
+    .prose-custom table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+    .prose-custom th, .prose-custom td {
+      border: 1px solid var(--md-sys-color-outline-variant);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+    .prose-custom th {
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+      font-weight: 600;
+    }
+    html.dark .prose-custom th {
+      background: #0F172A !important;
+      border-color: #1E293B !important;
+      color: #FFFFFF !important;
+    }
+    html.dark .prose-custom td {
+      border-color: #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+
+    /* ==========================================================================
+       📊 8. MERMAID DIAGRAMAS (ADAPTABLES A MODO CLARO Y OSCURO)
+       ========================================================================== */
+    .mermaid-card,
+    .mermaid,
+    .prose-custom .mermaid-card,
+    .prose-custom .mermaid,
+    .prose-custom pre.mermaid {
+      background-color: #F8FAFC !important;
+      background: #F8FAFC !important;
+      border-color: #E2E8F0 !important;
+      color: #0F172A !important;
+      transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+    }
+    .mermaid svg {
+      max-width: 100% !important;
+      height: auto !important;
+      background: transparent !important;
+      font-family: inherit !important;
+    }
+    .mermaid .label text,
+    .mermaid .edgeLabel,
+    .mermaid text {
+      fill: #0F172A !important;
+      color: #0F172A !important;
+    }
+
+    /* MODO OSCURO: Mermaid con fondo Slate Oscuro y texto/nodos adaptados */
+    html.dark .mermaid-card,
+    html.dark .mermaid,
+    html.dark .prose-custom .mermaid-card,
+    html.dark .prose-custom .mermaid,
+    html.dark .prose-custom pre.mermaid {
+      background-color: #0F172A !important;
+      background: #0F172A !important;
+      border-color: #1E293B !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+    }
+    html.dark .mermaid .label text,
+    html.dark .mermaid .edgeLabel,
+    html.dark .mermaid .edgeLabel text,
+    html.dark .mermaid text,
+    html.dark .mermaid span {
+      fill: #FFFFFF !important;
+      color: #FFFFFF !important;
+    }
+    html.dark .mermaid .node rect,
+    html.dark .mermaid .node circle,
+    html.dark .mermaid .node polygon {
+      stroke: #38BDF8 !important;
+      fill: #1E293B !important;
+    }
+    html.dark .mermaid .edgePaths path,
+    html.dark .mermaid .flowchart-link {
+      stroke: #94A3B8 !important;
+    }
+    html.dark .mermaid marker path {
+      fill: #94A3B8 !important;
+      stroke: #94A3B8 !important;
+    }
+    html.dark .mermaid .cluster rect {
+      fill: #0B0F19 !important;
+      stroke: #334155 !important;
+    }
+
+    /* ==========================================================================
+       📐 9. KATEX (MATEMÁTICAS & FÓRMULAS) NORMALIZADO Y 100% ADAPTABLE AL TEMA
+       ========================================================================== */
+    .katex-display {
+      margin: 1.25rem 0;
+      padding: 0.85rem 1.25rem;
+      overflow-x: auto;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 14px;
+      color: #0F172A !important;
+      text-align: center;
+      transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+    }
+    .katex {
+      font-size: 1.05em;
+      color: #0F172A !important;
+      transition: color 0.28s ease;
+    }
+
+    /* MODO OSCURO: KaTeX 100% Blanco Puro y Nítido */
+    html.dark .katex-display {
+      background: #0F172A !important;
+      border: 1px solid #1E293B !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+    }
+    html.dark .katex,
+    html.dark .katex * {
+      color: #FFFFFF !important;
+      fill: #FFFFFF !important;
+      border-color: #FFFFFF !important;
+    }
+    html.dark .katex .frac-line {
+      border-bottom-color: #FFFFFF !important;
+    }
+    html.dark .katex .sqrt > path {
+      fill: #FFFFFF !important;
+      stroke: #FFFFFF !important;
+    }
+
+    /* ==========================================================================
+       🎬 10. ANIMACIONES SUAVES NORMALIZADAS
+       ========================================================================== */
+    @keyframes m3FadeIn {
+      from { opacity: 0; transform: translate3d(0, 8px, 0); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .animate-m3FadeIn {
+      animation: m3FadeIn var(--m3-duration-medium) var(--m3-easing-standard) forwards;
+    }
+
+    /* ==========================================================================
+       🌫️ 11. DESVANECIMIENTO GRADUAL SCROLL Y FOOTER FLOTANTE GEMINI
+       ========================================================================== */
+    .gemini-scroll-fade {
+      mask-image: linear-gradient(
+        to bottom,
+        transparent 0px,
+        black 24px,
+        black calc(100% - 110px),
+        transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0px,
+        black 24px,
+        black calc(100% - 110px),
+        transparent 100%
+      );
+    }
+
+    /* Gradiente dinámico de fondo para el footer flotante */
+    .gemini-floating-footer {
+      background: linear-gradient(to top, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 60%, transparent 100%);
+    }
+    html.dark .gemini-floating-footer {
+      background: linear-gradient(to top, #090D16 0%, rgba(9, 13, 22, 0.96) 60%, transparent 100%) !important;
+    }
   </style>
 </head>
-<body class="bg-dark-900 text-slate-100 flex flex-col h-screen overflow-hidden font-sans antialiased">
+<body class="h-screen w-screen overflow-hidden flex bg-white dark:bg-[#090D16] antialiased">
 
   <!-- ======================================================== -->
-  <!-- HEADER / BARRA DE NAVEGACIÓN SUPERIOR                    -->
+  <!-- M3 MODAL BACKDROP (MÓVILES)                              -->
   <!-- ======================================================== -->
-  <header class="border-b border-dark-700 bg-dark-800/80 backdrop-blur px-6 py-3 flex items-center justify-between z-20">
-    <div class="flex items-center space-x-4">
-      <div class="flex items-center space-x-2">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-sky-400 flex items-center justify-center shadow-lg shadow-sky-500/20">
-          <span class="text-white font-bold text-lg">A</span>
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-[#000000]/40 backdrop-blur-xs z-30 hidden lg:hidden transition-opacity"></div>
+
+  <!-- ======================================================== -->
+  <!-- NAVIGATION RAIL / SIDEBAR (ESTILO STRIP LIMPIO)          -->
+  <!-- ======================================================== -->
+  <aside id="sidebar" class="flex-shrink-0 flex flex-col justify-between py-3 px-2 select-none h-screen z-30 transition-all duration-200">
+    
+    <!-- Contenido del Sidebar: Solo acciones y botones limpios -->
+    <div class="space-y-2.5 w-full flex flex-col items-center">
+      
+      <!-- Botón Toggle de Menú y Logo Oficial AulaIA (Minimalista y Sobrio) -->
+      <div class="relative group flex justify-center w-full px-1 py-0.5">
+        <button onclick="toggleSidebar()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition group" title="Alternar menú lateral">
+          <img src="/static/logo.svg" alt="AulaIA" class="w-6 h-6 rounded-[7px] flex-shrink-0 object-contain shadow-xs">
+          <span class="sidebar-label ml-3 font-bold text-base text-[#0F172A] dark:text-[#F8FAFC] whitespace-nowrap tracking-tight">AulaIA</span>
+          <span class="sidebar-label ml-auto material-symbols-outlined text-xl text-[#747775] dark:text-[#94A3B8] group-hover:text-[#0F172A] dark:group-hover:text-[#F8FAFC] transition">menu_open</span>
+        </button>
+        <span class="sidebar-tooltip">Menú AulaIA</span>
+      </div>
+
+      <!-- Icon 1: Nueva Consulta (Lápiz / Edición como en la captura) -->
+      <div class="relative group flex justify-center w-full">
+        <button onclick="clearChat()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition">
+          <span class="material-symbols-outlined text-xl flex-shrink-0">drive_file_rename_outline</span>
+          <span class="sidebar-label ml-3 text-xs font-semibold tracking-wide whitespace-nowrap">Nueva consulta</span>
+        </button>
+        <span class="sidebar-tooltip">Nueva consulta</span>
+      </div>
+
+      <!-- Icon 2: Búsqueda / Enfoque al input -->
+      <div class="relative group flex justify-center w-full">
+        <button onclick="document.getElementById('userInput').focus()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition">
+          <span class="material-symbols-outlined text-xl flex-shrink-0">search</span>
+          <span class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Escribir consulta</span>
+        </button>
+        <span class="sidebar-tooltip">Escribir consulta</span>
+      </div>
+
+      <div class="sidebar-divider h-px bg-[#E5E7EB] dark:bg-[#1E293B] w-full my-1"></div>
+
+      <!-- Modos Pedagógicos -->
+      <div class="space-y-1.5 w-full flex flex-col items-center">
+        <!-- Modo Intuitivo -->
+        <div class="relative group flex justify-center w-full">
+          <button onclick="setNivel('intuitivo')" id="btnIntuitivo" class="sidebar-nav-btn bg-[#E5E7EB] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#38BDF8] font-semibold transition">
+            <span class="material-symbols-outlined text-xl flex-shrink-0">lightbulb</span>
+            <span class="sidebar-label ml-3 text-xs whitespace-nowrap">Modo Intuitivo</span>
+          </button>
+          <span class="sidebar-tooltip">Modo Intuitivo</span>
         </div>
-        <div>
-          <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-sky-400 bg-clip-text text-transparent">AulaIA</h1>
-          <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Tutor RAG Académico</p>
+
+        <!-- Modo Formal -->
+        <div class="relative group flex justify-center w-full">
+          <button onclick="setNivel('formal')" id="btnFormal" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#444746] dark:text-[#94A3B8] hover:text-[#1F1F1F] dark:hover:text-[#F8FAFC] transition">
+            <span class="material-symbols-outlined text-xl flex-shrink-0">menu_book</span>
+            <span class="sidebar-label ml-3 text-xs whitespace-nowrap">Modo Formal</span>
+          </button>
+          <span class="sidebar-tooltip">Modo Formal</span>
+        </div>
+
+        <!-- Modo Código Python -->
+        <div class="relative group flex justify-center w-full">
+          <button onclick="setNivel('codigo')" id="btnCodigo" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#444746] dark:text-[#94A3B8] hover:text-[#1F1F1F] dark:hover:text-[#F8FAFC] transition">
+            <span class="material-symbols-outlined text-xl flex-shrink-0">terminal</span>
+            <span class="sidebar-label ml-3 text-xs whitespace-nowrap">Modo Código Python</span>
+          </button>
+          <span class="sidebar-tooltip">Modo Código Python</span>
         </div>
       </div>
 
-      <!-- Badge de Salud del Backend -->
-      <div id="statusBadge" class="hidden sm:flex items-center space-x-2 px-2.5 py-1 rounded-full bg-dark-700/60 border border-dark-600 text-xs">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span id="statusText" class="text-slate-300 font-medium">Verificando...</span>
-      </div>
-    </div>
+      <div class="sidebar-divider h-px bg-[#E5E7EB] dark:bg-[#1E293B] w-full my-1"></div>
 
-    <!-- Controles rápidos del Header -->
-    <div class="flex items-center space-x-3">
-      <!-- Selector de Nivel Pedagógico -->
-      <div class="flex items-center bg-dark-700/80 p-0.5 rounded-lg border border-dark-600 text-xs">
-        <button onclick="setNivel('formal')" id="btnFormal" class="px-2.5 py-1.5 rounded-md transition font-medium bg-brand-600 text-white shadow">📚 Formal</button>
-        <button onclick="setNivel('intuitivo')" id="btnIntuitivo" class="px-2.5 py-1.5 rounded-md transition font-medium text-slate-400 hover:text-white">💡 Intuitivo</button>
-        <button onclick="setNivel('codigo')" id="btnCodigo" class="px-2.5 py-1.5 rounded-md transition font-medium text-slate-400 hover:text-white">💻 Código</button>
-      </div>
-
-      <!-- Filtro por Tema / Clase -->
-      <select id="topicFilter" class="hidden md:block bg-dark-700 border border-dark-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500 max-w-[180px] truncate">
-        <option value="">Todas las Clases</option>
-      </select>
-
-      <!-- Botón para abrir el Modal de Quiz -->
-      <button onclick="openQuizModal()" class="flex items-center space-x-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md shadow-indigo-600/20 transition">
-        <span>📝</span>
-        <span>Simulador Quiz</span>
-      </button>
-
-      <!-- Botón Reiniciar Chat -->
-      <button onclick="clearChat()" title="Limpiar conversación" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-dark-700 border border-dark-600 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- ======================================================== -->
-  <!-- CONTENEDOR PRINCIPAL DE MENSAJES (CHAT STREAMING)        -->
-  <!-- ======================================================== -->
-  <main id="chatContainer" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-4xl w-full mx-auto">
-    <!-- Pantalla de bienvenida (se oculta al enviar el primer mensaje) -->
-    <div id="welcomeView" class="py-8 text-center space-y-6 my-auto">
-      <div class="inline-flex p-3 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-400">
-        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-      </div>
-      <div>
-        <h2 class="text-2xl font-bold text-white tracking-tight">¿En qué puedo ayudarte hoy?</h2>
-        <p class="text-sm text-slate-400 mt-1 max-w-md mx-auto">Tutor con Búsqueda Híbrida (FAISS + BM25). Cada respuesta incluye citas exactas y diagramas de estados.</p>
-      </div>
-
-      <!-- Preguntas sugeridas de 1 clic -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto pt-2 text-left">
-        <button onclick="sendQuickPrompt(this.innerText)" class="p-3.5 rounded-xl bg-dark-800 border border-dark-700 hover:border-brand-500/60 hover:bg-dark-700/60 transition text-xs text-slate-300 hover:text-white group">
-          <span class="font-semibold text-brand-400 block mb-1">Teoría de Autómatas</span>
-          ¿Cuáles son los componentes de la 5-tupla formal de un autómata finito?
-        </button>
-        <button onclick="sendQuickPrompt(this.innerText)" class="p-3.5 rounded-xl bg-dark-800 border border-dark-700 hover:border-brand-500/60 hover:bg-dark-700/60 transition text-xs text-slate-300 hover:text-white group">
-          <span class="font-semibold text-brand-400 block mb-1">Conversión AFND a AFD</span>
-          ¿Cómo funciona el método de subconjuntos para transformar un AFND en AFD?
-        </button>
-        <button onclick="sendQuickPrompt(this.innerText)" class="p-3.5 rounded-xl bg-dark-800 border border-dark-700 hover:border-brand-500/60 hover:bg-dark-700/60 transition text-xs text-slate-300 hover:text-white group">
-          <span class="font-semibold text-brand-400 block mb-1">Autómatas a Pila</span>
-          ¿Cómo opera la memoria de pila LIFO en un autómata a pila para a^n b^n?
-        </button>
-        <button onclick="sendQuickPrompt(this.innerText)" class="p-3.5 rounded-xl bg-dark-800 border border-dark-700 hover:border-brand-500/60 hover:bg-dark-700/60 transition text-xs text-slate-300 hover:text-white group">
-          <span class="font-semibold text-brand-400 block mb-1">Máquinas de Turing</span>
-          ¿Cómo funciona la cinta infinita y el cabezal de una Máquina de Turing?
-        </button>
-      </div>
-    </div>
-
-    <!-- Lista de mensajes dinámicos -->
-    <div id="messagesList" class="space-y-6"></div>
-  </main>
-
-  <!-- ======================================================== -->
-  <!-- BARRA DE ENTRADA INFERIOR (INPUT EXPANDIBLE)             -->
-  <!-- ======================================================== -->
-  <footer class="border-t border-dark-700 bg-dark-800/90 backdrop-blur p-4">
-    <div class="max-w-4xl mx-auto">
-      <form id="chatForm" onsubmit="handleChatSubmit(event)" class="relative flex items-center">
-        <textarea
-          id="userInput"
-          rows="1"
-          placeholder="Formula una duda sobre autómatas, máquinas de Turing o ejercicios..."
-          class="w-full bg-dark-900 border border-dark-600 focus:border-brand-500 rounded-xl px-4 py-3 pr-14 text-sm text-slate-100 placeholder-slate-500 resize-none focus:outline-none focus:ring-1 focus:ring-brand-500/50 shadow-inner"
-          onkeydown="handleKeyDown(event)"
-        ></textarea>
+      <!-- Selector Custom de Clases / Documentos (M3 Popover Integrado) -->
+      <div class="relative flex justify-center w-full topic-wrapper" id="topicWrapper">
         
-        <button
-          type="submit"
-          id="sendBtn"
-          class="absolute right-2 p-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white disabled:opacity-40 disabled:cursor-not-allowed transition shadow"
+        <!-- Botón Modo Retraído: Icono flotante con indicador de filtro activo -->
+        <div class="relative group flex justify-center">
+          <button
+            id="topicTriggerCollapsed"
+            onclick="toggleTopicMenu(event)"
+            class="topic-icon-only sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition relative cursor-pointer"
+            title="Documentos de clase"
+          >
+            <span class="material-symbols-outlined text-xl flex-shrink-0">layers</span>
+            <span id="topicActiveBadge" class="hidden absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-[#0F172A] dark:bg-[#38BDF8] border-2 border-white dark:border-[#0F172A]"></span>
+          </button>
+          <span class="sidebar-tooltip">Documentos de clase</span>
+        </div>
+
+        <!-- Botón Modo Expandido: Custom Dropdown Trigger M3 -->
+        <div class="sidebar-label w-full px-1">
+          <button
+            id="topicTriggerExpanded"
+            onclick="toggleTopicMenu(event)"
+            class="w-full flex items-center justify-between bg-white dark:bg-[#0F172A] hover:bg-[#F0F4F9] dark:hover:bg-[#1E293B] border border-[#E0E2EC] dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-600 rounded-[14px] px-3.5 py-2.5 text-xs text-[#1F1F1F] dark:text-[#F8FAFC] transition shadow-xs group/btn"
+          >
+            <div class="flex items-center space-x-2 truncate pr-1">
+              <span class="material-symbols-outlined text-base text-[#747775] dark:text-[#94A3B8] group-hover/btn:text-[#0F172A] dark:group-hover/btn:text-[#38BDF8] transition">layers</span>
+              <span id="topicSelectedLabel" class="truncate font-medium text-[#1F1F1F] dark:text-[#F8FAFC]">Todas las Clases</span>
+            </div>
+            <span id="topicChevron" class="material-symbols-outlined text-base text-[#747775] dark:text-[#94A3B8] transition-transform duration-200">expand_more</span>
+          </button>
+        </div>
+
+        <!-- Popover Desplegable M3 (Custom & Integrado al Sistema) -->
+        <div
+          id="topicDropdownMenu"
+          class="hidden absolute z-50 bg-white/95 dark:bg-[#0F172A]/98 backdrop-blur-md border border-[#E0E2EC] dark:border-[#1E293B] rounded-[20px] shadow-elevation-3 py-2 w-72 sm:w-80 max-h-80 flex flex-col animate-m3FadeIn text-left select-none"
         >
-          <svg id="sendIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          <div id="spinIcon" class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-        </button>
-      </form>
-      <div class="flex items-center justify-between text-[11px] text-slate-500 mt-2 px-1">
-        <span><b>Enter</b> para enviar • <b>Shift + Enter</b> para nueva línea</span>
-        <span>Respaldado por las diapositivas oficiales de clase</span>
+          <div id="topicDropdownHeader" class="px-3.5 py-2 border-b border-[#E0E2EC] dark:border-[#1E293B] flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="material-symbols-outlined text-base text-[#0F172A] dark:text-[#38BDF8]">folder_open</span>
+              <span class="text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC]">Filtrar por Documento</span>
+            </div>
+            <button
+              type="button"
+              onclick="selectTopic('', 'Todas las Clases')"
+              class="text-[10px] text-[#747775] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#38BDF8] font-medium px-2 py-0.5 rounded-full hover:bg-[#F0F4F9] dark:hover:bg-[#1E293B] transition"
+            >
+              Restablecer
+            </button>
+          </div>
+          <div id="topicOptionsList" class="overflow-y-auto p-1.5 space-y-1 flex-1"></div>
+        </div>
+
       </div>
+
+      <!-- Limpiar / Historial (Clock como en la captura) -->
+      <div class="relative group flex justify-center w-full">
+        <button onclick="clearChat()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition">
+          <span class="material-symbols-outlined text-xl flex-shrink-0">history</span>
+          <span class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Reiniciar chat</span>
+        </button>
+        <span class="sidebar-tooltip">Reiniciar chat</span>
+      </div>
+
+      <div class="sidebar-divider h-px bg-[#E5E7EB] dark:bg-[#1E293B] w-full my-1"></div>
+
+      <!-- Botón Simulador de Quiz (Birrete Académico como en la captura) -->
+      <div class="relative group flex justify-center w-full">
+        <button onclick="openQuizModal()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition">
+          <span class="material-symbols-outlined text-xl flex-shrink-0">school</span>
+          <span class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Simulador de Quiz</span>
+        </button>
+        <span class="sidebar-tooltip">Simulador de Quiz</span>
+      </div>
+
     </div>
-  </footer>
+
+    <!-- Selector / Switcher de Modo Oscuro / Claro en el fondo del sidebar -->
+    <div class="relative group flex justify-center w-full px-1 py-1">
+      <button
+        id="themeToggleBtn"
+        onclick="toggleTheme()"
+        class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition group relative cursor-pointer"
+        title="Cambiar tema (Oscuro / Claro)"
+        aria-label="Cambiar tema de la aplicación"
+      >
+        <span id="themeToggleIcon" class="material-symbols-outlined text-xl flex-shrink-0 transition-transform duration-300">dark_mode</span>
+        <span id="themeToggleLabel" class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Modo Oscuro</span>
+      </button>
+      <span id="themeTooltip" class="sidebar-tooltip">Modo Oscuro</span>
+    </div>
+  </aside>
 
   <!-- ======================================================== -->
-  <!-- MODAL: SIMULADOR DE QUIZ INTERACTIVO                     -->
+  <!-- CANVAS PRINCIPAL (ÁREA DE CHAT Y BIENVENIDA)             -->
   <!-- ======================================================== -->
-  <div id="quizModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-dark-800 border border-dark-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
-      <div class="flex items-center justify-between border-b border-dark-700 pb-3">
-        <div class="flex items-center space-x-2">
-          <span class="text-xl">📝</span>
-          <h3 class="text-lg font-bold text-white">Simulador de Examen y Autoevaluación</h3>
+  <div id="canvasPrincipal" class="flex-1 flex flex-col h-full overflow-hidden relative bg-white dark:bg-[#090D16]">
+    
+    <!-- ======================================================== -->
+    <!-- 🌌 AURORA BOREAL AMBIENTAL (FONDO VIVO IA)               -->
+    <!-- ======================================================== -->
+    <div id="auroraContainer" class="aurora-wrapper pointer-events-none">
+      <div class="aurora-blob aurora-blob-1"></div>
+      <div class="aurora-blob aurora-blob-2"></div>
+      <div class="aurora-blob aurora-blob-3"></div>
+      <div class="aurora-blob aurora-blob-4"></div>
+    </div>
+
+    <!-- M3 Top App Bar (Completamente Transparente para dar la ilusión de iconos flotantes) -->
+    <header id="topNavbar" class="h-14 flex items-center justify-between px-4 sm:px-6 z-10 flex-shrink-0 bg-transparent border-b border-transparent transition-all duration-300">
+      <div class="flex items-center space-x-3">
+        <!-- Espacio reservado para flujo libre -->
+      </div>
+      <div></div>
+    </header>
+
+    <!-- Contenedor Scrollable de Mensajes (Scroll Suave con Desvanecimiento Orgánico Gemini) -->
+    <main id="chatContainer" class="flex-1 overflow-y-auto w-full px-4 sm:px-6 pt-4 pb-44 relative z-10 gemini-scroll-fade">
+      <div class="max-w-3xl w-full mx-auto space-y-6">
+
+        <!-- ======================================================== -->
+        <!-- PANTALLA DE ESPERA VIVA (ESTILO GOOGLE GEMINI AI M3)     -->
+        <!-- ======================================================== -->
+        <div id="welcomeView" class="py-12 sm:py-20 flex flex-col items-center justify-center text-center space-y-8 select-none animate-m3FadeIn">
+          
+          <!-- Headline Medium M3 -->
+          <div class="space-y-2 max-w-lg">
+            <h2 id="welcomeTitle" class="text-2xl sm:text-3xl font-medium tracking-tight text-[#1F1F1F] dark:text-[#F8FAFC]">
+              ¿En qué puedo ayudarte hoy?
+            </h2>
+            <p id="welcomeSubtitle" class="text-xs sm:text-sm text-[#444746] dark:text-[#94A3B8] leading-relaxed font-normal">
+              Tutor inteligente para el curso de Teoría de Autómatas e Inteligencia Artificial con trazabilidad documental en tus diapositivas.
+            </p>
+          </div>
+
+          <!-- M3 Outlined Cards (Tarjetas de Sugerencias con Glassmorphism suave) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl text-left pt-2">
+            
+            <button onclick="sendQuickPrompt('¿Cómo funciona el método de subconjuntos para transformar un AFND en AFD?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#0F172A]/75 backdrop-blur-md hover:bg-white dark:hover:bg-[#1E293B] border border-[#E0E2EC]/90 dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-500 hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
+              <div class="pr-3">
+                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] transition">Conversión AFND a AFD</span>
+                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#94A3B8] mt-1 line-clamp-1">¿Cómo funciona el método de subconjuntos?</span>
+              </div>
+              <span class="material-symbols-outlined text-[#747775] dark:text-[#64748B] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] text-lg transition">arrow_outward</span>
+            </button>
+
+            <button onclick="sendQuickPrompt('¿Cómo opera la memoria de pila LIFO en un autómata a pila para a^n b^n?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#0F172A]/75 backdrop-blur-md hover:bg-white dark:hover:bg-[#1E293B] border border-[#E0E2EC]/90 dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-500 hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
+              <div class="pr-3">
+                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] transition">Autómatas a Pila</span>
+                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#94A3B8] mt-1 line-clamp-1">¿Cómo opera la memoria LIFO para a^n b^n?</span>
+              </div>
+              <span class="material-symbols-outlined text-[#747775] dark:text-[#64748B] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] text-lg transition">arrow_outward</span>
+            </button>
+
+            <button onclick="sendQuickPrompt('¿Cómo funciona la cinta infinita y el cabezal de una Máquina de Turing?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#0F172A]/75 backdrop-blur-md hover:bg-white dark:hover:bg-[#1E293B] border border-[#E0E2EC]/90 dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-500 hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
+              <div class="pr-3">
+                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] transition">Máquinas de Turing</span>
+                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#94A3B8] mt-1 line-clamp-1">¿Cómo opera la cinta y el cabezal?</span>
+              </div>
+              <span class="material-symbols-outlined text-[#747775] dark:text-[#64748B] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] text-lg transition">arrow_outward</span>
+            </button>
+
+            <button onclick="sendQuickPrompt('¿Cuáles son los componentes de la 5-tupla formal de un autómata finito?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#0F172A]/75 backdrop-blur-md hover:bg-white dark:hover:bg-[#1E293B] border border-[#E0E2EC]/90 dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-500 hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
+              <div class="pr-3">
+                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] transition">Definición Formal</span>
+                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#94A3B8] mt-1 line-clamp-1">Componentes de la 5-tupla formal</span>
+              </div>
+              <span class="material-symbols-outlined text-[#747775] dark:text-[#64748B] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] text-lg transition">arrow_outward</span>
+            </button>
+
+          </div>
         </div>
-        <button onclick="closeQuizModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+
+        <!-- Lista de Mensajes del Chat -->
+        <div id="messagesList" class="space-y-6"></div>
+      </div>
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- M3 SEARCH BAR / CHAT INPUT (ESTILO GEMINI FLOTANTE)      -->
+    <!-- ======================================================== -->
+    <footer class="absolute bottom-0 left-0 right-0 z-20 pt-16 pb-5 px-4 sm:px-6 gemini-floating-footer pointer-events-none">
+      <div class="max-w-3xl mx-auto pointer-events-auto">
+        <form id="chatForm" onsubmit="handleChatSubmit(event)" class="relative flex items-center bg-[#F0F4F9]/90 dark:bg-[#0F172A]/85 backdrop-blur-md hover:bg-[#E9EEF6] dark:hover:bg-[#1E293B] focus-within:bg-white dark:focus-within:bg-[#0F172A] border border-transparent dark:border-[#1E293B] focus-within:border-[#0F172A] dark:focus-within:border-[#38BDF8] rounded-[28px] px-5 py-2.5 shadow-xs focus-within:shadow-elevation-2 transition-all duration-200">
+          
+          <textarea
+            id="userInput"
+            rows="1"
+            placeholder="Escribe tu consulta sobre autómatas, gramáticas o ejercicios..."
+            class="w-full bg-transparent px-2 py-1.5 pr-12 text-sm text-[#1F1F1F] dark:text-[#F8FAFC] placeholder-[#747775] dark:placeholder-[#64748B] resize-none focus:outline-none max-h-32"
+            onkeydown="handleKeyDown(event)"
+          ></textarea>
+          
+          <!-- Botón circular M3 Filled Icon Button con flecha arriba -->
+          <button
+            type="submit"
+            id="sendBtn"
+            class="absolute right-3 w-10 h-10 rounded-full bg-[#0F172A] dark:bg-[#F8FAFC] hover:bg-[#1E293B] dark:hover:bg-[#E2E8F0] text-white dark:text-[#0F172A] flex items-center justify-center transition shadow-xs disabled:opacity-35 disabled:cursor-not-allowed flex-shrink-0"
+          >
+            <span id="sendIcon" class="material-symbols-outlined text-xl">arrow_upward</span>
+            <div id="spinIcon" class="hidden w-4 h-4 border-2 border-white dark:border-[#0F172A] border-t-transparent dark:border-t-transparent rounded-full animate-spin"></div>
+          </button>
+        </form>
+
+        <div id="footerHint" class="flex items-center justify-center space-x-2 text-[11px] text-[#747775] dark:text-[#94A3B8] mt-2.5 text-center">
+          <span><b>Enter</b> para enviar • <b>Shift + Enter</b> para nueva línea</span>
+          <span>•</span>
+          <span>Respaldado por las diapositivas oficiales</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: M3 DIALOG (SIMULADOR DE QUIZ INTERACTIVO)         -->
+  <!-- ======================================================== -->
+  <div id="quizModal" class="hidden fixed inset-0 z-50 bg-[#000000]/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#0F172A] border border-[#E0E2EC] dark:border-[#1E293B] rounded-[28px] max-w-xl w-full p-6 shadow-elevation-3 space-y-5 max-h-[90vh] flex flex-col animate-m3FadeIn text-[#1F1F1F] dark:text-[#F8FAFC]">
+      <div class="flex items-center justify-between border-b border-[#E0E2EC] dark:border-[#1E293B] pb-3">
+        <div class="flex items-center space-x-2.5">
+          <span class="material-symbols-outlined filled text-[#0F172A] dark:text-[#38BDF8] text-2xl">quiz</span>
+          <h3 class="text-base font-semibold text-[#1F1F1F] dark:text-[#F8FAFC]">Simulador de Evaluación</h3>
+        </div>
+        <button onclick="closeQuizModal()" class="w-9 h-9 rounded-full flex items-center justify-center text-[#444746] dark:text-[#94A3B8] hover:bg-[#F0F4F9] dark:hover:bg-[#1E293B] transition">
+          <span class="material-symbols-outlined text-xl">close</span>
         </button>
       </div>
 
       <!-- Configuración del Quiz -->
       <div id="quizSetup" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Selecciona el tema de la evaluación:</label>
-          <select id="quizTopic" class="w-full bg-dark-900 border border-dark-600 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+          <label class="block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] mb-1.5">Selecciona el tema de la evaluación:</label>
+          <select id="quizTopic" class="m3-select w-full !text-sm !py-2.5">
             <option value="Autómatas Finitos No Deterministas (AFND)">Autómatas Finitos No Deterministas (AFND)</option>
             <option value="Autómatas Finitos con Transiciones Épsilon">Autómatas Finitos con Transiciones Épsilon</option>
             <option value="Autómatas a Pila">Autómatas a Pila (PDA)</option>
@@ -223,79 +1171,305 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Número de preguntas:</label>
-          <input type="number" id="quizCount" value="3" min="1" max="5" class="w-24 bg-dark-900 border border-dark-600 rounded-lg p-2 text-sm text-slate-200">
+          <label class="block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] mb-1.5">Número de preguntas:</label>
+          <input type="number" id="quizCount" value="3" min="1" max="5" class="w-24 bg-white dark:bg-[#1E293B] border border-[#E0E2EC] dark:border-[#334155] rounded-[12px] p-2 text-sm text-[#1F1F1F] dark:text-[#F8FAFC] focus:outline-none focus:border-slate-400">
         </div>
 
-        <button onclick="startQuiz()" id="startQuizBtn" class="w-full py-2.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm transition shadow-lg shadow-sky-600/20">
+        <button onclick="startQuiz()" id="startQuizBtn" class="w-full py-3 rounded-full bg-[#0F172A] dark:bg-[#38BDF8] hover:bg-[#1E293B] dark:hover:bg-[#7DD3FC] text-white dark:text-[#0F172A] font-medium text-sm transition shadow-xs hover:shadow-elevation-1">
           🚀 Iniciar Evaluación
         </button>
       </div>
 
       <!-- Contenedor dinámico de preguntas -->
-      <div id="quizQuestionsContainer" class="hidden overflow-y-auto space-y-5 flex-1 pr-1"></div>
+      <div id="quizQuestionsContainer" class="hidden overflow-y-auto space-y-4 flex-1 pr-1"></div>
 
       <!-- Footer del Quiz -->
-      <div id="quizFooter" class="hidden border-t border-dark-700 pt-3 flex justify-between items-center text-xs">
-        <span id="quizScoreText" class="font-bold text-slate-200"></span>
-        <button onclick="closeQuizModal()" class="px-4 py-1.5 rounded-lg bg-dark-700 hover:bg-dark-600 text-white transition">Cerrar</button>
+      <div id="quizFooter" class="hidden border-t border-[#E0E2EC] dark:border-[#1E293B] pt-3 flex justify-between items-center text-xs">
+        <span id="quizScoreText" class="font-bold text-[#1F1F1F] dark:text-[#38BDF8]"></span>
+        <button onclick="closeQuizModal()" class="px-5 py-2 rounded-full bg-[#F0F4F9] dark:bg-[#1E293B] hover:bg-[#E9EEF6] dark:hover:bg-[#334155] text-[#1F1F1F] dark:text-[#F8FAFC] transition font-medium">Cerrar</button>
       </div>
     </div>
   </div>
 
-
   <!-- ======================================================== -->
-  <!-- CLIENTE JAVASCRIPT: SSE, MARKED, MERMAID & QUIZ         -->
+  <!-- JAVASCRIPT: SSE, MARKED, KATEX, MERMAID & M3 HANDLERS    -->
   <!-- ======================================================== -->
   <script>
-    let currentNivel = 'formal';
+    let currentNivel = 'intuitivo';
     let isStreaming = false;
+    let chatHistory = [];
+    let isSidebarExpanded = false;
+    let currentSelectedTopic = null;
+    let availableTopicsList = [];
 
-    // 1. Inicialización y Healthcheck
-    window.addEventListener('DOMContentLoaded', async () => {
-      checkBackendHealth();
-      loadTopics();
-    });
+    // ========================================================
+    // 🌓 ENGINE DE MODO OSCURO / CLARO
+    // ========================================================
+    function initTheme() {
+      const savedTheme = localStorage.getItem('aulaia_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = savedTheme ? (savedTheme === 'dark') : prefersDark;
+      applyTheme(isDark);
+    }
 
-    async function checkBackendHealth() {
-      const badge = document.getElementById('statusBadge');
-      const text = document.getElementById('statusText');
-      try {
-        const res = await fetch('/api/health');
-        const data = await res.json();
-        if (data.status === 'healthy') {
-          badge.classList.remove('hidden');
-          text.innerText = `${data.total_chunks} slides indexadas (Híbrido)`;
-        }
-      } catch (e) {
-        badge.classList.remove('hidden');
-        text.innerText = 'Backend Desconectado';
-        badge.querySelector('span').classList.replace('bg-emerald-400', 'bg-rose-500');
+    function toggleTheme() {
+      const isCurrentlyDark = document.documentElement.classList.contains('dark');
+      const newTheme = !isCurrentlyDark;
+      
+      const icon = document.getElementById('themeToggleIcon');
+      if (icon) {
+        icon.classList.add('rotate-[360deg]');
+        setTimeout(() => icon.classList.remove('rotate-[360deg]'), 350);
+      }
+
+      applyTheme(newTheme);
+      localStorage.setItem('aulaia_theme', newTheme ? 'dark' : 'light');
+      
+      // Re-renderizar diagramas Mermaid existentes con la paleta activa
+      reRenderAllMermaidDiagrams();
+    }
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      // Actualizar UI del botón toggle del sidebar
+      const icon = document.getElementById('themeToggleIcon');
+      const label = document.getElementById('themeToggleLabel');
+      const tooltip = document.getElementById('themeTooltip');
+
+      if (icon) {
+        icon.innerText = isDark ? 'light_mode' : 'dark_mode';
+      }
+      if (label) {
+        label.innerText = isDark ? 'Modo Claro' : 'Modo Oscuro';
+      }
+      if (tooltip) {
+        tooltip.innerText = isDark ? 'Modo Claro' : 'Modo Oscuro';
+      }
+
+      // Inicializar Mermaid acorde al tema
+      initMermaid(isDark);
+
+      // Re-sincronizar el nivel pedagógico activo y el menú
+      if (typeof currentNivel !== 'undefined') {
+        setNivel(currentNivel);
+      }
+      if (typeof renderTopicMenuOptions === 'function') {
+        renderTopicMenuOptions();
       }
     }
 
+    async function reRenderAllMermaidDiagrams() {
+      const isDark = document.documentElement.classList.contains('dark');
+      initMermaid(isDark);
+      const cards = document.querySelectorAll('.mermaid-card[data-mermaid-src]');
+      for (const card of cards) {
+        const raw = card.getAttribute('data-mermaid-src');
+        if (raw) {
+          card.removeAttribute('data-processed');
+          card.innerHTML = `<div class="mermaid w-full text-center flex justify-center">${raw}</div>`;
+        }
+      }
+      if (cards.length > 0 && window.mermaid) {
+        try {
+          await mermaid.run();
+        } catch (e) {
+          console.warn("Mermaid re-render note:", e);
+        }
+      }
+    }
+
+    // Inicialización del Sistema
+    window.addEventListener('DOMContentLoaded', async () => {
+      initTheme();
+      loadTopics();
+      initAuroraInteractivity();
+    });
+
+    // Toggle Sidebar: alterna entre modo contraído flotante y expandido
+    function toggleSidebar() {
+      isSidebarExpanded = !isSidebarExpanded;
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      
+      closeTopicMenu();
+
+      if (isSidebarExpanded) {
+        sidebar.classList.add('sidebar-expanded');
+        if (window.innerWidth < 1024) {
+          overlay.classList.remove('hidden');
+        }
+      } else {
+        sidebar.classList.remove('sidebar-expanded');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Efecto interactivo: Parallax atmosférico de la Aurora Boreal al mover el mouse
+    function initAuroraInteractivity() {
+      window.addEventListener('mousemove', (e) => {
+        const welcome = document.getElementById('welcomeView');
+        if (!welcome || welcome.classList.contains('hidden')) return;
+
+        const aurora = document.getElementById('auroraContainer');
+        if (aurora) {
+          const offsetX = (e.clientX - window.innerWidth / 2) / 55;
+          const offsetY = (e.clientY - window.innerHeight / 2) / 55;
+          aurora.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        }
+      });
+    }
+
+    // ========================================================
+    // 📚 CONTROL CUSTOM DE DOCUMENTOS DE CLASE (M3 MENU POPOVER)
+    // ========================================================
     async function loadTopics() {
       try {
         const res = await fetch('/api/topics');
-        const topics = await res.json();
-        const select = document.getElementById('topicFilter');
-        topics.forEach(t => {
-          const opt = document.createElement('option');
-          opt.value = t;
-          opt.innerText = t.replace('.pptx', '').replace('.pdf', '');
-          select.appendChild(opt);
-        });
-      } catch (e) {}
+        availableTopicsList = await res.json();
+        renderTopicMenuOptions();
+      } catch (e) {
+        console.warn("Nota: No se pudieron cargar los temas de clase:", e);
+      }
     }
 
+    function renderTopicMenuOptions() {
+      const container = document.getElementById('topicOptionsList');
+      if (!container) return;
+
+      const isDark = document.documentElement.classList.contains('dark');
+      const isAllSelected = !currentSelectedTopic;
+      
+      const activeBtnClass = isDark ? 'bg-[#1E293B] text-[#38BDF8] font-semibold' : 'bg-[#E2E8F0] text-[#0F172A] font-semibold';
+      const inactiveBtnClass = isDark ? 'text-[#CBD5E1] hover:bg-[#1E293B]' : 'text-[#1F1F1F] hover:bg-[#F0F4F9]';
+      const activeIconClass = isDark ? 'text-[#38BDF8]' : 'text-[#0F172A]';
+      const inactiveIconClass = isDark ? 'text-[#64748B]' : 'text-[#747775]';
+
+      let html = `
+        <button
+          type="button"
+          onclick="selectTopic('', 'Todas las Clases')"
+          class="w-full text-left px-3 py-2 rounded-[12px] text-xs flex items-center justify-between transition ${isAllSelected ? activeBtnClass : inactiveBtnClass}"
+        >
+          <div class="flex items-center space-x-2.5 truncate pr-2">
+            <span class="material-symbols-outlined text-sm ${isAllSelected ? activeIconClass : inactiveIconClass}">auto_awesome</span>
+            <span class="truncate">Todas las Clases</span>
+          </div>
+          ${isAllSelected ? `<span class="material-symbols-outlined text-sm ${activeIconClass}">check</span>` : ''}
+        </button>
+      `;
+
+      availableTopicsList.forEach(t => {
+        const isSelected = (currentSelectedTopic === t);
+        const displayName = t.replace('.pptx', '').replace('.pdf', '');
+        html += `
+          <button
+            type="button"
+            onclick="selectTopic('${escapeHtml(t)}', '${escapeHtml(displayName)}')"
+            class="w-full text-left px-3 py-2 rounded-[12px] text-xs flex items-center justify-between transition ${isSelected ? activeBtnClass : inactiveBtnClass}"
+          >
+            <div class="flex items-center space-x-2.5 truncate pr-2">
+              <span class="material-symbols-outlined text-sm ${isSelected ? activeIconClass : inactiveIconClass}">description</span>
+              <span class="truncate" title="${displayName}">${displayName}</span>
+            </div>
+            ${isSelected ? `<span class="material-symbols-outlined text-sm ${activeIconClass}">check</span>` : ''}
+          </button>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function toggleTopicMenu(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('topicDropdownMenu');
+      const chevron = document.getElementById('topicChevron');
+      if (!menu) return;
+
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        closeTopicMenu();
+      }
+    }
+
+    function closeTopicMenu() {
+      const menu = document.getElementById('topicDropdownMenu');
+      const chevron = document.getElementById('topicChevron');
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+    }
+
+    function selectTopic(topicValue, displayName) {
+      currentSelectedTopic = topicValue || null;
+      
+      const label = document.getElementById('topicSelectedLabel');
+      if (label) {
+        label.innerText = displayName || 'Todas las Clases';
+      }
+
+      const badge = document.getElementById('topicActiveBadge');
+      if (badge) {
+        if (currentSelectedTopic) {
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+
+      renderTopicMenuOptions();
+      closeTopicMenu();
+    }
+
+    // Cerrar el menú si se hace clic fuera o se pulsa Escape
+    document.addEventListener('click', (e) => {
+      const wrapper = document.getElementById('topicWrapper');
+      if (wrapper && !wrapper.contains(e.target)) {
+        closeTopicMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeTopicMenu();
+      }
+    });
+
+    // M3 Navigation Drawer Item Active Indicator (Adaptable a Modo Claro y Oscuro)
     function setNivel(nivel) {
       currentNivel = nivel;
-      ['formal', 'intuitivo', 'codigo'].forEach(n => {
-        const btn = document.getElementById('btn' + n.charAt(0).toUpperCase() + n.slice(1));
-        if (n === nivel) {
-          btn.className = "px-2.5 py-1.5 rounded-md transition font-medium bg-brand-600 text-white shadow";
-        } else {
-          btn.className = "px-2.5 py-1.5 rounded-md transition font-medium text-slate-400 hover:text-white";
+      const isDark = document.documentElement.classList.contains('dark');
+      const modes = [
+        { id: 'intuitivo', name: 'Modo Intuitivo', icon: 'lightbulb' },
+        { id: 'formal', name: 'Modo Formal', icon: 'menu_book' },
+        { id: 'codigo', name: 'Modo Código Python', icon: 'terminal' }
+      ];
+
+      modes.forEach(m => {
+        const btn = document.getElementById('btn' + m.id.charAt(0).toUpperCase() + m.id.slice(1));
+        if (btn) {
+          btn.classList.remove('bg-[#E2E8F0]', 'bg-[#E5E7EB]', 'bg-[#1E293B]', 'text-[#0F172A]', 'text-[#38BDF8]', 'text-[#444746]', 'text-[#94A3B8]', 'text-[#1F1F1F]', 'shadow-xs');
+          if (m.id === nivel) {
+            if (isDark) {
+              btn.classList.add('bg-[#1E293B]', 'text-[#38BDF8]', 'font-semibold', 'shadow-xs');
+            } else {
+              btn.classList.add('bg-[#E5E7EB]', 'text-[#0F172A]', 'font-semibold', 'shadow-xs');
+            }
+          } else {
+            if (isDark) {
+              btn.classList.add('text-[#94A3B8]', 'hover:bg-[#1E293B]', 'hover:text-[#F8FAFC]');
+            } else {
+              btn.classList.add('text-[#444746]', 'hover:bg-[#E5E7EB]', 'hover:text-[#1F1F1F]');
+            }
+          }
         }
       });
     }
@@ -313,8 +1487,14 @@
     }
 
     function clearChat() {
+      chatHistory = [];
       document.getElementById('messagesList').innerHTML = '';
       document.getElementById('welcomeView').classList.remove('hidden');
+      const aurora = document.getElementById('auroraContainer');
+      if (aurora) aurora.classList.remove('aurora-subtle');
+      if (window.innerWidth < 1024 && isSidebarExpanded) {
+        toggleSidebar();
+      }
     }
 
     // ========================================================
@@ -330,18 +1510,21 @@
 
       input.value = '';
       document.getElementById('welcomeView').classList.add('hidden');
+      const aurora = document.getElementById('auroraContainer');
+      if (aurora) aurora.classList.add('aurora-subtle');
 
-      // 1. Renderizar mensaje del usuario
+      // 1. Mensaje del usuario (M3 Primary Container)
       appendUserMessage(query);
 
-      // 2. Preparar placeholder de AulaIA
+      // 2. Placeholder para respuesta de AulaIA
       const assistantMsg = createAssistantMessagePlaceholder();
       const textContainer = assistantMsg.querySelector('.bot-text');
       const sourcesContainer = assistantMsg.querySelector('.bot-sources');
 
       setStreamingState(true);
+      closeTopicMenu();
 
-      const topicFilter = document.getElementById('topicFilter').value || null;
+      const topicFilter = currentSelectedTopic || null;
 
       try {
         const response = await fetch('/api/chat/stream', {
@@ -350,7 +1533,8 @@
           body: JSON.stringify({
             pregunta: query,
             nivel: currentNivel,
-            tema_filtro: topicFilter
+            tema_filtro: topicFilter,
+            historial: chatHistory.slice(-6)
           })
         });
 
@@ -368,47 +1552,52 @@
           if (done) break;
 
           buffer += decoder.decode(value, { stream: true });
-          const events = buffer.split('\n\n');
-          buffer = events.pop(); // Mantener fragmento incompleto
+          const normalized = buffer.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+          const events = normalized.split('\n\n');
+          buffer = events.pop() || '';
 
           for (const ev of events) {
             if (!ev.trim()) continue;
             let eventType = 'message';
-            let eventData = '';
+            let dataLines = [];
 
             ev.split('\n').forEach(line => {
-              if (line.startsWith('event:')) eventType = line.replace('event:', '').trim();
-              if (line.startsWith('data:')) eventData = line.replace('data:', '').trim();
+              const trimmed = line.trim();
+              if (trimmed.startsWith('event:')) {
+                eventType = trimmed.substring(6).trim();
+              } else if (trimmed.startsWith('data:')) {
+                dataLines.push(trimmed.substring(5).trim());
+              }
             });
 
+            const eventData = dataLines.join('\n');
             if (eventData) {
-              const parsed = JSON.parse(eventData);
+              try {
+                const parsed = JSON.parse(eventData);
 
-              // Evento 1: Fuentes y Citas
-              if (eventType === 'sources') {
-                renderSourcesList(sourcesContainer, parsed);
-              }
-              // Evento 2: Token de texto
-              else if (eventType === 'token') {
-                fullAnswer += parsed.text;
-                textContainer.innerHTML = marked.parse(fullAnswer);
-                scrollToBottom();
-              }
-              // Evento 3: Finalización
-              else if (eventType === 'done') {
-                // Post-procesar diagramas Mermaid si los hay
-                renderMermaidBlocks(textContainer);
-              }
-              // Evento 4: Error controlado
-              else if (eventType === 'error') {
-                textContainer.innerHTML += `<div class="p-3 my-2 rounded bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">${parsed.error}</div>`;
+                if (eventType === 'sources') {
+                  renderSourcesList(sourcesContainer, parsed);
+                } else if (eventType === 'token') {
+                  fullAnswer += parsed.text;
+                  textContainer.innerHTML = renderMarkdownAndMath(fullAnswer);
+                  scrollToBottom();
+                } else if (eventType === 'done') {
+                  textContainer.innerHTML = renderMarkdownAndMath(fullAnswer);
+                  renderMermaidBlocks(textContainer);
+                  chatHistory.push({ role: 'user', content: query });
+                  chatHistory.push({ role: 'assistant', content: fullAnswer });
+                } else if (eventType === 'error') {
+                  textContainer.innerHTML += `<div class="p-3.5 my-2 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200 text-xs">${parsed.error}</div>`;
+                }
+              } catch (parseErr) {
+                console.warn("Fragmento parcial SSE:", parseErr, eventData);
               }
             }
           }
         }
 
       } catch (err) {
-        textContainer.innerHTML = `<div class="text-rose-400 text-sm">❌ Error al conectar con el asistente: ${err.message}</div>`;
+        textContainer.innerHTML = `<div class="text-rose-600 dark:text-rose-400 text-sm">❌ Error al conectar con el asistente: ${err.message}</div>`;
       } finally {
         setStreamingState(false);
         scrollToBottom();
@@ -421,9 +1610,9 @@
     function appendUserMessage(text) {
       const container = document.getElementById('messagesList');
       const div = document.createElement('div');
-      div.className = "flex justify-end";
+      div.className = "flex justify-end animate-m3FadeIn";
       div.innerHTML = `
-        <div class="max-w-[85%] bg-dark-700/80 border border-dark-600 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-slate-100 shadow">
+        <div class="user-bubble max-w-[85%] sm:max-w-[75%] bg-[#0F172A] dark:bg-[#1E293B] text-white rounded-[20px] rounded-tr-[4px] px-5 py-3 text-sm shadow-elevation-1 leading-relaxed">
           ${text.replace(/\n/g, '<br>')}
         </div>
       `;
@@ -434,16 +1623,19 @@
     function createAssistantMessagePlaceholder() {
       const container = document.getElementById('messagesList');
       const div = document.createElement('div');
-      div.className = "flex space-x-3 items-start";
+      div.className = "flex space-x-3.5 items-start animate-m3FadeIn";
       div.innerHTML = `
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-sky-400 flex-shrink-0 flex items-center justify-center shadow">
-          <span class="text-white font-bold text-xs">AI</span>
+        <div class="bot-avatar w-8 h-8 rounded-full bg-[#0F172A] dark:bg-[#1E293B] text-white flex-shrink-0 flex items-center justify-center shadow-xs mt-0.5">
+          <span class="material-symbols-outlined filled text-sm">auto_awesome</span>
         </div>
-        <div class="flex-1 bg-dark-800 border border-dark-700 rounded-2xl rounded-tl-sm p-4 text-sm text-slate-200 shadow-lg space-y-3">
-          <div class="bot-text prose-custom">
-            <span class="inline-block w-2 h-4 bg-brand-400 animate-pulse"></span>
+        <div class="flex-1 space-y-2">
+          <div class="bot-text prose-custom text-sm text-[#1F1F1F] dark:text-[#F8FAFC] leading-relaxed">
+            <div class="flex items-center space-x-2 text-[#747775] dark:text-[#94A3B8] text-xs py-1">
+              <div class="w-3.5 h-3.5 border-2 border-[#0F172A] dark:border-[#38BDF8] border-t-transparent dark:border-t-transparent rounded-full animate-spin"></div>
+              <span>Consultando diapositivas de clase...</span>
+            </div>
           </div>
-          <div class="bot-sources hidden pt-2 border-t border-dark-700/60"></div>
+          <div class="bot-sources hidden pt-2"></div>
         </div>
       `;
       container.appendChild(div);
@@ -455,21 +1647,19 @@
       container.classList.remove('hidden');
       container.innerHTML = `
         <details class="group cursor-pointer">
-          <summary class="text-xs font-semibold text-slate-400 hover:text-brand-400 list-none flex items-center justify-between">
-            <span class="flex items-center space-x-1.5">
-              <span>🔍</span>
-              <span>Fuentes consultadas (${sources.length} diapositivas)</span>
-            </span>
-            <span class="text-[10px] bg-dark-700 px-2 py-0.5 rounded text-slate-300">Ver citas</span>
+          <summary class="source-summary text-xs font-medium text-[#444746] dark:text-[#94A3B8] hover:text-[#1F1F1F] dark:hover:text-[#F8FAFC] list-none flex items-center space-x-1.5 transition">
+            <span class="material-symbols-outlined text-sm">search</span>
+            <span>Fuentes consultadas (${sources.length} diapositivas)</span>
+            <span class="source-pill text-[10px] bg-[#E2E8F0] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#38BDF8] px-2 py-0.5 rounded-full ml-1 font-medium">Ver</span>
           </summary>
-          <div class="grid grid-cols-1 gap-2 pt-3">
+          <div class="grid grid-cols-1 gap-2 pt-2.5">
             ${sources.map(s => `
-              <div class="p-2.5 rounded-lg bg-dark-900/60 border border-dark-700 text-xs">
+              <div class="source-item-card p-3 rounded-[14px] bg-[#F0F4F9] dark:bg-[#0F172A] border border-[#E0E2EC] dark:border-[#1E293B] text-xs">
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-semibold text-brand-400 truncate max-w-[70%]">${s.archivo}</span>
-                  <span class="px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-400 text-[10px]">Slide ${s.slide}</span>
+                  <span class="source-item-title font-medium text-[#1F1F1F] dark:text-[#F8FAFC] truncate max-w-[70%]">${s.archivo}</span>
+                  <span class="source-pill px-2 py-0.5 rounded-full bg-[#E2E8F0] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#38BDF8] font-medium text-[10px]">Slide ${s.slide}</span>
                 </div>
-                <p class="text-slate-400 text-[11px] line-clamp-2 italic">${s.extracto}</p>
+                <p class="source-item-extract text-[#444746] dark:text-[#94A3B8] text-[11px] line-clamp-2 italic">${s.extracto}</p>
               </div>
             `).join('')}
           </div>
@@ -478,14 +1668,20 @@
     }
 
     async function renderMermaidBlocks(container) {
+      const isDark = document.documentElement.classList.contains('dark');
+      initMermaid(isDark);
       const codeBlocks = container.querySelectorAll('pre code');
       for (const block of codeBlocks) {
         if (block.innerText.startsWith('mermaid') || block.classList.contains('language-mermaid')) {
           const rawMermaid = block.innerText.replace(/^mermaid\n?/, '').trim();
-          const mermaidDiv = document.createElement('pre');
-          mermaidDiv.className = 'mermaid text-center my-4 p-4 bg-dark-900 border border-dark-700 rounded-xl overflow-x-auto';
+          const mermaidCard = document.createElement('div');
+          mermaidCard.className = 'mermaid-card my-4 p-5 bg-[#F8FAFC] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-[#1E293B] rounded-[16px] overflow-x-auto flex justify-center items-center shadow-xs';
+          mermaidCard.setAttribute('data-mermaid-src', rawMermaid);
+          const mermaidDiv = document.createElement('div');
+          mermaidDiv.className = 'mermaid w-full text-center flex justify-center';
           mermaidDiv.textContent = rawMermaid;
-          block.parentElement.replaceWith(mermaidDiv);
+          mermaidCard.appendChild(mermaidDiv);
+          block.parentElement.replaceWith(mermaidCard);
         }
       }
       try {
@@ -493,6 +1689,57 @@
       } catch (e) {
         console.warn("Mermaid render note:", e);
       }
+    }
+
+    function renderMarkdownAndMath(rawMarkdown) {
+      if (!rawMarkdown) return '';
+      const displayMath = [];
+      const inlineMath = [];
+
+      // 1. Proteger fórmulas display $$ ... $$
+      let protectedText = rawMarkdown.replace(/\$\$([\s\S]+?)\$\$/g, (match, formula) => {
+        displayMath.push(formula.trim());
+        return `@@DISPLAYMATH_${displayMath.length - 1}@@`;
+      });
+
+      // 2. Proteger fórmulas en línea $ ... $
+      protectedText = protectedText.replace(/\$([^\$\n\r]+?)\$/g, (match, formula) => {
+        inlineMath.push(formula.trim());
+        return `@@INLINEMATH_${inlineMath.length - 1}@@`;
+      });
+
+      // 3. Parsear Markdown
+      let html = marked.parse(protectedText);
+
+      // Limpiar párrafos envolventes alrededor de bloques de matemáticas display
+      html = html.replace(/<p>\s*(@@DISPLAYMATH_\d+@@)\s*<\/p>/g, '$1');
+
+      // 4. Inyectar KaTeX
+      html = html.replace(/@@DISPLAYMATH_(\d+)@@/g, (match, idx) => {
+        const formula = displayMath[parseInt(idx, 10)] || '';
+        if (window.katex) {
+          try {
+            return `<div class="katex-display my-3 text-center overflow-x-auto shadow-2xs">${katex.renderToString(formula, { displayMode: true, throwOnError: false })}</div>`;
+          } catch (e) {
+            return `<div class="katex-display my-2 text-center text-[#0F172A] font-mono shadow-2xs">$$${formula}$$</div>`;
+          }
+        }
+        return `<div class="katex-display my-2 text-center font-mono shadow-2xs">$$${formula}$$</div>`;
+      });
+
+      html = html.replace(/@@INLINEMATH_(\d+)@@/g, (match, idx) => {
+        const formula = inlineMath[parseInt(idx, 10)] || '';
+        if (window.katex) {
+          try {
+            return katex.renderToString(formula, { displayMode: false, throwOnError: false });
+          } catch (e) {
+            return `<span class="font-mono text-[#0F172A]">$${formula}$</span>`;
+          }
+        }
+        return `<span class="font-mono">$${formula}$</span>`;
+      });
+
+      return html;
     }
 
     function setStreamingState(streaming) {
@@ -508,7 +1755,7 @@
     }
 
     // ========================================================
-    // LÓGICA DEL SIMULADOR DE QUIZ
+    // LÓGICA DEL SIMULADOR DE QUIZ M3
     // ========================================================
     function openQuizModal() {
       document.getElementById('quizModal').classList.remove('hidden');
@@ -527,7 +1774,7 @@
       const footer = document.getElementById('quizFooter');
 
       btn.disabled = true;
-      btn.innerText = "⏳ Generando preguntas con Gemini...";
+      btn.innerText = "⏳ Generando preguntas...";
 
       try {
         const res = await fetch('/api/quiz/generate', {
@@ -545,28 +1792,25 @@
         questionsContainer.classList.remove('hidden');
         footer.classList.remove('hidden');
 
-        let answeredCount = 0;
-        let correctCount = 0;
-
         questionsContainer.innerHTML = questions.map((q, idx) => `
-          <div class="p-4 rounded-xl bg-dark-900/80 border border-dark-700 space-y-3" id="quizCard_${q.id}">
+          <div class="p-4 rounded-[20px] bg-[#F0F4F9] dark:bg-[#131B2E] border border-[#E0E2EC] dark:border-[#1E293B] space-y-3" id="quizCard_${q.id}">
             <div class="flex items-start justify-between">
-              <span class="text-xs font-bold text-brand-400">Pregunta ${idx + 1} de ${questions.length}</span>
-              <span class="text-[10px] text-slate-500">${q.fuente}</span>
+              <span class="text-xs font-bold text-[#0F172A] dark:text-[#38BDF8]">Pregunta ${idx + 1} de ${questions.length}</span>
+              <span class="text-[10px] text-[#747775] dark:text-[#94A3B8] font-medium">${q.fuente}</span>
             </div>
-            <p class="text-sm font-medium text-white">${q.pregunta}</p>
+            <p class="text-sm font-semibold text-[#1F1F1F] dark:text-[#F8FAFC]">${q.pregunta}</p>
             <div class="space-y-2">
               ${q.opciones.map(opt => `
                 <button
                   onclick="selectQuizOption(${q.id}, '${opt.charAt(0)}', '${q.respuesta_correcta}', '${escapeHtml(q.explicacion)}')"
-                  class="quiz-opt-btn w-full text-left p-2.5 rounded-lg bg-dark-800 border border-dark-700 hover:border-brand-500/50 text-xs text-slate-200 transition"
+                  class="quiz-opt-btn w-full text-left p-3 rounded-[14px] bg-white dark:bg-[#1E293B] border border-[#E0E2EC] dark:border-[#334155] hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-[#273549] text-xs text-[#1F1F1F] dark:text-[#F8FAFC] transition shadow-xs"
                   data-qid="${q.id}"
                 >
                   ${opt}
                 </button>
               `).join('')}
             </div>
-            <div id="feedback_${q.id}" class="hidden text-xs p-2.5 rounded-lg"></div>
+            <div id="feedback_${q.id}" class="hidden text-xs p-3.5 rounded-[14px] leading-relaxed"></div>
           </div>
         `).join('');
 
@@ -586,17 +1830,16 @@
       const buttons = card.querySelectorAll('.quiz-opt-btn');
       const feedback = document.getElementById(`feedback_${qid}`);
 
-      // Deshabilitar todos los botones de esta pregunta
       buttons.forEach(b => b.disabled = true);
 
       const isCorrect = (chosenLetter.toUpperCase() === correctLetter.toUpperCase());
       if (isCorrect) {
         window.currentQuizState.correct++;
-        feedback.className = "text-xs p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 block";
+        feedback.className = "text-xs p-3.5 rounded-[14px] bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 block";
         feedback.innerHTML = `<b>✅ ¡Correcto!</b> ${explanation}`;
       } else {
-        feedback.className = "text-xs p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 block";
-        feedback.innerHTML = `<b>❌ Incorrecto.</b> La respuesta correcta era <b>${correctLetter}</b>.<br><span class="text-slate-400">${explanation}</span>`;
+        feedback.className = "text-xs p-3.5 rounded-[14px] bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 block";
+        feedback.innerHTML = `<b>❌ Incorrecto.</b> La respuesta correcta era <b>${correctLetter}</b>.<br><span class="text-[#444746] dark:text-[#94A3B8] mt-1 block">${explanation}</span>`;
       }
 
       window.currentQuizState.answered++;
@@ -609,4 +1852,3 @@
   </script>
 </body>
 </html>
-

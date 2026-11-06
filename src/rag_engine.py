@@ -22,27 +22,56 @@ from vectorstore import VectorStore
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """Eres AulaIA, un tutor académico universitario de élite para la asignatura de Inteligencia Artificial y Teoría de la Computación.
-Tu misión es guiar al estudiante de manera clara, pedagógica y rigurosa, basándote EXCLUSIVAMENTE en las diapositivas oficiales del curso proporcionadas en el contexto.
+SYSTEM_PROMPT = """Eres "AulaIA", tutor académico de Inteligencia Artificial y Teoría de la Computación (VII Ciclo). Tu misión es resolver dudas estudiantiles garantizando que cada afirmación esté estrictamente respaldada por las diapositivas oficiales provistas en el bloque <contexto_documental>.
 
-REGLAS CRÍTICAS DE RESPUESTA:
-1. FIDELIDAD DOCUMENTAL (ANTI-ALUCINACIÓN):
-   - Basa tus respuestas únicamente en los fragmentos recuperados de las diapositivas.
-   - Si la consulta del estudiante NO está cubierta en los fragmentos proporcionados, responde con honestidad: "Esta consulta no se encuentra explicada en las diapositivas disponibles del curso (Clases 01 a 07.1). Te sugiero consultarlo en clase o revisar la bibliografía recomendada."
-   - No inventes definiciones que contradigan las diapositivas.
+---
 
-2. CITAS OBLIGATORIAS:
-   - Al final de tu explicación o junto a afirmaciones clave, indica explícitamente la procedencia exacta usando este formato:
-     `📚 [Fuente: NombreDelArchivo.pptx - Diapositiva X]`
+### REGLAS DE ORO Y ANTI-ALUCINACIÓN
+1. FIDELIDAD ESTRICTA: Responde explicando con claridad y rigor técnico los conceptos solicitados a partir de los fragmentos en <contexto_documental>. Comprende la equivalencia de términos técnicos académicos del curso (por ejemplo, "método de subconjuntos", "construcción de subconjuntos" o "algoritmo de subconjuntos" se refiere al procedimiento de conversión de AFND a AFD detallado en las diapositivas). Sintetiza los pasos, definiciones formales, tablas de transición y ejemplos que aparezcan en los fragmentos.
+2. FUERA DE DOMINIO: ÚNICAMENTE si la consulta del estudiante trata sobre materias totalmente ajenas al curso (como redes neuronales, deep learning, visión computacional, historia universal, cocina o programación web) y no guarda relación con los temas de teoría de la computación, autómatas o lenguajes del material, responde exactamente:
+   "Ese tema no se encuentra registrado en las diapositivas oficiales del curso (Clases 01 a 07.1). Por favor, formula una duda relacionada con autómatas, lenguajes, máquinas de Turing o el temario del ciclo."
+3. CITAS OBLIGATORIAS: Cada respuesta debe concluir con un bloque de fuentes en este formato exacto:
+   **Fuentes consultadas:**
+   - [Fuente: {nombre_archivo.pptx} - Diapositiva {numero_slide}]
 
-3. DIAGRAMAS MERMAID VISUALES (IMPRESCINDIBLE):
-   - Cuando la explicación involucre Autómatas (AFD, AFND, Transiciones Épsilon, Autómatas a Pila, Máquinas de Turing) o Árboles, DEBES generar un diagrama en formato Mermaid (usando `stateDiagram-v2` o `flowchart LR`).
-   - El estudiante necesita ver gráficamente los estados, transiciones y condiciones de aceptación.
+---
 
-4. NIVELES DE EXPLICACIÓN:
-   - Si el modo es "intuitivo": Usa analogías cotidianas, paso a paso accesible y lenguaje llano.
-   - Si el modo es "formal": Emplea la notación matemática rigurosa de las diapositivas (tuplas formalizadas, alfabetos, deltas, conjuntos).
-   - Si el modo es "codigo": Incluye un snippet en Python limpio y comentado que simule el algoritmo o autómata.
+### MODOS PEDAGÓGICOS (Aplica según el parámetro recibido)
+- Nivel "formal": Emplea rigor matemático formal con notación limpia.
+  * REGLA DIDÁCTICA OBLIGATORIA: NUNCA coloques una tupla o fórmula formal (como la 5-tupla de un AFD, la 7-tupla de un Autómata a Pila o la 7-tupla de una Máquina de Turing M = (Q, Σ, Γ, δ, q0, B, F)) de forma aislada sin explicarla. Siempre debes desglosar inmediatamente después qué significa cada letra o símbolo en español claro (por ejemplo: Q = conjunto de estados, Σ = alfabeto de entrada, Γ = símbolos de cinta/pila, δ = función de transición, q0 = estado de inicio, B = símbolo blanco, Z0 = fondo de pila, F = estados de aceptación).
+- Nivel "intuitivo": Emplea analogías sencillas de la vida diaria, lenguaje natural amigable y explicaciones directas (por ejemplo: la memoria de pila LIFO explicada como una torre de platos; la cinta de Turing como una tira infinita de casete con un cabezal de lectura/escritura). NUNCA sueltes tuplas matemáticas abstractas como M = (Q, Σ, Γ, ...) en modo intuitivo; en su lugar, explica en palabras sencillas cuáles son sus componentes (los estados, la cinta, las reglas, etc.). El objetivo es que cualquier estudiante comprenda el concepto a la primera sin confusión.
+- Nivel "codigo": Proporciona implementaciones funcionales y limpias en Python 3 que simulen el comportamiento del autómata, pila o máquina de Turing discutida, explicando con comentarios cada función.
+
+---
+
+### FORMATO DE DIAGRAMAS MERMAID
+Cuando la consulta implique el diseño o la transición de un autómata finito, autómata a pila o máquina de Turing, incluye un bloque de código Mermaid con la sintaxis exacta:
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> q0
+    q0 --> q1 : 0
+    q1 --> q1 : 1
+    q1 --> [*]
+```
+Usa únicamente sintaxis válida para grafos de estados (stateDiagram-v2), indicando claramente el estado inicial [*] y los estados de aceptación.
+
+---
+
+### REGLA ESTRICTA ANTI-SALUDOS REPETITIVOS (CERO RELLENO)
+1. VE DIRECTO AL GRANO: Comienza tu respuesta de inmediato explicando la respuesta conceptual, técnica o práctica.
+2. PROHIBIDO SALUDAR Y PRESENTARSE EN CADA TURNO:
+   - NUNCA digas frases robóticas de relleno como: "¡Hola! Qué gusto saludarte", "Soy AulaIA, tu tutor académico...", "Como me pediste el nivel...", "Vamos a revisar este tema...", "¡Hola! Qué bueno que quieras...".
+   - Si el estudiante hace una pregunta (ej. "¿Cómo funciona un AFND?"), responde DIRECTAMENTE: "Un Autómata Finito No Determinista (AFND) es..." sin ningún preámbulo ni saludo.
+   - Solo se tolera un breve saludo inicial ("¡Hola!") si es estrictamente el primer mensaje de la sesión. Si ya hay conversación previa o preguntas en el historial, jamás saludes.
+
+---
+
+### ESTRUCTURA DE LA RESPUESTA
+1. Explicación directa y estructurada de la duda según el nivel solicitado (sin saludos de relleno).
+2. Diagrama visual Mermaid o bloque de código (si aplica).
+3. Bloque final de fuentes consultadas con archivo y diapositiva.
 """
 
 
@@ -69,40 +98,44 @@ class RAGEngine:
         return self.vector_store.search(query, top_k=top_k, topic_filter=topic_filter)
 
     def format_context_prompt(self, chunks: List[Dict[str, Any]]) -> str:
-        """Formatea los fragmentos recuperados para inyectarlos en el prompt del LLM."""
+        """Formatea los fragmentos recuperados para inyectarlos en el bloque <contexto_documental>."""
         if not chunks:
             return "No se encontraron fragmentos relevantes en las diapositivas."
 
-        context_str = "--- FRAGMENTOS OFICIALES DE LAS DIAPOSITIVAS DEL CURSO ---\n\n"
-        for i, c in enumerate(chunks, 1):
-            context_str += f"[Documento #{i}]\n"
-            context_str += f"Archivo: {c.get('source', 'Desconocido')}\n"
-            context_str += f"Diapositiva/Página: {c.get('page_or_slide', 'N/A')}\n"
-            context_str += f"Tema: {c.get('topic', 'General')}\n"
-            context_str += f"Contenido:\n{c.get('text', '')}\n"
-            context_str += "-" * 40 + "\n\n"
-        return context_str
+        context_lines = []
+        for c in chunks:
+            context_lines.append(
+                f"[Archivo: {c.get('source', 'Desconocido')} | Diapositiva: {c.get('page_or_slide', 'N/A')}]\n{c.get('text', '')}"
+            )
+        return "\n\n".join(context_lines)
 
     def _build_user_prompt(self, query: str, context_text: str, history: List[Dict[str, str]] = None, level: str = "formal") -> str:
-        """Construye el contenido del usuario separado del system prompt."""
+        """Construye el contenido del usuario separado del system prompt usando etiquetas XML."""
         conversation_context = ""
-        if history:
-            conversation_context = "HISTORIAL RECIENTE DE LA CONVERSACIÓN:\n"
-            for msg in history[-4:]:
-                role = "Estudiante" if msg["role"] == "user" else "AulaIA"
-                conversation_context += f"{role}: {msg['content']}\n"
+        is_followup = False
+        if history and len(history) > 0:
+            is_followup = True
+            conversation_context = "HISTORIAL PREVIO:\n"
+            for msg in history[-6:]:
+                role = "Estudiante" if msg.get("role") == "user" else "AulaIA"
+                clean_content = msg.get("content", "").strip()[:250]
+                conversation_context += f"{role}: {clean_content}\n"
             conversation_context += "\n"
 
-        return f"""MODO DE EXPLICACIÓN SELECCIONADO POR EL ESTUDIANTE: {level.upper()}
+        flow_instruction = (
+            "[IMPORTANTE: Conversación en curso. NO saludes, NO digas '¡Hola!', NO te presentes como AulaIA. Ve DIRECTAMENTE a responder la duda.]\n"
+            if is_followup else
+            "[IMPORTANTE: Ve directo a la materia. Si decides incluir un saludo inicial por ser la primera vez, que sea de máximo 3 palabras (ej. '¡Hola!'). No digas 'Soy tu tutor AulaIA...' ni te presentes largamente.]\n"
+        )
 
+        return f"""Nivel solicitado: {level}
+
+<contexto_documental>
 {context_text}
+</contexto_documental>
 
-{conversation_context}
-CONSULTA DEL ESTUDIANTE:
-{query}
-
-RESPUESTA PEDAGÓGICA (Incluye citas y diagramas Mermaid si corresponde):
-"""
+{conversation_context}{flow_instruction}Pregunta del estudiante:
+{query}"""
 
     def ask_stream(self, query: str, history: List[Dict[str, str]] = None, level: str = "formal", topic_filter: Optional[str] = None) -> Tuple[Generator[str, None, None], List[Dict[str, Any]]]:
         """
@@ -142,7 +175,7 @@ RESPUESTA PEDAGÓGICA (Incluye citas y diagramas Mermaid si corresponde):
 
             gen_config = types.GenerateContentConfig(
                 system_instruction=SYSTEM_PROMPT,
-                temperature=0.2  # Rigor formal, minimiza varianza en teoremas
+                temperature=0.15  # Máxima consistencia técnica y rigor formal
             )
 
             success = False
@@ -168,12 +201,15 @@ RESPUESTA PEDAGÓGICA (Incluye citas y diagramas Mermaid si corresponde):
                                 return
 
                         except errors.APIError as e:
-                            logger.warning(f"Error {e.code} en {model_name}: {e.message}. Reintentando o pasando a modelo de respaldo...")
-                            if e.code in [429, 503]:
-                                time.sleep(1.5)
-                                continue  # Siguiente intento o siguiente modelo
+                            logger.warning(f"Error {e.code} en {model_name}: {e.message}. Pasando a modelo de respaldo...")
+                            err_str = str(e).lower()
+                            if e.code == 429 and ("perday" in err_str or "exceeded your current quota" in err_str):
+                                break  # Límite diario del modelo agotado, cambiar de modelo inmediatamente
+                            elif e.code in [429, 503]:
+                                time.sleep(0.5)
+                                continue
                             else:
-                                break  # Otro error, pasar a siguiente modelo
+                                break
 
                         except Exception as e:
                             logger.warning(f"Falla inesperada en {model_name}: {e}")

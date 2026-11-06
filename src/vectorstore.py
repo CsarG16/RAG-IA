@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import sys
+import unicodedata
 import numpy as np
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
@@ -27,6 +28,11 @@ SPANISH_STOP_WORDS = {
     "esa", "estos", "mucho", "quienes", "nada", "muchos", "cual", "cuál", "cuales", "cuáles", "sea",
     "poco", "ella", "estas", "es", "son", "unas", "cómo"
 }
+
+
+def _strip_accents(s: str) -> str:
+    """Normaliza texto eliminando tildes y diacríticos de forma rápida."""
+    return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn').lower()
 
 
 def _tokenize(text: str) -> List[str]:
@@ -261,13 +267,9 @@ class VectorStore:
             chunk["score"] = float(rrf_score)
 
             if topic_filter:
-                import unicodedata
-                def _strip_accents(s):
-                    return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn').lower()
                 src_norm = _strip_accents(chunk.get("source", ""))
                 top_norm = _strip_accents(chunk.get("topic", ""))
                 filt_norm = _strip_accents(topic_filter)
-                # Si alguna palabra del filtro coincide
                 filt_words = [w for w in filt_norm.split() if len(w) > 3]
                 if filt_words and not any(w in src_norm or w in top_norm for w in filt_words):
                     continue
