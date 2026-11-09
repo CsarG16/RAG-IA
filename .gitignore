@@ -36,3 +36,11 @@ desktop.ini
 
 # Logs
 *.log
+
+# Bases de datos locales
+*.db
+*.sqlite
+*.sqlite3
+data/*.db
+*.db-shm
+*.db-wal

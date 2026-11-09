@@ -14,6 +14,7 @@ PROCESSED_DATA_DIR = DATA_DIR / "processed"
 CHUNKS_FILE = PROCESSED_DATA_DIR / "chunks.json"
 FAISS_INDEX_FILE = PROCESSED_DATA_DIR / "faiss.index"
 METADATA_FILE = PROCESSED_DATA_DIR / "metadata.json"
+CHATS_DB_FILE = DATA_DIR / "chats.db"
 
 # Credenciales de API (Principal y Respaldo de emergencia)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
@@ -30,4 +31,6 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "gemini-embedding-001")
 
 # Parámetros de Recuperación
 TOP_K_RESULTS = 6
-MAX_HISTORY_MESSAGES = 10
+MAX_HISTORY_MESSAGES = 6          # memoria de corto plazo: últimos 3 turnos (pregunta + respuesta)
+HISTORY_USER_CHARS = 400          # recorte por mensaje del estudiante dentro del prompt
+HISTORY_ASSISTANT_CHARS = 700     # recorte por respuesta previa del tutor dentro del prompt

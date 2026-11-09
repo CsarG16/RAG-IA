@@ -3,8 +3,9 @@ import logging
 import os
 import sys
 import time
+import unicodedata
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Generator, Tuple
+from typing import List, Dict, Any, Optional, Generator, Tuple, Union
 
 # Asegurar path de src
 sys.path.append(str(Path(__file__).resolve().parent))
@@ -15,12 +16,19 @@ from config import (
     GEMINI_API_KEY_BACKUP,
     DEFAULT_MODEL,
     FALLBACK_MODELS,
-    TOP_K_RESULTS
+    TOP_K_RESULTS,
+    MAX_HISTORY_MESSAGES,
+    HISTORY_USER_CHARS,
+    HISTORY_ASSISTANT_CHARS,
 )
 from vectorstore import VectorStore
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+
+# Señal interna del stream: "descarta el texto parcial ya emitido, se reintentará la respuesta desde cero".
+# Se usa cuando Gemini falla a mitad de una respuesta (p. ej. 503) y hay que reintentar.
+STREAM_RESET = "\x00__AULAIA_RESET__\x00"
 
 SYSTEM_PROMPT = """Eres "AulaIA", tutor académico de Inteligencia Artificial y Teoría de la Computación (VII Ciclo). Tu misión es resolver dudas estudiantiles garantizando que cada afirmación esté estrictamente respaldada por las diapositivas oficiales provistas en el bloque <contexto_documental>.
 
@@ -35,6 +43,15 @@ SYSTEM_PROMPT = """Eres "AulaIA", tutor académico de Inteligencia Artificial y 
    - [Fuente: {nombre_archivo.pptx} - Diapositiva {numero_slide}]
 
 ---
+
+### DEFINICIONES CANÓNICAS DEL CURSO (NO LAS MEZCLES)
+Las diapositivas siguen la notación de Hopcroft. Cada tipo de autómata tiene SU propia función de transición; nunca uses la de otro:
+- AFD (Clase 03): A = (Q, Σ, δ, q0, F) con δ: Q × Σ → Q (devuelve UN solo estado).
+- AFND / AFN (Clase 04): A = (Q, Σ, δ, q0, F) con δ: Q × Σ → P(Q) (devuelve un SUBCONJUNTO de Q, posiblemente vacío). El AFND clásico NO tiene transiciones ε: su función de transición solo lee símbolos de Σ.
+- AFND-ε / AFN con transiciones épsilon (Clase 05): E = (Q, Σ, δ, q0, F) con δ: Q × (Σ ∪ {ε}) → P(Q). Solo aquí aparecen ε-transiciones y la ε-clausura.
+- Autómata a Pila (Clase 06): P = (Q, Σ, Γ, δ, q0, Z0, F) con δ: Q × (Σ ∪ {ε}) × Γ → subconjuntos finitos de Q × Γ*.
+- Máquina de Turing (Clase 07): M = (Q, Σ, Γ, δ, q0, B, F) con δ: Q × Γ → Q × Γ × {L, R} (función parcial).
+Si preguntan por un AFND/AFN, da la definición del AFND clásico (sin ε). Puedes mencionar al final, como nota aparte, que el AFND-ε (Clase 05) amplía δ para aceptar ε.
 
 ### MODOS PEDAGÓGICOS (Aplica según el parámetro recibido)
 - Nivel "formal": Emplea rigor matemático formal con notación limpia.
@@ -93,7 +110,7 @@ class RAGEngine:
             logger.error(f"Error iniciando cliente Gemini: {e}")
             return None
 
-    def retrieve_context(self, query: str, top_k: int = TOP_K_RESULTS, topic_filter: Optional[str] = None) -> List[Dict[str, Any]]:
+    def retrieve_context(self, query: str, top_k: int = TOP_K_RESULTS, topic_filter: Optional[Union[str, List[str]]] = None) -> List[Dict[str, Any]]:
         """Recupera los fragmentos más relevantes usando Búsqueda Híbrida (FAISS + BM25 RRF)."""
         return self.vector_store.search(query, top_k=top_k, topic_filter=topic_filter)
 
@@ -109,18 +126,58 @@ class RAGEngine:
             )
         return "\n\n".join(context_lines)
 
+    # Palabras que indican que la pregunta depende del turno anterior ("¿y su función de transición?")
+    FOLLOWUP_MARKERS = (
+        " su ", " sus ", " este ", " esta ", " esto ", " ese ", " esa ", " eso ", " ello ", " lo ",
+        " dicho ", " dicha ", " mismo ", " misma ", " anterior", " ahi ", " tambien ", " entonces ",
+        " el otro ", " la otra ", " ejemplo ", " otro ejemplo ", " mas ", " codigo ", " diagrama ",
+    )
+
+    # Términos que nombran un tema del curso: si la pregunta los trae, ya es autosuficiente
+    TOPIC_TERMS = (
+        " afd", " afnd", " afn", "automata", " pila", "turing", "chomsky", "gramatica", "boole",
+        "alfabeto", "clausura", "epsilon", "lenguaje", " palabra", "concatenacion", "nota", "curso",
+    )
+
+    @staticmethod
+    def _norm(text: str) -> str:
+        t = unicodedata.normalize("NFKD", text or "").encode("ASCII", "ignore").decode("utf-8").lower()
+        return " " + " ".join(t.replace("¿", " ").replace("?", " ").replace(",", " ").split()) + " "
+
+    def build_retrieval_query(self, query: str, history: Optional[List[Dict[str, str]]] = None) -> str:
+        """
+        Contextualización de la consulta (query condensation) para preguntas de seguimiento.
+        "¿Y cómo es su función de transición?" no menciona el tema; si depende del turno anterior,
+        se busca con la última pregunta del estudiante + la nueva pregunta.
+        """
+        if not history:
+            return query
+        last_user = next((m.get("content", "") for m in reversed(history) if m.get("role") == "user"), "")
+        if not last_user or last_user.strip() == query.strip():
+            return query
+        q = self._norm(query)
+        has_marker = q.startswith(" y ") or any(marker in q for marker in self.FOLLOWUP_MARKERS)
+        names_topic = any(t in q for t in self.TOPIC_TERMS)
+        # Pregunta corta sin tema propio ("dame un ejemplo") o con pronombres ("su", "eso"...) => seguimiento
+        is_followup = has_marker or (len(q.split()) <= 7 and not names_topic)
+        return f"{last_user.strip()} {query.strip()}" if is_followup else query
+
     def _build_user_prompt(self, query: str, context_text: str, history: List[Dict[str, str]] = None, level: str = "formal") -> str:
         """Construye el contenido del usuario separado del system prompt usando etiquetas XML."""
         conversation_context = ""
         is_followup = False
         if history and len(history) > 0:
             is_followup = True
-            conversation_context = "HISTORIAL PREVIO:\n"
-            for msg in history[-6:]:
-                role = "Estudiante" if msg.get("role") == "user" else "AulaIA"
-                clean_content = msg.get("content", "").strip()[:250]
+            conversation_context = "<historial_conversacion>\n"
+            for msg in history[-MAX_HISTORY_MESSAGES:]:
+                is_user = msg.get("role") == "user"
+                role = "Estudiante" if is_user else "AulaIA"
+                limit = HISTORY_USER_CHARS if is_user else HISTORY_ASSISTANT_CHARS
+                clean_content = " ".join(msg.get("content", "").split())
+                if len(clean_content) > limit:
+                    clean_content = clean_content[:limit].rstrip() + "…"
                 conversation_context += f"{role}: {clean_content}\n"
-            conversation_context += "\n"
+            conversation_context += "</historial_conversacion>\n\n"
 
         flow_instruction = (
             "[IMPORTANTE: Conversación en curso. NO saludes, NO digas '¡Hola!', NO te presentes como AulaIA. Ve DIRECTAMENTE a responder la duda.]\n"
@@ -137,14 +194,18 @@ class RAGEngine:
 {conversation_context}{flow_instruction}Pregunta del estudiante:
 {query}"""
 
-    def ask_stream(self, query: str, history: List[Dict[str, str]] = None, level: str = "formal", topic_filter: Optional[str] = None) -> Tuple[Generator[str, None, None], List[Dict[str, Any]]]:
+    def ask_stream(self, query: str, history: List[Dict[str, str]] = None, level: str = "formal", topic_filter: Optional[Union[str, List[str]]] = None) -> Tuple[Generator[str, None, None], List[Dict[str, Any]]]:
         """
         Streaming reactivo con doble blindaje de cuota:
         1. Fallback automático de modelo: gemini-2.5-flash -> gemini-2.5-flash-lite -> gemini-1.5-flash
         2. Fallback de llave secundaria si la principal se satura.
         """
         history = history or []
-        chunks = self.retrieve_context(query, top_k=TOP_K_RESULTS, topic_filter=topic_filter)
+
+        retrieval_query = self.build_retrieval_query(query, history)
+        if retrieval_query != query:
+            logger.info(f"Consulta contextualizada para la búsqueda: '{retrieval_query}'")
+        chunks = self.retrieve_context(retrieval_query, top_k=TOP_K_RESULTS, topic_filter=topic_filter)
         context_text = self.format_context_prompt(chunks)
         client = self._get_client()
 
@@ -175,7 +236,8 @@ class RAGEngine:
 
             gen_config = types.GenerateContentConfig(
                 system_instruction=SYSTEM_PROMPT,
-                temperature=0.15  # Máxima consistencia técnica y rigor formal
+                temperature=0.15,  # Máxima consistencia técnica y rigor formal
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             )
 
             success = False
@@ -183,6 +245,7 @@ class RAGEngine:
                 active_client = self._get_client(current_api_key)
                 for model_name in self.models:
                     for attempt in range(2):
+                        has_yielded = False
                         try:
                             logger.info(f"Enviando consulta a {model_name} (Intento {attempt + 1})...")
                             response_stream = active_client.models.generate_content_stream(
@@ -190,7 +253,6 @@ class RAGEngine:
                                 contents=user_content,
                                 config=gen_config
                             )
-                            has_yielded = False
                             for chunk in response_stream:
                                 if hasattr(chunk, "text") and chunk.text:
                                     has_yielded = True
@@ -202,6 +264,9 @@ class RAGEngine:
 
                         except errors.APIError as e:
                             logger.warning(f"Error {e.code} en {model_name}: {e.message}. Pasando a modelo de respaldo...")
+                            if has_yielded:
+                                # Falló a mitad de la respuesta: el cliente debe borrar lo parcial antes del reintento
+                                yield STREAM_RESET
                             err_str = str(e).lower()
                             if e.code == 429 and ("perday" in err_str or "exceeded your current quota" in err_str):
                                 break  # Límite diario del modelo agotado, cambiar de modelo inmediatamente
@@ -213,6 +278,8 @@ class RAGEngine:
 
                         except Exception as e:
                             logger.warning(f"Falla inesperada en {model_name}: {e}")
+                            if has_yielded:
+                                yield STREAM_RESET
                             break
 
                 if success:
@@ -223,47 +290,86 @@ class RAGEngine:
 
         return resilient_gemini_stream(), chunks
 
-    def ask(self, query: str, history: List[Dict[str, str]] = None, level: str = "formal", topic_filter: Optional[str] = None) -> Dict[str, Any]:
+    def ask(self, query: str, history: List[Dict[str, str]] = None, level: str = "formal", topic_filter: Optional[Union[str, List[str]]] = None) -> Dict[str, Any]:
         """Versión sincrónica para pruebas por consola."""
         stream_gen, sources = self.ask_stream(query, history, level, topic_filter)
-        full_text = "".join(list(stream_gen))
+        full_text = ""
+        for tok in stream_gen:
+            full_text = "" if tok == STREAM_RESET else full_text + tok
         return {
             "answer": full_text,
             "sources": sources
         }
 
-    def generate_quiz(self, topic: Optional[str] = None, num_questions: int = 3) -> List[Dict[str, Any]]:
-        """Genera un cuestionario interactivo basado en las diapositivas con fallback blindado."""
+    def generate_quiz(self, topic: Optional[str] = None, num_questions: int = 5, difficulty: str = "medio") -> List[Dict[str, Any]]:
+        """Genera un cuestionario interactivo basado en las diapositivas con dificultad parametrizada y fallback blindado."""
         query_topic = topic or "Autómatas Finitos y Máquinas de Turing"
-        chunks = self.retrieve_context(f"Conceptos clave, definiciones y ejercicios de {query_topic}", top_k=6, topic_filter=topic)
+        diff = (difficulty or "medio").lower().strip()
+        if diff not in ["facil", "medio", "dificil"]:
+            diff = "medio"
+
+        # Escalar chunks recuperados según la cantidad solicitada (5, 10 o 15)
+        k_chunks = 8 if num_questions <= 5 else (12 if num_questions <= 10 else 16)
+        chunks = self.retrieve_context(f"Conceptos clave, definiciones, teoremas y ejercicios de {query_topic}", top_k=k_chunks, topic_filter=topic)
         context_text = self.format_context_prompt(chunks)
 
         client = self._get_client()
         if not client:
             # Fallback offline para pruebas sin clave API
-            return [
-                {
-                    "id": 1,
-                    "pregunta": f"¿Cuál de las siguientes afirmaciones sobre {query_topic} es correcta según las diapositivas?",
+            offline_qs = []
+            for i in range(1, num_questions + 1):
+                offline_qs.append({
+                    "id": i,
+                    "pregunta": f"[{diff.upper()}] Pregunta #{i}: ¿Cuál de las siguientes afirmaciones sobre {query_topic} es correcta según las diapositivas?",
                     "opciones": [
                         "A) Un AFD tiene exactamente una transición por cada símbolo del alfabeto en cada estado.",
                         "B) Un AFND no permite transiciones con la cadena vacía épsilon.",
                         "C) Las Máquinas de Turing solo pueden moverse hacia la derecha en la cinta.",
-                        "D) Los autómatas a pila no disponen de memoria adicional."
+                        "D) Los autómatas a pila no disponen de memoria auxiliar."
                     ],
                     "respuesta_correcta": "A",
                     "explicacion": "Un AFD es determinista porque su función de transición delta asigna a cada par (estado, símbolo) exactamente un único estado siguiente.",
                     "fuente": "03 Introducción a la Teoría de los Autómatas 2026-2.pptx - Diapositiva 9"
-                }
-            ]
+                })
+            return offline_qs
 
-        prompt = f"""Actúa como un evaluador académico para el curso de Inteligencia Artificial.
-Basándote EXCLUSIVAMENTE en el siguiente contexto de las diapositivas, genera un examen de autoevaluación de {num_questions} preguntas de opción múltiple.
+        difficulty_guidelines = {
+            "facil": (
+                "NIVEL FÁCIL: Las preguntas deben ser directas y conceptuales sobre definiciones esenciales, "
+                "significado de siglas (AFD, AFND, LIFO, MT), componentes de la 5-tupla formal de autómatas, "
+                "y diferencias básicas entre modelos. Las opciones incorrectas deben ser claramente identificables."
+            ),
+            "medio": (
+                "NIVEL MEDIO: Las preguntas deben evaluar la comprensión y aplicación de algoritmos del curso "
+                "(método o construcción de subconjuntos, cálculo de ε-clausura, funciones de transición delta, "
+                "operación de memoria en pila o cinta de Turing, y tablas de transición). Las opciones incorrectas "
+                "deben incluir errores conceptuales comunes de los estudiantes."
+            ),
+            "dificil": (
+                "NIVEL DIFÍCIL (Nivel Examen Avanzado): Las preguntas deben ser analíticas y desafiantes, "
+                "evaluando trazas de ejecución con cadenas específicas, casos de borde, estados trampa, "
+                "formalismo matemático riguroso (7-tuplas, funciones delta con múltiples símbolos), propiedades de clausura, "
+                "y distinciones sutiles en la jerarquía de Chomsky (lenguajes regulares vs independientes de contexto vs recursivos)."
+            )
+        }
+        diff_instruction = difficulty_guidelines.get(diff, difficulty_guidelines["medio"])
 
+        prompt = f"""Actúa como un evaluador académico universitario experto para el curso de Teoría de Autómatas e Inteligencia Artificial.
+Basándote EXCLUSIVAMENTE en el siguiente contexto de las diapositivas oficiales, genera un examen de autoevaluación riguroso de EXACTAMENTE {num_questions} preguntas de opción múltiple.
+
+{diff_instruction}
+
+<contexto_documental>
 {context_text}
+</contexto_documental>
 
 INSTRUCCIONES IMPORTANTES:
-Responde ÚNICAMENTE con una lista JSON válida (sin formato Markdown adicional, solo el array JSON puro []):
+- Genera EXACTAMENTE {num_questions} preguntas numeradas del 1 al {num_questions}.
+- Cada pregunta DEBE tener exactamente 4 opciones: ["A) ...", "B) ...", "C) ...", "D) ..."].
+- "respuesta_correcta" debe ser una sola letra: "A", "B", "C" o "D".
+- "explicacion" debe detallar por qué es correcta citando el concepto formal.
+- "fuente" debe indicar el archivo y diapositiva aproximada.
+- Responde ÚNICAMENTE con una lista JSON válida (sin texto adicional ni markdown ```json):
 [
   {{
     "id": 1,

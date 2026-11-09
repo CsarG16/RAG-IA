@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import uuid
 import logging
 from pathlib import Path
 from typing import Optional, List, Dict, Any
@@ -14,10 +15,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 from sse_starlette.sse import EventSourceResponse
+from starlette.concurrency import iterate_in_threadpool, run_in_threadpool
 from pydantic import BaseModel, Field
 
-from config import GEMINI_API_KEY, BASE_DIR
-from rag_engine import RAGEngine
+from config import GEMINI_API_KEY, BASE_DIR, MAX_HISTORY_MESSAGES
+from rag_engine import RAGEngine, STREAM_RESET
+import database
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("aulaia.api")
@@ -63,12 +66,19 @@ class ChatStreamRequest(BaseModel):
     pregunta: str = Field(..., description="Pregunta del estudiante")
     nivel: str = Field("formal", description="Nivel pedagógico: 'formal', 'intuitivo' o 'codigo'")
     tema_filtro: Optional[str] = Field(None, description="Filtro opcional por nombre de presentación")
+    temas_filtro: Optional[List[str]] = Field(None, description="Lista de presentaciones seleccionadas (checkboxes)")
     historial: List[Dict[str, str]] = Field(default_factory=list, description="Historial de mensajes previos")
+    conversation_id: Optional[str] = Field(None, description="ID único de la conversación en SQLite")
 
 
 class QuizRequest(BaseModel):
     tema: str = Field("Autómatas Finitos No Deterministas (AFND)", description="Tema a evaluar")
-    num_preguntas: int = Field(3, ge=1, le=5, description="Número de preguntas")
+    num_preguntas: int = Field(5, ge=1, le=15, description="Número de preguntas (5, 10 o 15)")
+    dificultad: str = Field("medio", description="Nivel de dificultad: 'facil', 'medio' o 'dificil'")
+
+
+class RenameChatRequest(BaseModel):
+    title: str = Field(..., description="Nuevo título de la conversación")
 
 
 # =======================================================
@@ -89,34 +99,116 @@ async def health_check():
         "index_loaded": index_loaded,
         "total_chunks": total_chunks,
         "hybrid_search": "FAISS + BM25Okapi (RRF)",
+        "embedding_model": rag_engine.vector_store.embedding_model_name,
+        "semantic_embeddings": rag_engine.vector_store.use_gemini_embeddings,
         "models": rag_engine.models,
         "active_key_configured": bool(rag_engine.api_key)
     }
+
+
+# =======================================================
+# GESTIÓN DE HISTORIAL DE CHATS (SQLITE)
+# =======================================================
+
+@app.get("/api/chats")
+async def list_chats():
+    """Retorna la lista cronológica de conversaciones guardadas en SQLite."""
+    try:
+        return database.list_conversations()
+    except Exception as e:
+        logger.error(f"Error listando conversaciones: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/chats")
+async def create_chat():
+    """Crea una nueva conversación explícita en SQLite."""
+    try:
+        return database.create_conversation()
+    except Exception as e:
+        logger.error(f"Error creando conversación: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/chats/{conversation_id}")
+async def get_chat(conversation_id: str):
+    """Retorna todos los mensajes y fuentes de una conversación específica."""
+    conv = database.get_conversation(conversation_id)
+    if not conv:
+        raise HTTPException(status_code=404, detail="Conversación no encontrada.")
+    return conv
+
+
+@app.delete("/api/chats/{conversation_id}")
+async def delete_chat(conversation_id: str):
+    """Elimina una conversación y sus mensajes asociados."""
+    success = database.delete_conversation(conversation_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Conversación no encontrada.")
+    return {"status": "deleted", "id": conversation_id}
+
+
+@app.patch("/api/chats/{conversation_id}")
+async def rename_chat(conversation_id: str, req: RenameChatRequest):
+    """Renombra el título de una conversación."""
+    success = database.rename_conversation(conversation_id, req.title)
+    if not success:
+        raise HTTPException(status_code=404, detail="Conversación no encontrada.")
+    return {"status": "renamed", "id": conversation_id, "title": req.title}
 
 
 @app.post("/api/chat/stream")
 async def chat_stream(req: ChatStreamRequest):
     """
     Endpoint SSE que emite eventos:
+    - event: conversation (ID de la conversación persistida)
     - event: sources (JSON con las diapositivas citadas)
     - event: token (cada token generado por el LLM)
-    - event: done (fin del streaming)
+    - event: done (fin del streaming con confirmación de persistencia)
     - event: error (ante fallas de cuota u operativas)
     """
     pregunta = req.pregunta.strip()
     if not pregunta:
         raise HTTPException(status_code=400, detail="La pregunta no puede estar vacía.")
 
-    logger.info(f"Petición de chat stream: '{pregunta}' | Nivel: {req.nivel} | Filtro: {req.tema_filtro}")
+    # Asegurar o generar ID de conversación
+    cid = req.conversation_id or str(uuid.uuid4())
+
+    # Memoria de la conversación: la fuente de verdad es SQLite (servidor).
+    # El historial enviado por el navegador solo se usa si la conversación aún no existe en la BD.
+    history = []
+    if req.conversation_id:
+        try:
+            history = database.get_recent_messages(cid, limit=MAX_HISTORY_MESSAGES)
+        except Exception as db_err:
+            logger.warning(f"No se pudo leer el historial desde SQLite: {db_err}")
+    if not history:
+        history = req.historial[-MAX_HISTORY_MESSAGES:]
+
+    # Persistir mensaje del estudiante en SQLite
+    try:
+        database.add_message(cid, "user", pregunta)
+    except Exception as db_err:
+        logger.warning(f"No se pudo guardar el mensaje de usuario en SQLite: {db_err}")
+
+    logger.info(f"Petición de chat stream: '{pregunta}' | ConvID: {cid} | Nivel: {req.nivel} | Memoria: {len(history)} msgs | Filtro: {req.temas_filtro or req.tema_filtro}")
 
     async def sse_event_generator():
         try:
+            # Emitir ID de conversación inmediatamente para sincronizar frontend
+            yield {
+                "event": "conversation",
+                "data": json.dumps({"conversation_id": cid}, ensure_ascii=False)
+            }
+
             # 1. Recuperar fragmentos y abrir generador en streaming
-            stream_gen, sources = rag_engine.ask_stream(
+            # Búsqueda (embedding + FAISS + BM25) en un hilo aparte para no bloquear a otros usuarios
+            stream_gen, sources = await run_in_threadpool(
+                rag_engine.ask_stream,
                 query=pregunta,
-                history=req.historial,
+                history=history,
                 level=req.nivel,
-                topic_filter=req.tema_filtro
+                topic_filter=req.temas_filtro or req.tema_filtro
             )
 
             # 2. Formatear y emitir las fuentes recuperadas primero
@@ -135,18 +227,34 @@ async def chat_stream(req: ChatStreamRequest):
                 "data": json.dumps(formatted_sources, ensure_ascii=False)
             }
 
-            # 3. Emitir token a token en tiempo real
-            for token in stream_gen:
+            # 3. Emitir token a token en tiempo real y acumular para SQLite
+            tokens_accumulated = []
+            # Los tokens de Gemini se leen en un hilo aparte: el servidor sigue atendiendo otras peticiones
+            async for token in iterate_in_threadpool(stream_gen):
+                if token == STREAM_RESET:
+                    # Gemini falló a mitad de la respuesta y se reintenta: el cliente descarta lo parcial
+                    tokens_accumulated = []
+                    yield {"event": "reset", "data": json.dumps({"reason": "retry"})}
+                    continue
                 if token:
+                    tokens_accumulated.append(token)
                     yield {
                         "event": "token",
                         "data": json.dumps({"text": token}, ensure_ascii=False)
                     }
 
-            # 4. Emitir evento de finalización
+            # 4. Guardar respuesta final en SQLite
+            full_response_text = "".join(tokens_accumulated).strip()
+            if full_response_text:
+                try:
+                    database.add_message(cid, "assistant", full_response_text, sources=formatted_sources)
+                except Exception as save_err:
+                    logger.warning(f"Error al guardar respuesta en SQLite: {save_err}")
+
+            # 5. Emitir evento de finalización
             yield {
                 "event": "done",
-                "data": json.dumps({"status": "complete"})
+                "data": json.dumps({"status": "complete", "conversation_id": cid})
             }
 
         except Exception as e:
@@ -163,10 +271,15 @@ async def chat_stream(req: ChatStreamRequest):
 
 @app.post("/api/quiz/generate")
 async def generate_quiz_endpoint(req: QuizRequest):
-    """Genera un cuestionario de opción múltiple estructurado en JSON."""
+    """Genera un cuestionario de opción múltiple estructurado en JSON con dificultad parametrizada."""
     try:
-        logger.info(f"Generando quiz para tema: '{req.tema}', preguntas: {req.num_preguntas}")
-        questions = rag_engine.generate_quiz(topic=req.tema, num_questions=req.num_preguntas)
+        logger.info(f"Generando quiz para tema: '{req.tema}', preguntas: {req.num_preguntas}, dificultad: {req.dificultad}")
+        questions = await run_in_threadpool(
+            rag_engine.generate_quiz,
+            topic=req.tema,
+            num_questions=req.num_preguntas,
+            difficulty=req.dificultad
+        )
         return questions
     except Exception as e:
         logger.error(f"Error generando quiz: {e}")
@@ -194,7 +307,9 @@ async def serve_favicon():
     return JSONResponse(status_code=404, content={"message": "Not found"})
 
 @app.get("/")
-async def serve_index():
+@app.get("/landing")
+async def serve_landing():
+    """Sirve la Landing Page interactiva de AulaIA."""
     index_file = STATIC_DIR / "index.html"
     if not index_file.exists():
         return JSONResponse(
@@ -202,6 +317,15 @@ async def serve_index():
             content={"message": "AulaIA FastAPI backend activo. Coloca index.html en /static para la interfaz."}
         )
     return FileResponse(index_file)
+
+@app.get("/chat")
+@app.get("/app")
+async def serve_chat():
+    """Sirve la aplicación interactiva de Chat y Quizzes de AulaIA."""
+    chat_file = STATIC_DIR / "chat.html"
+    if not chat_file.exists():
+        chat_file = STATIC_DIR / "index.html"
+    return FileResponse(chat_file)
 
 # Montar directorio /static para scripts, estilos o recursos
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")

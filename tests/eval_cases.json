@@ -1,0 +1,36 @@
+[
+  {"id": 1, "tipo": "directa", "tema": "AFD", "pregunta": "¿Cuáles son los componentes de la 5-tupla de un autómata finito determinista?", "fuentes": ["03"], "diapositivas": [16], "conceptos": ["Q", "Σ", "δ", "q0", "F"]},
+  {"id": 2, "tipo": "directa", "tema": "AFND", "pregunta": "¿Cuál es la definición formal de un AFND?", "fuentes": ["04"], "diapositivas": [5, 6], "conceptos": ["Q", "Σ", "δ", "subconjunto"]},
+  {"id": 3, "tipo": "directa", "tema": "AFND → AFD", "pregunta": "¿Cómo se convierte un AFN en un AFD?", "fuentes": ["04"], "diapositivas": [13, 14, 15, 16, 17, 18], "conceptos": ["subconjuntos", "estado inicial", "aceptación"]},
+  {"id": 4, "tipo": "directa", "tema": "AFND", "pregunta": "¿Qué es la función de transición extendida de un AFN?", "fuentes": ["04"], "diapositivas": [7], "conceptos": ["δ*", "cadena", "conjunto de estados"]},
+  {"id": 5, "tipo": "directa", "tema": "AFN-ε", "pregunta": "¿Qué es la clausura épsilon y cómo se calcula?", "fuentes": ["05"], "diapositivas": [8, 14], "conceptos": ["clausura", "ε"]},
+  {"id": 6, "tipo": "directa", "tema": "AFN-ε", "pregunta": "¿Cuál es la notación formal de un AFN con transiciones épsilon?", "fuentes": ["05"], "diapositivas": [6], "conceptos": ["ε", "δ"]},
+  {"id": 7, "tipo": "directa", "tema": "Autómata a Pila", "pregunta": "¿Cuáles son los siete elementos de un autómata a pila?", "fuentes": ["06"], "diapositivas": [5], "conceptos": ["Γ", "Z0", "pila"]},
+  {"id": 8, "tipo": "directa", "tema": "Autómata a Pila", "pregunta": "¿Cómo funciona la función de transición de un autómata a pila?", "fuentes": ["06"], "diapositivas": [6, 9], "conceptos": ["δ", "pila", "símbolo"]},
+  {"id": 9, "tipo": "directa", "tema": "Máquina de Turing", "pregunta": "¿Cuál es la definición formal de la máquina de Turing?", "fuentes": ["07 "], "diapositivas": [12], "conceptos": ["Γ", "B", "cinta"]},
+  {"id": 10, "tipo": "directa", "tema": "Lenguajes formales", "pregunta": "¿Qué es la jerarquía de Chomsky?", "fuentes": ["02"], "diapositivas": [20], "conceptos": ["Chomsky", "gramática"]},
+  {"id": 11, "tipo": "directa", "tema": "Lenguajes formales", "pregunta": "¿Qué es la palabra vacía?", "fuentes": ["02"], "diapositivas": [23], "conceptos": ["λ", "longitud"]},
+  {"id": 12, "tipo": "directa", "tema": "Lenguajes formales", "pregunta": "¿Cómo se concatenan dos lenguajes?", "fuentes": ["02"], "diapositivas": [31, 25], "conceptos": ["concatenación", "L1", "L2"]},
+  {"id": 13, "tipo": "directa", "tema": "Curso", "pregunta": "¿Cómo se calcula la nota final del curso?", "fuentes": ["01"], "diapositivas": [8], "conceptos": ["PF", "EP", "EF"]},
+  {"id": 14, "tipo": "directa", "tema": "Máquina de Turing", "pregunta": "¿La máquina de Turing reconoce el lenguaje a^n b^n c^n?", "fuentes": ["07.1"], "diapositivas": [8, 9], "conceptos": ["Turing", "reconoce"]},
+
+  {"id": 15, "tipo": "parafraseada", "tema": "Autómata a Pila", "pregunta": "¿Qué memoria auxiliar se le agrega a un autómata para poder reconocer cadenas como 0011 o aaabbb?", "fuentes": ["06"], "diapositivas": [3, 4, 10, 11, 12], "conceptos": ["pila"]},
+  {"id": 16, "tipo": "parafraseada", "tema": "Máquina de Turing", "pregunta": "Explícame el modelo teórico que lee y escribe símbolos sobre una cinta infinita moviendo un cabezal", "fuentes": ["07 "], "diapositivas": [9, 10, 11, 12], "conceptos": ["Turing", "cinta"]},
+  {"id": 17, "tipo": "parafraseada", "tema": "AFND", "pregunta": "¿Cómo diseño una máquina que encuentre las palabras web y ebay dentro de un texto?", "fuentes": ["04"], "diapositivas": [20, 21, 24], "conceptos": ["web", "ebay"]},
+  {"id": 18, "tipo": "parafraseada", "tema": "AFND", "pregunta": "¿Qué significa que una máquina pueda estar en varios estados al mismo tiempo?", "fuentes": ["04"], "diapositivas": [3, 4], "conceptos": ["no determinista"]},
+  {"id": 19, "tipo": "parafraseada", "tema": "AFD", "pregunta": "Dame un ejemplo de la vida real, como el control de la entrada de autos a un parqueo", "fuentes": ["03"], "diapositivas": [10, 11], "conceptos": ["ticket", "tranquera"]},
+  {"id": 20, "tipo": "parafraseada", "tema": "Álgebra de Boole", "pregunta": "¿Cómo simplifico una función lógica para usar menos compuertas?", "fuentes": ["02"], "diapositivas": [5, 8, 9, 10], "conceptos": ["Boole"]},
+
+  {"id": 21, "tipo": "fuera_de_dominio", "tema": "Cocina", "pregunta": "¿Cómo preparo un lomo saltado tradicional?"},
+  {"id": 22, "tipo": "fuera_de_dominio", "tema": "Deep Learning", "pregunta": "Explícame cómo funciona el algoritmo de backpropagation para entrenar redes neuronales profundas"},
+  {"id": 23, "tipo": "fuera_de_dominio", "tema": "Deportes", "pregunta": "¿Quién ganó el mundial de fútbol 2022?"},
+
+  {"id": 24, "tipo": "seguimiento", "tema": "Autómata a Pila", "historial": [
+      {"role": "user", "content": "¿Qué es un autómata a pila?"},
+      {"role": "assistant", "content": "Un autómata a pila (AP) es un AFN-ε al que se le agrega una pila como memoria auxiliar LIFO."}
+    ], "pregunta": "¿Y cómo es su función de transición?", "fuentes": ["06"], "diapositivas": [6, 9], "conceptos": ["pila", "δ"]},
+  {"id": 25, "tipo": "seguimiento", "tema": "Máquina de Turing", "historial": [
+      {"role": "user", "content": "¿Qué es una máquina de Turing?"},
+      {"role": "assistant", "content": "Es un modelo teórico con una cinta infinita, un cabezal de lectura/escritura y una unidad de control."}
+    ], "pregunta": "¿Cuál es su definición formal?", "fuentes": ["07 "], "diapositivas": [12], "conceptos": ["Γ", "B"]}
+]

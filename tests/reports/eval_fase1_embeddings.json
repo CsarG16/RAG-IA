@@ -1,0 +1,986 @@
+{
+  "tag": "fase1_embeddings",
+  "fecha": "2026-11-09T02:57:28",
+  "embeddings": "gemini-embedding-001",
+  "diapositivas_indexadas": 161,
+  "modelos_llm": [
+    "gemini-3.5-flash-lite",
+    "gemini-flash-lite-latest"
+  ],
+  "recuperacion": {
+    "global": {
+      "bm25": {
+        "n": 22,
+        "hit1_archivo": 0.7272727272727273,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.9090909090909091,
+        "mrr_diapo": 0.7651515151515151
+      },
+      "dense": {
+        "n": 22,
+        "hit1_archivo": 0.8636363636363636,
+        "hit3_archivo": 0.9545454545454546,
+        "hit3_diapo": 0.9545454545454546,
+        "mrr_diapo": 0.893939393939394
+      },
+      "hybrid": {
+        "n": 22,
+        "hit1_archivo": 0.8636363636363636,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.9545454545454546,
+        "mrr_diapo": 0.8787878787878788
+      }
+    },
+    "directa": {
+      "bm25": {
+        "n": 14,
+        "hit1_archivo": 0.8571428571428571,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.9285714285714286,
+        "mrr_diapo": 0.8214285714285714
+      },
+      "dense": {
+        "n": 14,
+        "hit1_archivo": 1.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 1.0
+      },
+      "hybrid": {
+        "n": 14,
+        "hit1_archivo": 1.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 1.0
+      }
+    },
+    "parafraseada": {
+      "bm25": {
+        "n": 6,
+        "hit1_archivo": 0.6666666666666666,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.8333333333333334,
+        "mrr_diapo": 0.75
+      },
+      "dense": {
+        "n": 6,
+        "hit1_archivo": 0.8333333333333334,
+        "hit3_archivo": 0.8333333333333334,
+        "hit3_diapo": 0.8333333333333334,
+        "mrr_diapo": 0.7777777777777778
+      },
+      "hybrid": {
+        "n": 6,
+        "hit1_archivo": 0.8333333333333334,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.8333333333333334,
+        "mrr_diapo": 0.7222222222222222
+      }
+    },
+    "seguimiento": {
+      "bm25": {
+        "n": 2,
+        "hit1_archivo": 0.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 0.41666666666666663
+      },
+      "dense": {
+        "n": 2,
+        "hit1_archivo": 0.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 0.5
+      },
+      "hybrid": {
+        "n": 2,
+        "hit1_archivo": 0.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 0.5
+      }
+    }
+  },
+  "detalle_recuperacion": [
+    {
+      "id": 1,
+      "tipo": "directa",
+      "pregunta": "¿Cuáles son los componentes de la 5-tupla de un autómata finito determinista?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": false,
+          "rr_diapo": 0.0,
+          "top3": [
+            "03 I#13",
+            "04 A#17",
+            "04 A#18"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "03 I#16",
+            "04 A#5",
+            "03 I#21"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "03 I#16",
+            "03 I#21",
+            "03 I#13"
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la definición formal de un AFND?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#6",
+            "05 A#6",
+            "04 A#5"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#5",
+            "04 A#6",
+            "04 A#3"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#6",
+            "04 A#5",
+            "04 A#9"
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se convierte un AFN en un AFD?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#18",
+            "04 A#3",
+            "04 A#17"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#13",
+            "04 A#17",
+            "04 A#18"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#18",
+            "04 A#17",
+            "04 A#13"
+          ]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la función de transición extendida de un AFN?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#7",
+            "04 A#10",
+            "04 A#6"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#7",
+            "04 A#10",
+            "03 I#25"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#7",
+            "04 A#10",
+            "03 I#25"
+          ]
+        }
+      }
+    },
+    {
+      "id": 5,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la clausura épsilon y cómo se calcula?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#14",
+            "05 A#2",
+            "05 A#6"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#8",
+            "05 A#14",
+            "05 A#10"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#14",
+            "05 A#11",
+            "05 A#12"
+          ]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la notación formal de un AFN con transiciones épsilon?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#6",
+            "05 A#2",
+            "05 A#7"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#6",
+            "05 A#7",
+            "05 A#3"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#6",
+            "05 A#7",
+            "05 A#3"
+          ]
+        }
+      }
+    },
+    {
+      "id": 7,
+      "tipo": "directa",
+      "pregunta": "¿Cuáles son los siete elementos de un autómata a pila?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#5",
+            "06 A#9",
+            "06 A#2"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#5",
+            "06 A#7",
+            "06 A#8"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#5",
+            "06 A#9",
+            "06 A#7"
+          ]
+        }
+      }
+    },
+    {
+      "id": 8,
+      "tipo": "directa",
+      "pregunta": "¿Cómo funciona la función de transición de un autómata a pila?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#3",
+            "06 A#5"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#8",
+            "06 A#9"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#5",
+            "06 A#9"
+          ]
+        }
+      }
+    },
+    {
+      "id": 9,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la definición formal de la máquina de Turing?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "04 A#6",
+            "07 M#12",
+            "07 M#10"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#12",
+            "07 M#9",
+            "07 M#11"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#12",
+            "07 M#10",
+            "07 M#2"
+          ]
+        }
+      }
+    },
+    {
+      "id": 10,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la jerarquía de Chomsky?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "06 A#4",
+            "02 M#20",
+            "01 I#5"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#20",
+            "06 A#4",
+            "02 M#18"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#20",
+            "06 A#4",
+            "02 M#18"
+          ]
+        }
+      }
+    },
+    {
+      "id": 11,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la palabra vacía?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#23",
+            "02 M#22",
+            "02 M#27"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#23",
+            "02 M#28",
+            "02 M#22"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#23",
+            "02 M#22",
+            "05 A#3"
+          ]
+        }
+      }
+    },
+    {
+      "id": 12,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se concatenan dos lenguajes?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#31",
+            "02 M#25",
+            "02 M#29"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#31",
+            "02 M#29",
+            "02 M#25"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#31",
+            "02 M#29",
+            "02 M#25"
+          ]
+        }
+      }
+    },
+    {
+      "id": 13,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se calcula la nota final del curso?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "01 I#8",
+            "02 M#28",
+            "01 I#17"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "01 I#8",
+            "01 I#14",
+            "01 I#2"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "01 I#8",
+            "01 I#14",
+            "01 I#11"
+          ]
+        }
+      }
+    },
+    {
+      "id": 14,
+      "tipo": "directa",
+      "pregunta": "¿La máquina de Turing reconoce el lenguaje a^n b^n c^n?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "07.1#5",
+            "07.1#9",
+            "07.1#8"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07.1#9",
+            "07.1#8",
+            "07.1#3"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07.1#9",
+            "07.1#8",
+            "07.1#5"
+          ]
+        }
+      }
+    },
+    {
+      "id": 15,
+      "tipo": "parafraseada",
+      "pregunta": "¿Qué memoria auxiliar se le agrega a un autómata para poder reconocer cadenas como 0011 o aaabbb?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#11",
+            "06 A#10",
+            "04 A#24"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#11",
+            "06 A#10",
+            "03 I#12"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#11",
+            "06 A#10",
+            "03 I#12"
+          ]
+        }
+      }
+    },
+    {
+      "id": 16,
+      "tipo": "parafraseada",
+      "pregunta": "Explícame el modelo teórico que lee y escribe símbolos sobre una cinta infinita moviendo un cabezal",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#9",
+            "07 M#12",
+            "07 M#13"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#9",
+            "07 M#11",
+            "07 M#12"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#9",
+            "07 M#12",
+            "07 M#11"
+          ]
+        }
+      }
+    },
+    {
+      "id": 17,
+      "tipo": "parafraseada",
+      "pregunta": "¿Cómo diseño una máquina que encuentre las palabras web y ebay dentro de un texto?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#20",
+            "04 A#24",
+            "07 M#3"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#20",
+            "07.1#12",
+            "07.1#10"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#20",
+            "04 A#24",
+            "03 I#20"
+          ]
+        }
+      }
+    },
+    {
+      "id": 18,
+      "tipo": "parafraseada",
+      "pregunta": "¿Qué significa que una máquina pueda estar en varios estados al mismo tiempo?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "03 I#14",
+            "04 A#3",
+            "03 I#7"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": false,
+          "hit3_archivo": false,
+          "hit3_diapo": false,
+          "rr_diapo": 0.16666666666666666,
+          "top3": [
+            "07 M#11",
+            "03 I#8",
+            "03 I#14"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.3333333333333333,
+          "top3": [
+            "03 I#14",
+            "07 M#11",
+            "04 A#3"
+          ]
+        }
+      }
+    },
+    {
+      "id": 19,
+      "tipo": "parafraseada",
+      "pregunta": "Dame un ejemplo de la vida real, como el control de la entrada de autos a un parqueo",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": false,
+          "rr_diapo": 0.0,
+          "top3": [
+            "07 M#12",
+            "03 I#7",
+            "03 I#23"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "03 I#10",
+            "03 I#11",
+            "03 I#9"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": false,
+          "rr_diapo": 0.0,
+          "top3": [
+            "03 I#30",
+            "03 I#7",
+            "04 A#4"
+          ]
+        }
+      }
+    },
+    {
+      "id": 20,
+      "tipo": "parafraseada",
+      "pregunta": "¿Cómo simplifico una función lógica para usar menos compuertas?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#9",
+            "02 M#4",
+            "04 A#18"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "02 M#11",
+            "02 M#9",
+            "02 M#8"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#9",
+            "02 M#4",
+            "02 M#13"
+          ]
+        }
+      }
+    },
+    {
+      "id": 24,
+      "tipo": "seguimiento",
+      "pregunta": "¿Y cómo es su función de transición?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.3333333333333333,
+          "top3": [
+            "04 A#7",
+            "04 A#6",
+            "06 A#6"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "04 A#7",
+            "06 A#6",
+            "05 A#5"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "04 A#7",
+            "06 A#6",
+            "04 A#6"
+          ]
+        }
+      }
+    },
+    {
+      "id": 25,
+      "tipo": "seguimiento",
+      "pregunta": "¿Cuál es su definición formal?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "04 A#6",
+            "07 M#12",
+            "05 A#6"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "04 A#6",
+            "07 M#12",
+            "02 M#22"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "04 A#6",
+            "07 M#12",
+            "06 A#5"
+          ]
+        }
+      }
+    }
+  ]
+}

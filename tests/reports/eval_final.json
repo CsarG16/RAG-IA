@@ -1,0 +1,1325 @@
+{
+  "tag": "final",
+  "fecha": "2026-11-09T03:11:45",
+  "embeddings": "gemini-embedding-001",
+  "diapositivas_indexadas": 161,
+  "modelos_llm": [
+    "gemini-3.5-flash-lite",
+    "gemini-flash-lite-latest"
+  ],
+  "recuperacion": {
+    "global": {
+      "bm25": {
+        "n": 22,
+        "hit1_archivo": 0.7727272727272727,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.9090909090909091,
+        "mrr_diapo": 0.7954545454545454
+      },
+      "dense": {
+        "n": 22,
+        "hit1_archivo": 0.9545454545454546,
+        "hit3_archivo": 0.9545454545454546,
+        "hit3_diapo": 0.9545454545454546,
+        "mrr_diapo": 0.9393939393939394
+      },
+      "hybrid": {
+        "n": 22,
+        "hit1_archivo": 0.9545454545454546,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.9545454545454546,
+        "mrr_diapo": 0.9242424242424242
+      }
+    },
+    "directa": {
+      "bm25": {
+        "n": 14,
+        "hit1_archivo": 0.8571428571428571,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.9285714285714286,
+        "mrr_diapo": 0.8214285714285714
+      },
+      "dense": {
+        "n": 14,
+        "hit1_archivo": 1.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 1.0
+      },
+      "hybrid": {
+        "n": 14,
+        "hit1_archivo": 1.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 1.0
+      }
+    },
+    "parafraseada": {
+      "bm25": {
+        "n": 6,
+        "hit1_archivo": 0.6666666666666666,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.8333333333333334,
+        "mrr_diapo": 0.75
+      },
+      "dense": {
+        "n": 6,
+        "hit1_archivo": 0.8333333333333334,
+        "hit3_archivo": 0.8333333333333334,
+        "hit3_diapo": 0.8333333333333334,
+        "mrr_diapo": 0.7777777777777778
+      },
+      "hybrid": {
+        "n": 6,
+        "hit1_archivo": 0.8333333333333334,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 0.8333333333333334,
+        "mrr_diapo": 0.7222222222222222
+      }
+    },
+    "seguimiento": {
+      "bm25": {
+        "n": 2,
+        "hit1_archivo": 0.5,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 0.75
+      },
+      "dense": {
+        "n": 2,
+        "hit1_archivo": 1.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 1.0
+      },
+      "hybrid": {
+        "n": 2,
+        "hit1_archivo": 1.0,
+        "hit3_archivo": 1.0,
+        "hit3_diapo": 1.0,
+        "mrr_diapo": 1.0
+      }
+    }
+  },
+  "detalle_recuperacion": [
+    {
+      "id": 1,
+      "tipo": "directa",
+      "pregunta": "¿Cuáles son los componentes de la 5-tupla de un autómata finito determinista?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": false,
+          "rr_diapo": 0.0,
+          "top3": [
+            "03 I#13",
+            "04 A#17",
+            "04 A#18"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "03 I#16",
+            "04 A#5",
+            "03 I#21"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "03 I#16",
+            "03 I#21",
+            "03 I#13"
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la definición formal de un AFND?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#6",
+            "05 A#6",
+            "04 A#5"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#5",
+            "04 A#6",
+            "04 A#3"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#6",
+            "04 A#5",
+            "04 A#9"
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se convierte un AFN en un AFD?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#18",
+            "04 A#3",
+            "04 A#17"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#13",
+            "04 A#17",
+            "04 A#18"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#18",
+            "04 A#17",
+            "04 A#13"
+          ]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la función de transición extendida de un AFN?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#7",
+            "04 A#10",
+            "04 A#6"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#7",
+            "04 A#10",
+            "03 I#25"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#7",
+            "04 A#10",
+            "03 I#25"
+          ]
+        }
+      }
+    },
+    {
+      "id": 5,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la clausura épsilon y cómo se calcula?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#14",
+            "05 A#2",
+            "05 A#6"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#8",
+            "05 A#14",
+            "05 A#10"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#14",
+            "05 A#11",
+            "05 A#12"
+          ]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la notación formal de un AFN con transiciones épsilon?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#6",
+            "05 A#2",
+            "05 A#7"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#6",
+            "05 A#7",
+            "05 A#3"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "05 A#6",
+            "05 A#7",
+            "05 A#3"
+          ]
+        }
+      }
+    },
+    {
+      "id": 7,
+      "tipo": "directa",
+      "pregunta": "¿Cuáles son los siete elementos de un autómata a pila?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#5",
+            "06 A#9",
+            "06 A#2"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#5",
+            "06 A#7",
+            "06 A#8"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#5",
+            "06 A#9",
+            "06 A#7"
+          ]
+        }
+      }
+    },
+    {
+      "id": 8,
+      "tipo": "directa",
+      "pregunta": "¿Cómo funciona la función de transición de un autómata a pila?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#3",
+            "06 A#5"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#8",
+            "06 A#9"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#5",
+            "06 A#9"
+          ]
+        }
+      }
+    },
+    {
+      "id": 9,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la definición formal de la máquina de Turing?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "04 A#6",
+            "07 M#12",
+            "07 M#10"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#12",
+            "07 M#9",
+            "07 M#11"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#12",
+            "07 M#10",
+            "07 M#2"
+          ]
+        }
+      }
+    },
+    {
+      "id": 10,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la jerarquía de Chomsky?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "06 A#4",
+            "02 M#20",
+            "01 I#5"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#20",
+            "06 A#4",
+            "02 M#18"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#20",
+            "06 A#4",
+            "02 M#18"
+          ]
+        }
+      }
+    },
+    {
+      "id": 11,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la palabra vacía?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#23",
+            "02 M#22",
+            "02 M#27"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#23",
+            "02 M#28",
+            "02 M#22"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#23",
+            "02 M#22",
+            "05 A#3"
+          ]
+        }
+      }
+    },
+    {
+      "id": 12,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se concatenan dos lenguajes?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#31",
+            "02 M#25",
+            "02 M#29"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#31",
+            "02 M#29",
+            "02 M#25"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#31",
+            "02 M#29",
+            "02 M#25"
+          ]
+        }
+      }
+    },
+    {
+      "id": 13,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se calcula la nota final del curso?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "01 I#8",
+            "02 M#28",
+            "01 I#17"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "01 I#8",
+            "01 I#14",
+            "01 I#2"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "01 I#8",
+            "01 I#14",
+            "01 I#11"
+          ]
+        }
+      }
+    },
+    {
+      "id": 14,
+      "tipo": "directa",
+      "pregunta": "¿La máquina de Turing reconoce el lenguaje a^n b^n c^n?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "07.1#5",
+            "07.1#9",
+            "07.1#8"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07.1#9",
+            "07.1#8",
+            "07.1#3"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07.1#9",
+            "07.1#8",
+            "07.1#5"
+          ]
+        }
+      }
+    },
+    {
+      "id": 15,
+      "tipo": "parafraseada",
+      "pregunta": "¿Qué memoria auxiliar se le agrega a un autómata para poder reconocer cadenas como 0011 o aaabbb?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#11",
+            "06 A#10",
+            "04 A#24"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#11",
+            "06 A#10",
+            "03 I#12"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#11",
+            "06 A#10",
+            "03 I#12"
+          ]
+        }
+      }
+    },
+    {
+      "id": 16,
+      "tipo": "parafraseada",
+      "pregunta": "Explícame el modelo teórico que lee y escribe símbolos sobre una cinta infinita moviendo un cabezal",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#9",
+            "07 M#12",
+            "07 M#13"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#9",
+            "07 M#11",
+            "07 M#12"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#9",
+            "07 M#12",
+            "07 M#11"
+          ]
+        }
+      }
+    },
+    {
+      "id": 17,
+      "tipo": "parafraseada",
+      "pregunta": "¿Cómo diseño una máquina que encuentre las palabras web y ebay dentro de un texto?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#20",
+            "04 A#24",
+            "07 M#3"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#20",
+            "07.1#12",
+            "07.1#10"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "04 A#20",
+            "04 A#24",
+            "03 I#20"
+          ]
+        }
+      }
+    },
+    {
+      "id": 18,
+      "tipo": "parafraseada",
+      "pregunta": "¿Qué significa que una máquina pueda estar en varios estados al mismo tiempo?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "03 I#14",
+            "04 A#3",
+            "03 I#7"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": false,
+          "hit3_archivo": false,
+          "hit3_diapo": false,
+          "rr_diapo": 0.16666666666666666,
+          "top3": [
+            "07 M#11",
+            "03 I#8",
+            "03 I#14"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.3333333333333333,
+          "top3": [
+            "03 I#14",
+            "07 M#11",
+            "04 A#3"
+          ]
+        }
+      }
+    },
+    {
+      "id": 19,
+      "tipo": "parafraseada",
+      "pregunta": "Dame un ejemplo de la vida real, como el control de la entrada de autos a un parqueo",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": false,
+          "rr_diapo": 0.0,
+          "top3": [
+            "07 M#12",
+            "03 I#7",
+            "03 I#23"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "03 I#10",
+            "03 I#11",
+            "03 I#9"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": false,
+          "rr_diapo": 0.0,
+          "top3": [
+            "03 I#30",
+            "03 I#7",
+            "04 A#4"
+          ]
+        }
+      }
+    },
+    {
+      "id": 20,
+      "tipo": "parafraseada",
+      "pregunta": "¿Cómo simplifico una función lógica para usar menos compuertas?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#9",
+            "02 M#4",
+            "04 A#18"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "02 M#11",
+            "02 M#9",
+            "02 M#8"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "02 M#9",
+            "02 M#4",
+            "02 M#13"
+          ]
+        }
+      }
+    },
+    {
+      "id": 24,
+      "tipo": "seguimiento",
+      "pregunta": "¿Y cómo es su función de transición?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#5",
+            "06 A#12"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#9",
+            "06 A#5"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "06 A#6",
+            "06 A#5",
+            "06 A#9"
+          ]
+        }
+      }
+    },
+    {
+      "id": 25,
+      "tipo": "seguimiento",
+      "pregunta": "¿Cuál es su definición formal?",
+      "modos": {
+        "bm25": {
+          "hit1_archivo": false,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 0.5,
+          "top3": [
+            "04 A#6",
+            "07 M#12",
+            "07 M#10"
+          ]
+        },
+        "dense": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#12",
+            "07 M#9",
+            "07 M#11"
+          ]
+        },
+        "hybrid": {
+          "hit1_archivo": true,
+          "hit3_archivo": true,
+          "hit3_diapo": true,
+          "rr_diapo": 1.0,
+          "top3": [
+            "07 M#12",
+            "07 M#10",
+            "07 M#2"
+          ]
+        }
+      }
+    }
+  ],
+  "e2e": {
+    "casos_ok": 25,
+    "casos_con_error": 0,
+    "rechazo_fuera_de_dominio": 1.0,
+    "falsos_rechazos_en_dominio": 0.0,
+    "respuestas_con_cita": 1.0,
+    "cobertura_conceptos_media": 0.9318181818181818,
+    "ttft_mediana_s": 3.79,
+    "ttft_p90_s": 5.65,
+    "total_mediana_s": 5.14,
+    "total_p90_s": 6.0
+  },
+  "detalle_e2e": [
+    {
+      "id": 1,
+      "tipo": "directa",
+      "pregunta": "¿Cuáles son los componentes de la 5-tupla de un autómata finito determinista?",
+      "ttft_s": 4.46,
+      "total_s": 5.47,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Un Autómata Finito Determinista (AFD) se define formalmente como una 5-tupla: $$A = ( Q , \\Sigma , \\delta , q_0 , F )$$ Cada uno de sus componentes se desglosa ",
+      "respuesta_completa": "Un Autómata Finito Determinista (AFD) se define formalmente como una 5-tupla:\n\n$$A = ( Q , \\Sigma , \\delta , q_0 , F )$$\n\nCada uno de sus componentes se desglosa formalmente de la siguiente manera:\n\n* **$Q$**: Conjunto finito de estados. Representa todas las configuraciones o estados posibles en los que puede encontrarse el autómata.\n* **$\\Sigma$**: Conjunto finito de símbolos de entrada o alfabeto. Son los símbolos válidos que el autómata puede leer de una cadena.\n* **$\\delta$**: Función de transición. Tiene como argumentos un estado y un símbolo de entrada y devuelve un único estado ($ \\delta : Q \\times \\Sigma \\to Q $), expresado formalmente como $\\delta(q, a) = p$.\n* **$q_0$**: Estado inicial. Es el estado único en el cual el autómata comienza a procesar cualquier cadena de entrada, donde $q_0 \\in Q$.\n* **$F$**: Estados finales o de aceptación. Es el subconjunto de estados que indican la aceptación de una cadena, donde $F \\subseteq Q$.\n\n**Fuentes consultadas:**\n- [Archivo: 03 Introducción a la Teoría de los Autómatas 2026-2.pptx - Diapositiva 16]"
+    },
+    {
+      "id": 2,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la definición formal de un AFND?",
+      "ttft_s": 3.3,
+      "total_s": 4.09,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Un Autómata Finito No Determinista (AFND o AFN) se define formalmente como una 5-tupla $A = (Q, \\Sigma, \\delta, q_0, F)$, donde cada componente se desglosa de l",
+      "respuesta_completa": "Un Autómata Finito No Determinista (AFND o AFN) se define formalmente como una 5-tupla $A = (Q, \\Sigma, \\delta, q_0, F)$, donde cada componente se desglosa de la siguiente manera:\n\n- **$Q$**: Un conjunto finito de estados.\n- **$\\Sigma$**: Un conjunto finito de símbolos de entrada (alfabeto).\n- **$\\delta$**: Una función de transición que toma como argumentos un estado y un símbolo de entrada, y devuelve un subconjunto de $Q$ (es decir, $\\delta: Q \\times \\Sigma \\to \\mathcal{P}(Q)$). Para un estado $q$ y un símbolo $a$, $\\delta(q,a)$ entrega el conjunto de estados a los que se puede transicionar mediante $a$. El AFND clásico tiene la capacidad de estar en varios estados a la vez y devuelve un conjunto de cero, uno o más estados.\n- **$q_0$**: El estado inicial, donde $q_0 \\in Q$.\n- **$F$**: Un conjunto de estados finales o de aceptación, el cual es un subconjunto de $Q$ ($F \\subseteq Q$).\n\n**Fuentes consultadas:**\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 3]\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 5]"
+    },
+    {
+      "id": 3,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se convierte un AFN en un AFD?",
+      "ttft_s": 3.84,
+      "total_s": 5.6,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "La conversión de un Autómata Finito No Determinista (AFN) a un Autómata Finito Determinista (AFD) se realiza mediante el procedimiento conocido como **método de",
+      "respuesta_completa": "La conversión de un Autómata Finito No Determinista (AFN) a un Autómata Finito Determinista (AFD) se realiza mediante el procedimiento conocido como **método de construcción de subconjuntos**. \n\nMatemáticamente, un AFN se define formalmente mediante una 5-tupla $A = (Q, \\Sigma, \\delta, q_0, F)$, donde:\n- $Q$ = conjunto finito de estados.\n- $\\Sigma$ = alfabeto de entrada (conjunto finito de símbolos).\n- $\\delta$ = función de transición, definida como $\\delta: Q \\times \\Sigma \\to \\mathcal{P}(Q)$, lo que significa que toma un estado y un símbolo, y devuelve un subconjunto de estados (cero, uno o más).\n- $q_0$ = estado inicial ($q_0 \\in Q$).\n- $F$ = conjunto de estados de aceptación o finales ($F \\subseteq Q$).\n\nPor su parte, un AFD equivalente se obtiene siguiendo los siguientes pasos metodológicos descritos en el curso:\n\n1. **Construcción de subconjuntos:** \n   Dado que un AFN con $n$ estados puede encontrarse en varios estados a la vez, el conjunto de estados del AFD resultante se forma considerando todas las combinaciones posibles de los estados del AFN, es decir, su conjunto potencia $\\mathcal{P}(Q)$, el cual contiene $2^n$ subconjuntos posibles.\n   - El estado inicial del AFD es el subconjunto formado por el estado inicial del AFN (y, de aplicar según el tipo de construcción, las transiciones asociadas).\n   - Se debe construir una tabla de transición evaluando las transiciones de cada subconjunto frente a los símbolos del alfabeto $\\Sigma$.\n\n2. **Cambio de nombre y definición de estados de aceptación:** \n   Una vez obtenidos los subconjuntos alcanzables, se les asigna un nuevo nombre (por ejemplo, $A, B, C$, etc.). \n   - Los estados de aceptación del AFD resultante son todos aquellos subconjuntos que incluyan al menos uno de los estados de aceptación ($F$) del AFN original.\n\nDado que el AFD resultante acepta exactamente los mismos conjuntos de estados que contienen al menos un estado de aceptación del AFN, se concluye que ambos modelos aceptan exactamente las mismas cadenas y, por tanto, definen el mismo lenguaje regular.\n\n**Fuentes consultadas:**\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 3]\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 13]\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 14]\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 18]"
+    },
+    {
+      "id": 4,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la función de transición extendida de un AFN?",
+      "ttft_s": 4.35,
+      "total_s": 5.35,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "La función de transición extendida de un Autómata Finito No Determinista (AFN), denotada formalmente como $\\delta^*$, es una función que toma como argumentos un",
+      "respuesta_completa": "La función de transición extendida de un Autómata Finito No Determinista (AFN), denotada formalmente como $\\delta^*$, es una función que toma como argumentos un estado $q$ y una cadena de símbolos de entrada $w$ ($w \\in \\Sigma^*$), y devuelve el conjunto de estados en los que el AFN se encontrará si se inicia en el estado $q$ y procesa dicha cadena $w$. \n\nA diferencia de la función de transición básica $\\delta$, que procesa un único símbolo de entrada y devuelve un subconjunto de estados, la función extendida $\\delta^*$ procesa cadenas completas de longitud cero o mayor. Por ejemplo, si se evalúa la función de transición extendida partiendo del estado inicial $q_0$ con la cadena $001$, el resultado es un conjunto de estados posibles:\n$$\\delta^*(q_0, 001) = \\{q_0, q_2\\}$$\n\nAsimismo, para determinar la aceptación de una cadena mediante un AFN, se calcula la función de transición extendida para toda la cadena de entrada. Si el conjunto resultante tras procesar toda la cadena contiene al menos un estado que pertenece al conjunto de estados de aceptación $F$, entonces la cadena es aceptada por el autómata.\n\n**Fuentes consultadas:**\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 7]\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 10]"
+    },
+    {
+      "id": 5,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la clausura épsilon y cómo se calcula?",
+      "ttft_s": 3.75,
+      "total_s": 4.81,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "La **clausura épsilon** (denotada formalmente como $C_\\varepsilon(q)$ o $\\varepsilon\\text{-clausura}$) de un estado $q$ en un Autómata Finito No Determinista co",
+      "respuesta_completa": "La **clausura épsilon** (denotada formalmente como $C_\\varepsilon(q)$ o $\\varepsilon\\text{-clausura}$) de un estado $q$ en un Autómata Finito No Determinista con transiciones $\\varepsilon$ (AFN-$\\varepsilon$) se define como el conjunto de todos los estados a los que se puede llegar desde $q$ mediante cero, una o más transiciones $\\varepsilon$.\n\nFormalmente, el cálculo de la clausura $\\varepsilon$ para un estado $q$ se compone de:\n1. El propio estado $q$ (ya que se puede alcanzar con cero transiciones $\\varepsilon$).\n2. Todos los estados alcanzables de manera directa o indirecta a partir de $q$ utilizando exclusivamente arcos etiquetados con $\\varepsilon$.\n\n### Ejemplo de cálculo de la clausura $\\varepsilon$\nTomando como referencia los estados de un autómata con transiciones $\\varepsilon$, la operación se expresa como la unión del estado base con los estados alcanzables vía $\\varepsilon$:\n\n- $C_\\varepsilon(0) = \\{0\\} \\cup \\{1, 2, 4, 7\\}$\n- $C_\\varepsilon(1) = \\{1\\} \\cup \\{2, 4\\}$\n- $C_\\varepsilon(3) = \\{3\\} \\cup \\{1, 2, 4, 6, 7\\}$\n\nEste procedimiento es el **Paso 1** fundamental para transformar un AFN-$\\varepsilon$ en un Autómata Finito Determinista (AFD), permitiendo agrupar los estados equivalentes que se activan sin consumir símbolos del alfabeto de entrada $\\Sigma$.\n\n**Fuentes consultadas:**\n- [Fuente: 05 Autómatas Finitos Con Transiciones épsilon 2026-II.pptx - Diapositiva 8]"
+    },
+    {
+      "id": 6,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la notación formal de un AFN con transiciones épsilon?",
+      "ttft_s": 3.69,
+      "total_s": 5.15,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Un Autómata Finito No Determinista con transiciones $\\varepsilon$ (AFN-$\\varepsilon$ o AFND-$\\varepsilon$) se define formalmente como una 5-tupla: $$E = (Q, \\Si",
+      "respuesta_completa": "Un Autómata Finito No Determinista con transiciones $\\varepsilon$ (AFN-$\\varepsilon$ o AFND-$\\varepsilon$) se define formalmente como una 5-tupla:\n\n$$E = (Q, \\Sigma, \\delta, q_0, F)$$\n\nDonde cada uno de sus componentes se desglosa de la siguiente manera:\n- **$Q$**: Un conjunto finito de estados.\n- **$\\Sigma$**: El alfabeto de entrada (conjunto de símbolos permitidos).\n- **$\\delta$**: La función de transición, definida formalmente como $\\delta: Q \\times (\\Sigma \\cup \\{\\varepsilon\\}) \\to \\mathcal{P}(Q)$. Esto significa que, dado un estado actual y un símbolo de entrada (o la cadena vacía $\\varepsilon$), la función devuelve un subconjunto de estados posibles de $Q$ (incluyendo el conjunto vacío $\\emptyset$).\n- **$q_0$**: El estado inicial, tal que $q_0 \\in Q$.\n- **$F$**: El conjunto de estados de aceptación o finales, donde $F \\subseteq Q$.\n\nLa característica distintiva de este modelo frente a otros autómatas finitos radica en su función de transición $\\delta$, la cual permite realizar movimientos espontáneos consumiendo el símbolo $\\varepsilon$ (la cadena vacía o $\\lambda$) sin necesidad de leer ningún carácter del flujo de entrada.\n\n**Fuentes consultadas:**\n- [Archivo: 05 Autómatas Finitos Con Transiciones épsilon 2026-II.pptx - Diapositiva 6]\n- [Archivo: 05 Autómatas Finitos Con Transiciones épsilon 2026-II.pptx - Diapositiva 3]"
+    },
+    {
+      "id": 7,
+      "tipo": "directa",
+      "pregunta": "¿Cuáles son los siete elementos de un autómata a pila?",
+      "ttft_s": 4.11,
+      "total_s": 4.91,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Un Autómata a Pila (AP) se define formalmente como una 7-tupla: $$AP = (Q, \\Sigma, \\Gamma, \\delta, q_0, Z_0, F)$$ Donde cada uno de sus elementos cumple la sigu",
+      "respuesta_completa": "Un Autómata a Pila (AP) se define formalmente como una 7-tupla:\n\n$$AP = (Q, \\Sigma, \\Gamma, \\delta, q_0, Z_0, F)$$\n\nDonde cada uno de sus elementos cumple la siguiente función:\n\n- **$Q$**: Conjunto finito de estados del autómata.\n- **$\\Sigma$**: Alfabeto de entrada del autómata.\n- **$\\Gamma$**: Alfabeto de la pila, conjunto de símbolos que se pueden introducir y manipular en la pila (los alfabetos $\\Sigma$ y $\\Gamma$ pueden ser diferentes).\n- **$\\delta$**: Función de transición, la cual controla el comportamiento del autómata mapeando un estado, un símbolo de entrada (o $\\epsilon$) y un símbolo de la pila hacia un conjunto finito de pares de nuevo estado y cadena de la pila.\n- **$q_0$**: Estado inicial perteneciente a $Q$.\n- **$Z_0$**: Símbolo inicial de la pila. Inicialmente, la pila del autómata consta solo de una instancia de este símbolo.\n- **$F$**: Conjunto de estados de aceptación ($F \\subseteq Q$).\n\n**Fuentes consultadas:**\n- [Archivo: 06 Autómatas a Pila 2026-II.pptx - Diapositiva 5]"
+    },
+    {
+      "id": 8,
+      "tipo": "directa",
+      "pregunta": "¿Cómo funciona la función de transición de un autómata a pila?",
+      "ttft_s": 3.79,
+      "total_s": 5.44,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "La función de transición de un Autómata a Pila (AP) formaliza su comportamiento dinámico, el cual depende simultáneamente del estado actual, del símbolo de entr",
+      "respuesta_completa": "La función de transición de un Autómata a Pila (AP) formaliza su comportamiento dinámico, el cual depende simultáneamente del estado actual, del símbolo de entrada leído (o la ausencia de este mediante $\\varepsilon$) y del símbolo ubicado en el tope de la pila. \n\nFormalmente, la función se expresa como:\n$$\\delta: Q \\times (\\Sigma \\cup \\{\\varepsilon\\}) \\times \\Gamma \\to \\text{subconjuntos finitos de } Q \\times \\Gamma^*$$\n\nDonde los componentes de la tupla del autómata a pila $P = (Q, \\Sigma, \\Gamma, \\delta, q_0, Z_0, F)$ se desglosan de la siguiente manera:\n- **$Q$**: Conjunto finito de estados del autómata.\n- **$\\Sigma$**: Alfabeto de entrada (símbolos que puede leer de la cadena de entrada).\n- **$\\Gamma$**: Alfabeto de la pila (conjunto de símbolos que se pueden almacenar en la pila).\n- **$\\delta$**: Función de transición.\n- **$q_0$**: Estado inicial perteneciente a $Q$.\n- **$Z_0$**: Símbolo inicial de la pila (la pila contiene inicialmente solo una instancia de este símbolo).\n- **$F$**: Conjunto de estados de aceptación o finales ($F \\subseteq Q$).\n\n### Operatoria de la transición $\\delta(q, a, X) = (p, \\gamma)$\nTomando un estado actual $q$, un símbolo de entrada $a$ (que puede ser un símbolo de $\\Sigma$ o $\\varepsilon$) y un símbolo $X$ en el tope de la pila ($\\Gamma$), la salida de la función produce un nuevo estado $p$ y una cadena $\\gamma \\in \\Gamma^*$ que reemplaza a $X$ en la parte superior de la pila. Este reemplazo opera bajo tres casos principales:\n1. **Extracción (Pop):** Si $\\gamma = \\varepsilon$, el símbolo $X$ es retirado de la pila sin introducir elementos nuevos, disminuyendo la altura de la pila.\n2. **Sin cambios:** Si $\\gamma = X$, el símbolo superior se reemplaza por sí mismo, manteniendo la pila intacta.\n3. **Inserción (Push) / Modificación:** Si $\\gamma = YZ$ (o cualquier secuencia de símbolos), $X$ es extraído y se introduce la cadena $\\gamma$ en la pila, donde el primer símbolo de $\\gamma$ queda en el nuevo tope.\n\n**Fuentes consultadas:**\n- [Archivo: 06 Autómatas a Pila 2026-II.pptx - Diapositiva: 5]\n- [Archivo: 06 Autómatas a Pila 2026-II.pptx - Diapositiva: 6]"
+    },
+    {
+      "id": 9,
+      "tipo": "directa",
+      "pregunta": "¿Cuál es la definición formal de la máquina de Turing?",
+      "ttft_s": 5.65,
+      "total_s": 7.52,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Una Máquina de Turing se define formalmente mediante una 7-tupla: $$M = (Q, \\Sigma, \\Gamma, \\delta, q_0, B, F)$$ Donde cada uno de sus componentes se desglosa d",
+      "respuesta_completa": "Una Máquina de Turing se define formalmente mediante una 7-tupla:\n\n$$M = (Q, \\Sigma, \\Gamma, \\delta, q_0, B, F)$$\n\nDonde cada uno de sus componentes se desglosa de la siguiente manera:\n- **$Q$**: Conjunto finito de estados de la unidad de control.\n- **$\\Sigma$**: Alfabeto de símbolos de entrada.\n- **$\\Gamma$**: Conjunto de símbolos de cinta; $\\Sigma$ siempre es un subconjunto de $\\Gamma$.\n- **$\\delta$**: Función de transición, expresada como $\\delta(q, X) \\to (p, Y, D)$, donde:\n  - $q$ es el estado actual del autómata y $X$ es el símbolo leído en la cinta.\n  - $p$ es el siguiente estado del autómata.\n  - $Y$ es el símbolo de $\\Gamma$ que se escribe en la casilla apuntada por el cabezal, sustituyendo al símbolo previo.\n  - $D$ es la dirección del movimiento del cabezal, pudiendo ser \"izquierda\" ($L$), \"derecha\" ($R$) o \"igual\" ($E$).\n- **$q_0$**: Estado inicial del autómata (unidad de control).\n- **$B$**: Símbolo espacio en blanco ($B \\in \\Gamma$ pero $B \\notin \\Sigma$). Aparece inicialmente en todas las casillas de la cinta, excepto en aquellas que almacenan la cadena de entrada.\n- **$F$**: Conjunto de estados finales o de aceptación, siendo un subconjunto de $Q$.\n\n**Fuentes consultadas:**\n- [Fuente: 07 Máquinas de Turing 2026-2.pptx - Diapositiva 12]"
+    },
+    {
+      "id": 10,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la jerarquía de Chomsky?",
+      "ttft_s": 3.5,
+      "total_s": 4.76,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 0.5,
+      "error": null,
+      "respuesta_inicio": "La jerarquía de Chomsky es una clasificación de los lenguajes formales introducida por el lingüista Avram Noam Chomsky en la década de 1950, la cual establece u",
+      "respuesta_completa": "La jerarquía de Chomsky es una clasificación de los lenguajes formales introducida por el lingüista Avram Noam Chomsky en la década de 1950, la cual establece una jerarquía inclusiva de 4 tipos (del Tipo 0 al Tipo 3) que sirven de base para el desarrollo de los lenguajes humanos y de computadoras. \n\nEsta jerarquía se estructura de la siguiente manera:\n\n- **Tipo 0 (Sin restricciones):** Pertenecen la semántica de todos los lenguajes naturales y artificiales, entre los que se encuentran los problemas computables que se pueden resolver mediante una máquina de Turing.\n- **Tipo 1 (Sensibles al contexto):** El valor sintáctico de la palabra depende de su posición en la frase. Se aplican a pocas lenguas naturales y son reconocidos por autómatas lineales acotados.\n- **Tipo 2 (Lenguajes independientes del contexto):** El valor sintáctico de la palabra es independiente de su posición en la frase. A este grupo pertenecen todos los lenguajes de computadoras y son reconocidos por los autómatas a pila.\n- **Tipo 3 (Lenguajes sencillos o regulares):** Corresponden a los lenguajes regulares, los cuales son reconocidos por los autómatas finitos (tanto AFD como AFND).\n\n**Fuentes consultadas:**\n- [Fuente: 02 Máquinas, Lenguajes y Problemas 2026-II.pptx - Diapositiva: 18]\n- [Fuente: 02 Máquinas, Lenguajes y Problemas 2026-II.pptx - Diapositiva: 20]"
+    },
+    {
+      "id": 11,
+      "tipo": "directa",
+      "pregunta": "¿Qué es la palabra vacía?",
+      "ttft_s": 3.4,
+      "total_s": 4.1,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "La palabra vacía es denotada por $\\lambda$ (Lambda) y se define formalmente como aquella palabra que no contiene ninguna letra. Su longitud es igual a cero ($|\\",
+      "respuesta_completa": "La palabra vacía es denotada por $\\lambda$ (Lambda) y se define formalmente como aquella palabra que no contiene ninguna letra. Su longitud es igual a cero ($|\\lambda| = 0$). \n\nDentro de las definiciones formales en lenguajes formales, la palabra vacía cumple un rol fundamental en operaciones como la potencia $i$-ésima, donde se establece que cualquier palabra elevada a la potencia cero da como resultado la palabra vacía ($x^0 = \\lambda$), y también forma parte fundamental del lenguaje universal o universo del discurso ($\\Sigma^*$), representando el primer elemento de dicho conjunto infinito para cualquier alfabeto $\\Sigma$.\n\n**Fuentes consultadas:**\n- [Archivo: 02 Máquinas, Lenguajes y Problemas 2026-II.pptx - Diapositiva 23]\n- [Archivo: 02 Máquinas, Lenguajes y Problemas 2026-II.pptx - Diapositiva 24]\n- [Archivo: 02 Máquinas, Lenguajes y Problemas 2026-II.pptx - Diapositiva 27]"
+    },
+    {
+      "id": 12,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se concatenan dos lenguajes?",
+      "ttft_s": 4.08,
+      "total_s": 5.14,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "La concatenación de dos lenguajes $L_1$ y $L_2$ definidos sobre un alfabeto $\\Sigma$ (es decir, $L_1, L_2 \\subset \\Sigma^*$), denotada como $L_1L_2$ o $L_1.L_2$",
+      "respuesta_completa": "La concatenación de dos lenguajes $L_1$ y $L_2$ definidos sobre un alfabeto $\\Sigma$ (es decir, $L_1, L_2 \\subset \\Sigma^*$), denotada como $L_1L_2$ o $L_1.L_2$, se define formalmente como el conjunto de todas las palabras posibles obtenidas al concatenar una palabra del primer lenguaje con una palabra del segundo lenguaje. \n\nSu representación formal en teoría de conjuntos es la siguiente:\n\n$$L_1L_2 = \\{ xy \\mid x \\in L_1, y \\in L_2 \\}$$\n\nDesglose de los componentes de la definición formal:\n- $L_1, L_2$: Lenguajes formados por conjuntos de palabras sobre el alfabeto $\\Sigma^*$.\n- $x$: Palabra que pertenece estrictamente al lenguaje $L_1$ ($x \\in L_1$).\n- $y$: Palabra que pertenece estrictamente al lenguaje $L_2$ ($y \\in L_2$).\n- $xy$: Palabra resultante de la concatenación de $x$ con $y$.\n\n### Propiedades de la Concatenación de Lenguajes:\n1. **Operación cerrada:** La concatenación de dos lenguajes sobre el mismo alfabeto da como resultado otro lenguaje perteneciente al mismo alfabeto.\n2. **Propiedad asociativa:** La agrupación de tres lenguajes no altera el resultado final: $(L_1L_2)L_3 = L_1(L_2L_3)$.\n3. **Existencia del elemento neutro:** La palabra vacía o lenguaje neutro $\\lambda$ cumple que $L\\lambda = \\lambda L = L$.\n\n**Fuentes consultadas:**\n- [Archivo: 02 Máquinas, Lenguajes y Problemas 2026-II.pptx - Diapositiva 31]"
+    },
+    {
+      "id": 13,
+      "tipo": "directa",
+      "pregunta": "¿Cómo se calcula la nota final del curso?",
+      "ttft_s": 5.01,
+      "total_s": 5.4,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Para calcular la nota final del curso se emplea la siguiente fórmula formal: $$PF = \\frac{3 \\cdot PE + EP + EF}{5}$$ Donde los componentes se desglosan de la si",
+      "respuesta_completa": "Para calcular la nota final del curso se emplea la siguiente fórmula formal:\n\n$$PF = \\frac{3 \\cdot PE + EP + EF}{5}$$\n\nDonde los componentes se desglosan de la siguiente manera:\n- **PF**: Promedio final de la asignatura.\n- **PE**: Promedio de evaluaciones.\n- **EP**: Examen parcial.\n- **EF**: Examen final.\n\nA su vez, el promedio de evaluaciones ($PE$) se calcula mediante la media aritmética de cuatro componentes:\n\n$$PE = \\frac{P1 + P2 + P3 + P4}{4}$$\n\nDonde cada indicador representa:\n- **P1**: Evaluación sobre Autómatas finitos.\n- **P2**: Evaluación sobre Inteligencia Artificial.\n- **P3**: Promedios de controles de lectura, tareas y guías de laboratorio.\n- **P4**: Exposición grupal (Proyecto Final).\n\n**Fuentes consultadas:**\n- [Fuente: 01 Introducción al Curso IA 2026-II.pptx - Diapositiva 8]"
+    },
+    {
+      "id": 14,
+      "tipo": "directa",
+      "pregunta": "¿La máquina de Turing reconoce el lenguaje a^n b^n c^n?",
+      "ttft_s": 4.57,
+      "total_s": 5.93,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Una Máquina de Turing formalmente se define como una 7-tupla: $$M = (Q, \\Sigma, \\Gamma, \\delta, q_0, B, F)$$ Donde cada componente representa: - $Q$: Conjunto f",
+      "respuesta_completa": "Una Máquina de Turing formalmente se define como una 7-tupla:\n$$M = (Q, \\Sigma, \\Gamma, \\delta, q_0, B, F)$$\n\nDonde cada componente representa:\n- $Q$: Conjunto finito de estados.\n- $\\Sigma$: Alfabeto de entrada.\n- $\\Gamma$: Alfabeto de la cinta (símbolos permitidos en la cinta).\n- $\\delta$: Función de transición parcial, definida como $\\delta: Q \\times \\Gamma \\to Q \\times \\Gamma \\times \\{L, R\\}$.\n- $q_0$: Estado inicial ($q_0 \\in Q$).\n- $B$: Símbolo blanco (Blank), el cual pertenece a $\\Gamma$ pero no a $\\Sigma$.\n- $F$: Conjunto de estados de aceptación o finales ($F \\subseteq Q$).\n\nEn relación con el reconocimiento del lenguaje $L = \\{a^n b^n c^n \\mid n \\ge 0\\}$, las diapositivas oficiales muestran que algunas construcciones de Máquinas de Turing propuestas como reconocedores fallan al aceptar cadenas incorrectas (como $abcabc$), lo que demuestra que diseñar una MT para este lenguaje no trivial requiere un manejo estricto del reemplazo de símbolos (como el uso de marcas adicionales $X, Y, Z$) para asegurar la correspondencia exacta en cantidad de $a$s, $b$s y $c$s. Por tanto, la respuesta depende de la máquina específica evaluada: configuraciones erróneas pueden aceptar cadenas fuera del lenguaje, mientras que una máquina correctamente diseñada con múltiples marcas y estados de validación sí logra reconocer exactamente $L = \\{a^n b^n c^n \\mid n \\ge 0\\}$.\n\n**Fuentes consultadas:**\n- [Archivo: 07.1 Ejercicios Maquinas de Turing 2026-2.pptx - Diapositiva 3]\n- [Archivo: 07.1 Ejercicios Maquinas de Turing 2026-2.pptx - Diapositiva 4]\n- [Archivo: 07.1 Ejercicios Maquinas de Turing 2026-2.pptx - Diapositiva 8]\n- [Archivo: 07.1 Ejercicios Maquinas de Turing 2026-2.pptx - Diapositiva 9]"
+    },
+    {
+      "id": 15,
+      "tipo": "parafraseada",
+      "pregunta": "¿Qué memoria auxiliar se le agrega a un autómata para poder reconocer cadenas como 0011 o aaabbb?",
+      "ttft_s": 3.23,
+      "total_s": 4.59,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Para reconocer lenguajes formales que requieren conteo ilimitado o balanceado, como $L = \\{0^n 1^n \\mid n \\ge 1\\}$, se le agrega al autómata una pila de tipo LI",
+      "respuesta_completa": "Para reconocer lenguajes formales que requieren conteo ilimitado o balanceado, como $L = \\{0^n 1^n \\mid n \\ge 1\\}$, se le agrega al autómata una pila de tipo LIFO (Last In First Out) como memoria temporal, lo cual da origen a un **Autómata a Pila**. \n\nUn autómata a pila se define formalmente como una 7-tupla:\n$$P = (Q, \\Sigma, \\Gamma, \\delta, q_0, Z_0, F)$$\n\nDonde cada componente se desglosa de la siguiente manera:\n- **$Q$**: Conjunto finito de estados.\n- **$\\Sigma$**: Alfabeto de entrada (símbolos que se leen de la cadena).\n- **$\\Gamma$**: Alfabeto de la pila (símbolos que se pueden almacenar y extraer).\n- **$\\delta$**: Función de transición, definida como $\\delta: Q \\times (\\Sigma \\cup \\{\\varepsilon\\}) \\times \\Gamma \\to \\mathcal{P}_{fin}(Q \\times \\Gamma^*)$, que mapea un estado, un símbolo de entrada (o vacío $\\varepsilon$) y la cima de la pila, hacia un conjunto finito de pares de nuevo estado y cadena de reemplazo en la pila.\n- **$q_0$**: Estado inicial ($q_0 \\in Q$).\n- **$Z_0$**: Símbolo inicial o fondo de la pila ($Z_0 \\in \\Gamma$).\n- **$F$**: Conjunto de estados de aceptación o finales ($F \\subseteq Q$).\n\nEsta memoria auxiliar permite apilar símbolos (por ejemplo, registrar los ceros `0` entrantes utilizando el símbolo de fondo de pila $Z_0$) y posteriormente desapilarlos al leer los símbolos correspondientes (como los unos `1`), validando que la cantidad de elementos coincida exactamente.\n\n**Fuentes consultadas:**\n- [Archivo: 06 Autómatas a Pila 2026-II.pptx - Diapositiva 3]\n- [Archivo: 06 Autómatas a Pila 2026-II.pptx - Diapositiva 11]"
+    },
+    {
+      "id": 16,
+      "tipo": "parafraseada",
+      "pregunta": "Explícame el modelo teórico que lee y escribe símbolos sobre una cinta infinita moviendo un cabezal",
+      "ttft_s": 2.79,
+      "total_s": 4.04,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "El modelo teórico que describe un autómata finito dotado de una cinta de longitud infinita con capacidad de lectura y escritura es la **Máquina de Turing (MT)**",
+      "respuesta_completa": "El modelo teórico que describe un autómata finito dotado de una cinta de longitud infinita con capacidad de lectura y escritura es la **Máquina de Turing (MT)**. \n\nFormalmente, una Máquina de Turing se define como una 7-tupla:\n$$M = (Q, \\Sigma, \\Gamma, \\delta, q_0, B, F)$$\n\nDonde cada componente se desglosa de la siguiente manera:\n- **$Q$**: Conjunto finito de estados de la unidad de control.\n- **$\\Sigma$**: Alfabeto de símbolos de entrada.\n- **$\\Gamma$**: Conjunto de símbolos de cinta ($\\Sigma$ siempre es un subconjunto de $\\Gamma$).\n- **$\\delta$**: Función de transición, expresada formalmente como $\\delta(q, X) = (p, Y, D)$.\n- **$q_0$**: Estado inicial de la unidad de control.\n- **$B$**: Símbolo espacio en blanco ($B \\in \\Gamma$ pero $B \\notin \\Sigma$). Aparece inicialmente en todas las casillas excepto en aquellas que almacenan la entrada.\n- **$F$**: Conjunto de estados finales o de aceptación ($F \\subseteq Q$).\n\nLa función de transición $\\delta(q, X) = (p, Y, D)$ opera bajo los siguientes parámetros:\n- $q$: Estado actual de la unidad de control.\n- $X$: Símbolo de la cinta leído por el cabezal.\n- $p$: Siguiente estado al que transiciona la máquina.\n- $Y$: Símbolo de cinta que se escribe en la casilla actual, sustituyendo al símbolo previo.\n- $D$: Dirección del movimiento del cabezal, la cual puede ser izquierda ($L$), derecha ($R$) o igual ($E$).\n\nLos movimientos de la máquina dependen estrictamente del estado actual de la unidad de control y del símbolo apuntado por el cabezal en la cinta, permitiendo cambiar de estado, escribir un nuevo símbolo y desplazar el cabezal de manera obligatoria hacia la izquierda o la derecha.\n\n**Fuentes consultadas:**\n- [Archivo: 07 Máquinas de Turing 2026-2.pptx - Diapositiva 9]\n- [Archivo: 07 Máquinas de Turing 2026-2.pptx - Diapositiva 11]\n- [Archivo: 07 Máquinas de Turing 2026-2.pptx - Diapositiva 12]"
+    },
+    {
+      "id": 17,
+      "tipo": "parafraseada",
+      "pregunta": "¿Cómo diseño una máquina que encuentre las palabras web y ebay dentro de un texto?",
+      "ttft_s": 3.81,
+      "total_s": 4.48,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Para diseñar un mecanismo que reconozca las palabras \"web\" y \"ebay\" dentro de un texto, se emplea formalmente un Autómata Finito No Determinista (AFND). Un AFND",
+      "respuesta_completa": "Para diseñar un mecanismo que reconozca las palabras \"web\" y \"ebay\" dentro de un texto, se emplea formalmente un Autómata Finito No Determinista (AFND). \n\nUn AFND se define formalmente como una 5-tupla $A = (Q, \\Sigma, \\delta, q_0, F)$, donde:\n- $Q$: Conjunto finito de estados.\n- $\\Sigma$: Alfabeto de entrada (el conjunto de todos los caracteres ASCII imprimibles).\n- $\\delta$: Función de transición, definida como $\\delta: Q \\times \\Sigma \\to \\mathcal{P}(Q)$, la cual mapea un estado y un símbolo de entrada a un subconjunto de estados posibles.\n- $q_0$: Estado inicial (en este diseño, el estado 1).\n- $F$: Conjunto de estados de aceptación o finales.\n\nEl modelo permite que el autómata maneje la búsqueda de múltiples patrones de forma eficiente gracias a la no determinabilidad en la lectura de caracteres bajo un alfabeto $\\Sigma$ que abarca todos los caracteres ASCII imprimibles.\n\n**Fuentes consultadas:**\n- [Archivo: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva 20]"
+    },
+    {
+      "id": 18,
+      "tipo": "parafraseada",
+      "pregunta": "¿Qué significa que una máquina pueda estar en varios estados al mismo tiempo?",
+      "ttft_s": 2.67,
+      "total_s": 3.38,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "En el contexto de los Autómatas Finitos No Deterministas (AFND o AFN), la afirmación de que el autómata «puede estar en varios estados a la vez» representa un m",
+      "respuesta_completa": "En el contexto de los Autómatas Finitos No Deterministas (AFND o AFN), la afirmación de que el autómata «puede estar en varios estados a la vez» representa un modelo de cómputo donde, ante un mismo símbolo de entrada desde un estado actual, la función de transición no determina un único estado destino, sino un subconjunto de estados posibles. \n\nFormalmente, mientras que un Autómata Finito Determinista (AFD) posee una función de transición que devuelve un único estado ($\\delta: Q \\times \\Sigma \\to Q$), un AFND emplea una función de transición que devuelve un conjunto de cero, uno o más estados ($\\delta: Q \\times \\Sigma \\to \\mathcal{P}(Q)$). Esto significa que la máquina explora múltiples caminos de computación en paralelo; conceptualmente, la cadena de entrada es aceptada si al menos uno de estos caminos paralelos conduce a un estado de aceptación tras procesar la totalidad de la entrada.\n\n**Fuentes consultadas:**\n- [Fuente: 03 Introducción a la Teoría de los Autómatas 2026-2.pptx - Diapositiva: 14]\n- [Fuente: 04 Autómatas Finitos No Deterministas AFND 2026-2.pptx - Diapositiva: 3]"
+    },
+    {
+      "id": 19,
+      "tipo": "parafraseada",
+      "pregunta": "Dame un ejemplo de la vida real, como el control de la entrada de autos a un parqueo",
+      "ttft_s": 2.71,
+      "total_s": 4.61,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 0.0,
+      "error": null,
+      "respuesta_inicio": "Un Autómata Finito Determinista (AFD) se define formalmente como una 5-tupla $A = (Q, \\Sigma, \\delta, q_0, F)$, cuyos componentes se desglozan de la siguiente m",
+      "respuesta_completa": "Un Autómata Finito Determinista (AFD) se define formalmente como una 5-tupla $A = (Q, \\Sigma, \\delta, q_0, F)$, cuyos componentes se desglozan de la siguiente manera:\n- $Q$: Conjunto finito de estados.\n- $\\Sigma$: Alfabeto de entrada (conjunto finito de símbolos que el autómata puede leer).\n- $\\delta$: Función de transición, denotada formalmente como $\\delta: Q \\times \\Sigma \\to Q$, la cual mapea un estado actual y un símbolo de entrada a un **único** estado siguiente.\n- $q_0$: Estado inicial ($q_0 \\in Q$).\n- $F$: Conjunto de estados de aceptación o finales ($F \\subseteq Q$).\n\nPara modelar el control de la entrada de autos a un parqueo utilizando un AFD, podemos estructurarlo mediante los siguientes componentes formales:\n\n1. **Alfabeto de entrada ($\\Sigma$):** $\\Sigma = \\{\\text{auto}, \\text{espacio\\_lleno}\\}$\n   - $\\text{auto}$: Se detecta la llegada de un vehículo en la garita.\n   - $\\text{espacio\\_lleno}$: El sistema indica que el parqueo ha alcanzado su capacidad máxima.\n\n2. **Conjunto de estados ($Q$):** $Q = \\{q_0, q_1, q_2\\}$\n   - $q_0$: Parqueo disponible (Barrera abajo, esperando vehículos).\n   - $q_1$: Procesando ingreso / Barrera levantada.\n   - $q_2$: Parqueo lleno (Estado de rechazo o bloqueo de entrada).\n\n3. **Estado inicial ($q_0$):** El sistema inicia por defecto con espacios disponibles y la barrera cerrada.\n\n4. **Estados de aceptación ($F$):** $F = \\{q_0\\}$ (Indica que el sistema se encuentra en un estado operativo válido y estable tras procesar los ingresos).\n\n5. **Función de transición ($\\delta$):** Define cómo el sistema cambia de un estado a otro al recibir un evento:\n   - $\\delta(q_0, \\text{auto}) = q_1$ (Llega un auto y se abre la barrera).\n   - $\\delta(q_1, \\text{auto}) = q_0$ (El auto ingresa y la barrera vuelve a cerrarse, quedando disponible).\n   - $\\delta(q_0, \\text{espacio\\_lleno}) = q_2$ (Se llena el cupo y el sistema bloquea nuevos ingresos).\n   - $\\delta(q_2, \\text{auto}) = q_2$ (Si llega un auto cuando está lleno, se deniega el acceso y permanece en el mismo estado de bloqueo).\n\nA continuación se representa el diagrama de transición mediante un grafo de estados:\n\n```mermaid\nstateDiagram-v2\n    direction LR\n    [*] --> q0\n    q0 --> q1 : auto\n    q1 --> q0 : auto\n    q0 --> q2 : espacio_lleno\n    q2 --> q2 : auto\n    state q0 {\n    }\n    state q1 {\n    }\n    state q2 {\n    }\n```\n\n**Fuentes consultadas:**\n- [Archivo: 03 Introducción a la Teoría de los Autómatas 2026-2.pptx - Diapositiva: 14]"
+    },
+    {
+      "id": 20,
+      "tipo": "parafraseada",
+      "pregunta": "¿Cómo simplifico una función lógica para usar menos compuertas?",
+      "ttft_s": 3.73,
+      "total_s": 5.55,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Para simplificar una función lógica y reducir el uso de compuertas, se emplea el álgebra de Boole. El proceso consiste en aplicar las leyes y teoremas booleanos",
+      "respuesta_completa": "Para simplificar una función lógica y reducir el uso de compuertas, se emplea el álgebra de Boole. El proceso consiste en aplicar las leyes y teoremas booleanos básicos (como la idempotencia, absorción, complementariedad y las leyes de De Morgan) sobre la expresión lógica derivada de la tabla de verdad o del problema planteado para eliminar literales y términos redundantes.\n\nTomando como referencia el ejercicio del sistema de préstamos digitales donde la salida depende de las variables de entrada $A$ (Años laborales), $E$ (Edad) y $C$ (Estado Civil), la función lógica se construye identificando las combinaciones de entrada donde la salida es igual a $1$:\n\nFórmula canónica en suma de minérminos (SOP):\n$$S(A, E, C) = \\overline{A}\\cdot\\overline{E}\\cdot\\overline{C} + \\overline{A}\\cdot E\\cdot\\overline{C} + \\overline{A}\\cdot E\\cdot C + A\\cdot E\\cdot C$$\n\nDonde cada componente representa:\n- $\\overline{A}, \\overline{E}, \\overline{C}$: Negación de las variables de entrada (equivalente a valor 0).\n- $A, E, C$: Variables de entrada directas (equivalente a valor 1).\n- Operador $\\cdot$: Conjunción lógica (compuerta AND).\n- Operador $+$: Disyunción lógica (compuerta OR).\n\nPara simplificar la expresión mediante álgebra de Boole, se agrupan términos comunes:\n1. Factorizando $\\overline{A}\\cdot\\overline{C}$ en los dos primeros términos: \n   $$\\overline{A}\\cdot\\overline{C}(\\overline{E} + E) = \\overline{A}\\cdot\\overline{C}(1) = \\overline{A}\\cdot\\overline{C}$$\n2. Factorizando $E\\cdot C$ en el tercer y cuarto término:\n   $$E\\cdot C(\\overline{A} + A) = E\\cdot C(1) = E\\cdot C$$\n\nLa función lógica simplificada resultante es:\n$$S(A, E, C) = \\overline{A}\\cdot\\overline{C} + E\\cdot C$$\n\nEsta reducción disminuye drásticamente el número de compuertas lógicas necesarias (pasando de múltiples compuertas AND de 3 entradas y una compuerta OR grande, a solo dos compuertas AND de 2 entradas y una compuerta OR final).\n\n**Fuentes consultadas:**\n- [Archivo: 02 Máquinas, Lenguajes y Problemas 2026-II.pptx - Diapositiva 9]\n- [Archivo: 02 Máquinas, Lenguajes y Problemas 2026-II.pptx - Diapositiva 11]"
+    },
+    {
+      "id": 21,
+      "tipo": "fuera_de_dominio",
+      "pregunta": "¿Cómo preparo un lomo saltado tradicional?",
+      "ttft_s": 6.12,
+      "total_s": 6.12,
+      "rechazo": true,
+      "cita_fuente": false,
+      "cobertura_conceptos": null,
+      "error": null,
+      "respuesta_inicio": "Ese tema no se encuentra registrado en las diapositivas oficiales del curso (Clases 01 a 07.1). Por favor, formula una duda relacionada con autómatas, lenguajes",
+      "respuesta_completa": "Ese tema no se encuentra registrado en las diapositivas oficiales del curso (Clases 01 a 07.1). Por favor, formula una duda relacionada con autómatas, lenguajes, máquinas de Turing o el temario del ciclo."
+    },
+    {
+      "id": 22,
+      "tipo": "fuera_de_dominio",
+      "pregunta": "Explícame cómo funciona el algoritmo de backpropagation para entrenar redes neuronales profundas",
+      "ttft_s": 6.0,
+      "total_s": 6.0,
+      "rechazo": true,
+      "cita_fuente": false,
+      "cobertura_conceptos": null,
+      "error": null,
+      "respuesta_inicio": "Ese tema no se encuentra registrado en las diapositivas oficiales del curso (Clases 01 a 07.1). Por favor, formula una duda relacionada con autómatas, lenguajes",
+      "respuesta_completa": "Ese tema no se encuentra registrado en las diapositivas oficiales del curso (Clases 01 a 07.1). Por favor, formula una duda relacionada con autómatas, lenguajes, máquinas de Turing o el temario del ciclo."
+    },
+    {
+      "id": 23,
+      "tipo": "fuera_de_dominio",
+      "pregunta": "¿Quién ganó el mundial de fútbol 2022?",
+      "ttft_s": 5.59,
+      "total_s": 5.87,
+      "rechazo": true,
+      "cita_fuente": false,
+      "cobertura_conceptos": null,
+      "error": null,
+      "respuesta_inicio": "Ese tema no se encuentra registrado en las diapositivas oficiales del curso (Clases 01 a 07.1). Por favor, formula una duda relacionada con autómatas, lenguajes",
+      "respuesta_completa": "Ese tema no se encuentra registrado en las diapositivas oficiales del curso (Clases 01 a 07.1). Por favor, formula una duda relacionada con autómatas, lenguajes, máquinas de Turing o el temario del ciclo."
+    },
+    {
+      "id": 24,
+      "tipo": "seguimiento",
+      "pregunta": "¿Y cómo es su función de transición?",
+      "ttft_s": 3.47,
+      "total_s": 4.59,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "La función de transición de un Autómata a Pila (AP) se define formalmente como: $$\\delta: Q \\times (\\Sigma \\cup \\{\\varepsilon\\}) \\times \\Gamma \\to \\mathcal{P}_{",
+      "respuesta_completa": "La función de transición de un Autómata a Pila (AP) se define formalmente como:\n\n$$\\delta: Q \\times (\\Sigma \\cup \\{\\varepsilon\\}) \\times \\Gamma \\to \\mathcal{P}_{\\text{finito}}(Q \\times \\Gamma^*)$$\n\nDonde cada componente se desglosa de la siguiente manera:\n- **$Q$**: Conjunto de estados del autómata.\n- **$\\Sigma$**: Alfabeto de entrada del autómata.\n- **$\\varepsilon$**: Cadena vacía, que permite realizar transiciones espontáneas sin consumir símbolos de entrada.\n- **$\\Gamma$**: Alfabeto de la pila (conjunto de símbolos que se pueden introducir en ella).\n- **$\\mathcal{P}_{\\text{finito}}(Q \\times \\Gamma^*)$**: Conjunto de subconjuntos finitos de pares $(p, \\gamma)$, donde $p$ es el nuevo estado y $\\gamma$ es la cadena de símbolos que reemplaza al elemento superior de la pila.\n\nMatemáticamente, la función se evalúa como $\\delta(q, a, X)$, donde:\n- **$q$**: Es un estado actual que pertenece a $Q$.\n- **$a$**: Es un símbolo de entrada de $\\Sigma$ o bien $a = \\varepsilon$.\n- **$X$**: Es un símbolo ubicado en la parte superior de la pila, perteneciente a $\\Gamma$.\n\nLa salida de esta función produce un conjunto finito de pares $(p, \\gamma)$, cuyo efecto sobre la pila depende de la cadena $\\gamma$:\n1. Si $\\gamma = \\varepsilon$, se extrae el elemento superior $X$ de la pila (operación *pop*).\n2. Si $\\gamma = X$, la pila no experimenta cambios.\n3. Si $\\gamma = YZ$, el símbolo $X$ es reemplazado en la cima por $Z$ e $Y$ se introduce en la pila (operación *push*).\n\n**Fuentes consultadas:**\n- [Archivo: 06 Autómatas a Pila 2026-II.pptx - Diapositiva 5]\n- [Archivo: 06 Autómatas a Pila 2026-II.pptx - Diapositiva 6]"
+    },
+    {
+      "id": 25,
+      "tipo": "seguimiento",
+      "pregunta": "¿Cuál es su definición formal?",
+      "ttft_s": 3.27,
+      "total_s": 4.1,
+      "rechazo": false,
+      "cita_fuente": true,
+      "cobertura_conceptos": 1.0,
+      "error": null,
+      "respuesta_inicio": "Una Máquina de Turing se define formalmente como una 7-tupla: $$M = (Q, \\Sigma, \\Gamma, \\delta, q_0, B, F)$$ Donde cada componente se desglosa de la siguiente m",
+      "respuesta_completa": "Una Máquina de Turing se define formalmente como una 7-tupla:\n\n$$M = (Q, \\Sigma, \\Gamma, \\delta, q_0, B, F)$$\n\nDonde cada componente se desglosa de la siguiente manera:\n\n* **$Q$**: Conjunto finito de estados de la unidad de control.\n* **$\\Sigma$**: Alfabeto de símbolos de entrada.\n* **$\\Gamma$**: Conjunto de símbolos de cinta, donde $\\Sigma$ siempre es un subconjunto de $\\Gamma$.\n* **$\\delta$**: Función de transición definida como $\\delta(q, X) = (p, Y, D)$, donde:\n  * $q$ es el estado actual y $X$ es el símbolo de la cinta leído por el cabezal.\n  * $p$ es el siguiente estado.\n  * $Y$ es el símbolo de $\\Gamma$ que se escribe en la casilla, sustituyendo al anterior.\n  * $D$ es la dirección en la que se mueve la cabeza, pudiendo ser izquierda ($L$), derecha ($R$) o igual ($E$).\n* **$q_0$**: Estado inicial del autómata (unidad de control).\n* **$B$**: Símbolo espacio en blanco. Pertenece a $\\Gamma$ pero no a $\\Sigma$ (no es un símbolo de entrada) y aparece inicialmente en todas las casillas vacías de la cinta.\n* **$F$**: Conjunto de los estados finales o de aceptación, el cual es un subconjunto de $Q$.\n\n**Fuentes consultadas:**\n- [Archivo: 07 Máquinas de Turing 2026-2.pptx - Diapositiva 12]"
+    }
+  ]
+}
