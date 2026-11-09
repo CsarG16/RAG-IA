@@ -197,7 +197,7 @@ class RAGEngine:
     def ask_stream(self, query: str, history: List[Dict[str, str]] = None, level: str = "formal", topic_filter: Optional[Union[str, List[str]]] = None) -> Tuple[Generator[str, None, None], List[Dict[str, Any]]]:
         """
         Streaming reactivo con doble blindaje de cuota:
-        1. Fallback automático de modelo: gemini-2.5-flash -> gemini-2.5-flash-lite -> gemini-1.5-flash
+        1. Fallback automático entre los modelos configurados en config.FALLBACK_MODELS.
         2. Fallback de llave secundaria si la principal se satura.
         """
         history = history or []

@@ -258,8 +258,7 @@ BOT IA/
 ├── tests/
 │   ├── eval_cases.json       # 25 casos de evaluación
 │   ├── eval_rag.py           # Script de evaluación (recuperación + respuestas)
-│   ├── reports/              # Reportes generados (antes / fases / final)
-│   ├── test_cases.json, run_tests.py   # pruebas antiguas (solo recuperación)
+│   └── reports/              # Reportes generados (antes / fases / final)
 ├── iniciar_aulaia.bat        # Lanzador de 1 clic para Windows
 ├── requirements.txt
 └── .env.example              # Plantilla de variables de entorno
