@@ -20,5 +20,5 @@ echo Iniciando servidor Uvicorn en http://127.0.0.1:8000 ...
 echo Presiona Ctrl + C en esta ventana para detener el servidor.
 echo ===================================================
 echo.
-python -m uvicorn api:app --app-dir src --host 127.0.0.1 --port 8000 --reload
+python -m uvicorn api:app --app-dir src --host 127.0.0.1 --port 8000
 pause

@@ -2,20 +2,20 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AulaIA — Tutor Académico Material Design 3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AulaIA — Tutor Académico Inteligente con RAG Híbrido</title>
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="alternate icon" href="/favicon.ico">
-  
+
   <!-- Tipografía Oficial Google: Roboto & Google Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 
-  <!-- Google Material Symbols Outlined & Filled (Material Design 3) -->
+  <!-- Google Material Symbols Outlined -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-  <!-- Tailwind CSS CDN con tokens de Material Design 3 y Soporte Modo Oscuro -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -32,9 +32,6 @@
               'surface-container-high': 'var(--md-sys-color-surface-container-high)',
               primary: 'var(--md-sys-color-primary)',
               'primary-container': 'var(--md-sys-color-primary-container)',
-              'on-primary-container': 'var(--md-sys-color-on-primary-container)',
-              'secondary-container': 'var(--md-sys-color-secondary-container)',
-              'on-secondary-container': 'var(--md-sys-color-on-secondary-container)',
               'on-surface': 'var(--md-sys-color-on-surface)',
               'on-surface-variant': 'var(--md-sys-color-on-surface-variant)',
               outline: 'var(--md-sys-color-outline)',
@@ -44,14 +41,17 @@
           boxShadow: {
             'elevation-1': '0px 1px 3px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.12)',
             'elevation-2': '0px 2px 6px 2px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.12)',
-            'elevation-3': '0px 4px 8px 3px rgba(0, 0, 0, 0.08), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)',
+            'elevation-3': '0px 4px 12px 3px rgba(0, 0, 0, 0.09), 0px 1px 3px 0px rgba(0, 0, 0, 0.14)',
+            'elevation-4': '0px 8px 24px 4px rgba(0, 0, 0, 0.12), 0px 2px 6px 0px rgba(0, 0, 0, 0.16)',
+            'glow': '0 0 40px -10px rgba(66, 133, 244, 0.35)',
+            'glow-dark': '0 0 50px -10px rgba(255, 255, 255, 0.15)',
           }
         }
       }
     }
   </script>
 
-  <!-- Script Antidestello (Anti-FOUC) para carga instantánea del Tema Preferido -->
+  <!-- Script Antidestello (Anti-FOUC) -->
   <script>
     (function() {
       try {
@@ -66,736 +66,200 @@
     })();
   </script>
 
-  <!-- Marked.js para Markdown -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
   <!-- KaTeX para renderizar fórmulas matemáticas LaTeX ($ y $$) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
-  <!-- Mermaid.js para grafos y autómatas -->
+  <!-- Mermaid.js para grafos interactivos de autómatas -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
-    function getMermaidThemeVariables(isDark) {
-      if (isDark) {
-        return {
-          darkMode: true,
-          background: '#0F172A',
-          primaryColor: '#1E293B',
-          primaryBorderColor: '#38BDF8',
-          primaryTextColor: '#FFFFFF',
-          lineColor: '#94A3B8',
-          secondaryColor: '#0F172A',
-          tertiaryColor: '#1E293B',
-          mainBkg: '#1E293B',
-          nodeBorder: '#38BDF8',
-          clusterBkg: '#0B0F19',
-          clusterBorder: '#334155',
-          titleColor: '#FFFFFF',
-          edgeLabelBackground: '#0F172A',
-          stateLabelColor: '#FFFFFF',
-          stateBkg: '#1E293B',
-          stateBorder: '#38BDF8',
-          labelColor: '#FFFFFF',
-          transitionColor: '#94A3B8',
-          transitionLabelColor: '#FFFFFF',
-          specialStateColor: '#38BDF8',
-          altBackground: '#0F172A'
-        };
-      }
-      return {
-        darkMode: false,
-        background: '#F8FAFC',
-        primaryColor: '#FFFFFF',
-        primaryBorderColor: '#0F172A',
-        primaryTextColor: '#0F172A',
-        lineColor: '#334155',
-        secondaryColor: '#F1F5F9',
-        tertiaryColor: '#FFFFFF',
-        mainBkg: '#FFFFFF',
-        nodeBorder: '#0F172A',
-        clusterBkg: '#F8FAFC',
-        clusterBorder: '#CBD5E1',
-        titleColor: '#0F172A',
-        edgeLabelBackground: '#FFFFFF',
-        stateLabelColor: '#0F172A',
-        stateBkg: '#FFFFFF',
-        stateBorder: '#0F172A',
-        labelColor: '#0F172A',
-        transitionColor: '#334155',
-        transitionLabelColor: '#0F172A',
-        specialStateColor: '#0F172A',
-        altBackground: '#F8FAFC'
-      };
-    }
-
-    function initMermaid(isDark) {
+    function initMermaidOnLanding(isDark) {
       if (window.mermaid) {
         mermaid.initialize({
-          startOnLoad: false,
+          startOnLoad: true,
           theme: 'base',
           securityLevel: 'loose',
-          themeVariables: getMermaidThemeVariables(isDark)
+          themeVariables: isDark ? {
+            darkMode: true,
+            background: '#18181B',
+            primaryColor: '#27272A',
+            primaryBorderColor: '#52525B',
+            primaryTextColor: '#FFFFFF',
+            lineColor: '#A1A1AA',
+            secondaryColor: '#18181B',
+            tertiaryColor: '#27272A',
+            mainBkg: '#27272A',
+            nodeBorder: '#71717A',
+            titleColor: '#FFFFFF',
+            edgeLabelBackground: '#18181B',
+            stateLabelColor: '#FFFFFF',
+            stateBkg: '#27272A',
+            stateBorder: '#71717A',
+            labelColor: '#FFFFFF',
+            transitionColor: '#A1A1AA',
+            transitionLabelColor: '#FFFFFF',
+          } : {
+            darkMode: false,
+            background: '#F8FAFC',
+            primaryColor: '#FFFFFF',
+            primaryBorderColor: '#0F172A',
+            primaryTextColor: '#0F172A',
+            lineColor: '#334155',
+            secondaryColor: '#F1F5F9',
+            tertiaryColor: '#FFFFFF',
+            mainBkg: '#FFFFFF',
+            nodeBorder: '#0F172A',
+            titleColor: '#0F172A',
+            edgeLabelBackground: '#FFFFFF',
+            stateLabelColor: '#0F172A',
+            stateBkg: '#FFFFFF',
+            stateBorder: '#0F172A',
+            labelColor: '#0F172A',
+            transitionColor: '#334155',
+            transitionLabelColor: '#0F172A',
+          }
         });
       }
     }
-
-    // Inicializar Mermaid acorde al tema detectado
-    initMermaid(document.documentElement.classList.contains('dark'));
   </script>
 
   <style>
-    /* ==========================================================================
-       🏛️ 1. DESIGN TOKENS (MATERIAL DESIGN 3 - MODO CLARO & MODO OSCURO)
-       ========================================================================== */
     :root {
-      /* Superficies Modo Claro */
       --md-sys-color-surface: #FFFFFF;
       --md-sys-color-surface-container: #F0F4F9;
       --md-sys-color-surface-container-high: #E9EEF6;
-      
-      /* Primarios & Acentos (Monocromo Grafito) */
       --md-sys-color-primary: #0F172A;
-      --md-sys-color-primary-hover: #1E293B;
       --md-sys-color-primary-container: #E2E8F0;
-      --md-sys-color-on-primary-container: #0F172A;
-      --md-sys-color-secondary-container: #E2E8F0;
-      --md-sys-color-on-secondary-container: #0F172A;
-
-      /* Tipografía y Bordes */
       --md-sys-color-on-surface: #1F1F1F;
       --md-sys-color-on-surface-variant: #444746;
       --md-sys-color-outline: #747775;
       --md-sys-color-outline-variant: #E0E2EC;
-
-      /* Motion Tokens M3 */
-      --m3-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-      --m3-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
-      --m3-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
-      --m3-duration-short: 150ms;
-      --m3-duration-medium: 250ms;
-      --m3-duration-long: 400ms;
     }
 
-    /* Tokens Modo Oscuro (Onyx & Slate Profundo de Alta Fidelidad) */
     html.dark {
-      --md-sys-color-surface: #090D16;
-      --md-sys-color-surface-container: #0F172A;
-      --md-sys-color-surface-container-high: #1E293B;
-      
-      --md-sys-color-primary: #F8FAFC;
-      --md-sys-color-primary-hover: #E2E8F0;
-      --md-sys-color-primary-container: #1E293B;
-      --md-sys-color-on-primary-container: #F8FAFC;
-      --md-sys-color-secondary-container: #1E293B;
-      --md-sys-color-on-secondary-container: #38BDF8;
-
-      --md-sys-color-on-surface: #F8FAFC;
-      --md-sys-color-on-surface-variant: #94A3B8;
-      --md-sys-color-outline: #64748B;
-      --md-sys-color-outline-variant: #1E293B;
+      --md-sys-color-surface: #0E0E10;
+      --md-sys-color-surface-container: #18181B;
+      --md-sys-color-surface-container-high: #202024;
+      --md-sys-color-primary: #FFFFFF;
+      --md-sys-color-primary-container: #27272A;
+      --md-sys-color-on-surface: #F4F4F5;
+      --md-sys-color-on-surface-variant: #A1A1AA;
+      --md-sys-color-outline: #71717A;
+      --md-sys-color-outline-variant: #27272A;
     }
 
-    /* ==========================================================================
-       🌐 2. RESET & TRANSICIÓN FLUIDA DEL TEMA
-       ========================================================================== */
-    *, *::before, *::after {
-      box-sizing: border-box;
+    html {
+      scroll-behavior: smooth;
     }
 
-    html, body {
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background-color: var(--md-sys-color-surface);
-      color: var(--md-sys-color-on-surface);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-      overflow: hidden;
-    }
-
-    /* Transición suave y limpia entre temas (fondos, textos y bordes) */
-    body, aside, main, header, footer,
-    .sidebar-nav-btn, .prose-custom, .katex-display, .mermaid-card,
-    #chatForm, #topicDropdownMenu, #quizModal > div, .welcome-prompt-card,
-    .user-bubble, .bot-avatar, input, textarea, select {
-      transition: background-color 0.28s cubic-bezier(0.2, 0, 0, 1),
-                  color 0.28s cubic-bezier(0.2, 0, 0, 1),
-                  border-color 0.28s cubic-bezier(0.2, 0, 0, 1),
-                  box-shadow 0.28s cubic-bezier(0.2, 0, 0, 1) !important;
-    }
-
-    ::selection {
-      background-color: var(--md-sys-color-primary-container);
-      color: var(--md-sys-color-primary);
-    }
-
-    /* Scrollbar Cross-Browser Normalizada Adaptable */
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: #C4C7C5 transparent;
-    }
-    html.dark * {
-      scrollbar-color: #334155 transparent;
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #C4C7C5;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--md-sys-color-outline);
-    }
-    html.dark ::-webkit-scrollbar-thumb {
-      background: #334155;
-    }
-    html.dark ::-webkit-scrollbar-thumb:hover {
-      background: #475569;
-    }
-
-    /* ==========================================================================
-       ✨ 3. ICONOGRAFÍA MATERIAL SYMBOLS NORMALIZADA
-       ========================================================================== */
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
-      display: inline-block;
-      vertical-align: middle;
-      line-height: 1;
-      color: var(--md-sys-color-on-surface);
-      user-select: none;
-    }
-
-    .material-symbols-outlined.filled {
-      font-variation-settings: 'FILL' 1, 'wght' 350, 'GRAD' 0, 'opsz' 24;
-    }
-
-    /* ==========================================================================
-       🌌 4. AURORA BOREAL AMBIENTAL (GPU 3D & MODO NOCHE LUMINOSO)
-       ========================================================================== */
-    .aurora-wrapper {
+    /* Aurora Glow suave para el fondo del hero */
+    .aurora-bg {
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 650px;
       overflow: hidden;
       pointer-events: none;
-      z-index: 1;
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s var(--m3-easing-standard);
+      z-index: 0;
+      opacity: 0.6;
     }
 
-    .aurora-wrapper.aurora-subtle {
-      opacity: 0.12;
-      transform: translate3d(0, 0, 0) scale(1.05);
-    }
-
-    .aurora-blob {
+    .aurora-blob-hero {
       position: absolute;
       border-radius: 50%;
-      filter: blur(85px);
-      will-change: transform, opacity;
+      filter: blur(100px);
       mix-blend-mode: multiply;
       pointer-events: none;
-      transform: translate3d(0, 0, 0);
-      transition: filter 0.4s ease, opacity 0.4s ease;
     }
 
-    /* En Modo Oscuro, la Aurora pasa a blend screen con brillo cósmico vibrante */
-    html.dark .aurora-blob {
-      mix-blend-mode: screen !important;
-      opacity: 0.60;
-      filter: blur(95px);
+    html.dark .aurora-bg {
+      opacity: 0.35;
     }
-    html.dark .aurora-wrapper.aurora-subtle {
-      opacity: 0.22 !important;
+    html.dark .aurora-blob-hero {
+      mix-blend-mode: screen;
+      filter: blur(120px);
     }
 
-    /* Blob 1: Azul Google / Gemini */
-    .aurora-blob-1 {
-      width: 580px;
-      height: 580px;
-      top: -8%;
-      left: 12%;
-      background: radial-gradient(circle, rgba(66, 133, 244, 0.38) 0%, rgba(66, 133, 244, 0.14) 50%, transparent 72%);
-      animation: auroraMove1 24s ease-in-out infinite alternate;
+    .blob-1 {
+      width: 550px;
+      height: 550px;
+      top: -120px;
+      left: 15%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(99, 102, 241, 0.15) 60%, transparent 80%);
     }
 
-    /* Blob 2: Violeta / Deep Indigo */
-    .aurora-blob-2 {
-      width: 620px;
-      height: 620px;
-      top: 10%;
-      right: 2%;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(147, 51, 234, 0.12) 50%, transparent 70%);
-      animation: auroraMove2 28s ease-in-out infinite alternate;
+    .blob-2 {
+      width: 600px;
+      height: 600px;
+      top: -100px;
+      right: 15%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(236, 72, 153, 0.12) 60%, transparent 80%);
     }
 
-    /* Blob 3: Rosa / Coral Cálido */
-    .aurora-blob-3 {
-      width: 540px;
-      height: 540px;
-      bottom: 2%;
-      left: 8%;
-      background: radial-gradient(circle, rgba(244, 63, 94, 0.28) 0%, rgba(236, 72, 153, 0.10) 55%, transparent 75%);
-      animation: auroraMove3 22s ease-in-out infinite alternate;
+    /* Grid pattern de fondo sutil */
+    .grid-pattern {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    }
+    html.dark .grid-pattern {
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
     }
 
-    /* Blob 4: Cian Eléctrico / Turquesa Suave */
-    .aurora-blob-4 {
-      width: 520px;
-      height: 520px;
-      top: 30%;
-      left: 32%;
-      background: radial-gradient(circle, rgba(6, 182, 212, 0.30) 0%, rgba(56, 189, 248, 0.12) 50%, transparent 70%);
-      animation: auroraMove4 20s ease-in-out infinite alternate;
-    }
-
-    @keyframes auroraMove1 {
-      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-      50% { transform: translate3d(75px, 50px, 0) scale(1.15) rotate(45deg); }
-      100% { transform: translate3d(-60px, 35px, 0) scale(0.95) rotate(-30deg); }
-    }
-
-    @keyframes auroraMove2 {
-      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-      50% { transform: translate3d(-85px, 60px, 0) scale(1.2) rotate(-50deg); }
-      100% { transform: translate3d(45px, -35px, 0) scale(0.9) rotate(35deg); }
-    }
-
-    @keyframes auroraMove3 {
-      0% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(65px, -70px, 0) scale(1.12); }
-      100% { transform: translate3d(-45px, -25px, 0) scale(0.98); }
-    }
-
-    @keyframes auroraMove4 {
-      0% { transform: translate3d(0, 0, 0) scale(0.95) rotate(0deg); }
-      50% { transform: translate3d(-55px, -45px, 0) scale(1.18) rotate(60deg); }
-      100% { transform: translate3d(60px, 45px, 0) scale(1.05) rotate(-40deg); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .aurora-blob {
-        animation: none !important;
-      }
-      .aurora-wrapper {
-        opacity: 0.15 !important;
-        transform: none !important;
-      }
-    }
-
-    /* ==========================================================================
-       🎛️ 5. SELECTS & FORM CONTROLS NORMALIZADOS
-       ========================================================================== */
-    .m3-select {
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-color: var(--md-sys-color-surface);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%23444746'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      background-size: 0.85rem;
-      padding: 0.45rem 2rem 0.45rem 0.85rem;
-      border: 1px solid var(--md-sys-color-outline-variant);
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--md-sys-color-on-surface);
-      cursor: pointer;
-      transition: border-color var(--m3-duration-short) var(--m3-easing-standard), box-shadow var(--m3-duration-short) var(--m3-easing-standard);
-    }
-    .m3-select:hover {
-      border-color: var(--md-sys-color-outline);
-    }
-    .m3-select:focus {
-      outline: none;
-      border-color: var(--md-sys-color-primary);
-      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.12);
-    }
-    html.dark .m3-select {
-      background-color: #1E293B !important;
-      border-color: #334155 !important;
-      color: #F8FAFC !important;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    }
-
-    /* ==========================================================================
-       🧭 6. SIDEBAR FLOTANTE & TOOLTIPS (TOTALMENTE INVISIBLE EN MODO RETRAÍDO)
-       ========================================================================== */
-    aside#sidebar {
-      width: 64px;
-      background-color: transparent !important;
-      border: none !important;
-      border-right: none !important;
-      box-shadow: none !important;
-      transition: width var(--m3-duration-medium) var(--m3-easing-standard), background-color var(--m3-duration-medium) ease, border-color var(--m3-duration-medium) ease, box-shadow var(--m3-duration-medium) ease;
-    }
-
-    aside#sidebar.sidebar-expanded {
-      width: 270px;
-      background-color: var(--md-sys-color-surface-container) !important;
-      border-right: 1px solid var(--md-sys-color-outline-variant) !important;
-      box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.08) !important;
-    }
-
-    html.dark aside#sidebar.sidebar-expanded {
-      background-color: #0F172A !important;
-      border-right: 1px solid #1E293B !important;
-      box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.45) !important;
-    }
-
-    /* En modo retraído, las líneas divisorias son invisibles para que los iconos floten libres */
-    aside#sidebar:not(.sidebar-expanded) .sidebar-divider {
-      display: none !important;
-    }
-
-    html.dark .sidebar-divider {
-      background-color: #1E293B !important;
-    }
-
-    /* Ocultar textos cuando está contraído (modo iconos flotantes) */
-    aside#sidebar:not(.sidebar-expanded) .sidebar-label,
-    aside#sidebar:not(.sidebar-expanded) .sidebar-logo-text {
-      display: none !important;
-    }
-
-    /* Estilo base y hover redondo de los botones del sidebar (Círculo flotante) */
-    .sidebar-nav-btn {
-      display: flex;
-      align-items: center;
-      border-radius: 9999px !important;
-      transition: background-color var(--m3-duration-short) var(--m3-easing-standard), color var(--m3-duration-short) var(--m3-easing-standard), transform var(--m3-duration-short) var(--m3-easing-standard);
-    }
-    html.dark .sidebar-nav-btn {
-      color: #CBD5E1;
-    }
-    html.dark .sidebar-nav-btn:hover {
-      background-color: #1E293B !important;
-      color: #F8FAFC !important;
-    }
-
-    /* Tamaño y hover de botones en modo contraído (Círculo perfecto de 42x42) */
-    aside#sidebar:not(.sidebar-expanded) .sidebar-nav-btn {
-      width: 42px !important;
-      height: 42px !important;
-      padding: 0 !important;
-      justify-content: center !important;
-      border-radius: 9999px !important;
-    }
-
-    /* En modo expandido: Píldora redondeada suave M3 */
-    aside#sidebar.sidebar-expanded .sidebar-nav-btn {
-      width: 100% !important;
-      height: auto !important;
-      padding: 10px 16px !important;
-      justify-content: flex-start !important;
-      border-radius: 9999px !important;
-    }
-
-    .sidebar-tooltip {
-      position: absolute;
-      left: calc(100% + 12px);
-      top: 50%;
-      transform: translateY(-50%) translateX(-6px);
-      padding: 5px 11px;
-      background-color: var(--md-sys-color-primary);
-      color: #FFFFFF;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-      border-radius: 8px;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      visibility: hidden;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-      transition: all 0.16s var(--m3-easing-standard);
-      z-index: 60;
-    }
-
-    html.dark .sidebar-tooltip {
-      background-color: #1E293B !important;
-      border: 1px solid #334155 !important;
-      color: #F8FAFC !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
-    }
-
-    .sidebar-tooltip::before {
-      content: '';
-      position: absolute;
-      right: 100%;
-      top: 50%;
-      transform: translateY(-50%);
-      border-width: 4px;
-      border-style: solid;
-      border-color: transparent var(--md-sys-color-primary) transparent transparent;
-    }
-    html.dark .sidebar-tooltip::before {
-      border-color: transparent #1E293B transparent transparent !important;
-    }
-
-    .group:hover .sidebar-tooltip {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(-50%) translateX(0px);
-    }
-
-    aside#sidebar.sidebar-expanded .sidebar-tooltip {
-      display: none !important;
-    }
-
-    /* Posicionamiento adaptativo del menú M3 de Documentos de Clase */
-    aside#sidebar:not(.sidebar-expanded) .topic-wrapper {
-      width: 42px;
-      height: 42px;
-      margin: 0 auto;
-      border-radius: 9999px;
-    }
-
-    aside#sidebar:not(.sidebar-expanded) #topicDropdownMenu {
-      left: calc(100% + 14px) !important;
-      top: -10px !important;
-      width: 290px !important;
-    }
-
-    aside#sidebar.sidebar-expanded #topicDropdownMenu {
-      left: 4px !important;
-      top: calc(100% + 6px) !important;
-      width: calc(100% - 8px) !important;
-    }
-
-    aside#sidebar.sidebar-expanded .topic-icon-only {
-      display: none !important;
-    }
-
-    html.dark #topicDropdownMenu {
-      background-color: rgba(15, 23, 42, 0.98) !important;
-      border-color: #1E293B !important;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
-    }
-    html.dark #topicTriggerExpanded {
-      background-color: #0F172A !important;
-      border-color: #1E293B !important;
-      color: #F8FAFC !important;
-    }
-    html.dark #topicTriggerExpanded:hover {
-      background-color: #1E293B !important;
-      border-color: #334155 !important;
-    }
-
-    /* ==========================================================================
-       📝 7. PROSE / MARKDOWN & TIPOGRAFÍA NORMALIZADA
-       ========================================================================== */
-    .prose-custom {
-      color: var(--md-sys-color-on-surface);
-      line-height: 1.65;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    .prose-custom p {
-      margin-bottom: 0.85rem;
-      line-height: 1.65;
-      color: var(--md-sys-color-on-surface);
-    }
-    .prose-custom ul {
-      list-style-type: disc;
-      margin-left: 1.25rem;
-      margin-bottom: 0.85rem;
-      color: var(--md-sys-color-on-surface-variant);
-    }
-    .prose-custom ol {
-      list-style-type: decimal;
-      margin-left: 1.25rem;
-      margin-bottom: 0.85rem;
-      color: var(--md-sys-color-on-surface-variant);
-    }
-    .prose-custom li {
-      margin-bottom: 0.3rem;
-    }
-    .prose-custom h1, .prose-custom h2, .prose-custom h3 {
-      font-weight: 600;
-      color: var(--md-sys-color-on-surface);
-      margin-top: 1.25rem;
-      margin-bottom: 0.6rem;
-      letter-spacing: -0.015em;
-    }
-    .prose-custom pre {
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-surface-container);
-      border-radius: 14px;
-      padding: 1rem;
-      overflow-x: auto;
-      margin-bottom: 1rem;
-      font-size: 0.88rem;
-    }
-    html.dark .prose-custom pre {
-      background: #0F172A !important;
-      border: 1px solid #1E293B !important;
-      color: #E2E8F0 !important;
-    }
-    .prose-custom code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.88em;
-      background: var(--md-sys-color-surface-container-high);
-      padding: 0.15rem 0.4rem;
-      border-radius: 6px;
-      color: var(--md-sys-color-primary);
-      font-weight: 500;
-    }
-    html.dark .prose-custom code {
-      background: #1E293B !important;
-      color: #38BDF8 !important;
-    }
-    .prose-custom pre code {
-      background: transparent !important;
-      padding: 0 !important;
-      color: inherit !important;
-      font-weight: 400;
-    }
-    .prose-custom blockquote {
-      border-left: 3px solid var(--md-sys-color-primary);
-      padding-left: 0.85rem;
-      color: var(--md-sys-color-on-surface-variant);
-      margin-bottom: 0.85rem;
-      font-style: italic;
-      background: var(--md-sys-color-surface-container);
-      padding-top: 0.4rem;
-      padding-bottom: 0.4rem;
-      border-radius: 0 8px 8px 0;
-    }
-    html.dark .prose-custom blockquote {
-      background: #0F172A !important;
-      border-left-color: #38BDF8 !important;
-      color: #94A3B8 !important;
-    }
-    .prose-custom table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1rem;
-      font-size: 0.875rem;
-    }
-    .prose-custom th, .prose-custom td {
-      border: 1px solid var(--md-sys-color-outline-variant);
-      padding: 0.5rem 0.75rem;
-      text-align: left;
-    }
-    .prose-custom th {
-      background: var(--md-sys-color-surface-container);
-      color: var(--md-sys-color-on-surface);
-      font-weight: 600;
-    }
-    html.dark .prose-custom th {
-      background: #0F172A !important;
-      border-color: #1E293B !important;
-      color: #FFFFFF !important;
-    }
-    html.dark .prose-custom td {
-      border-color: #1E293B !important;
-      color: #CBD5E1 !important;
-    }
-
-    /* ==========================================================================
-       📊 8. MERMAID DIAGRAMAS (ADAPTABLES A MODO CLARO Y OSCURO)
-       ========================================================================== */
-    .mermaid-card,
+    /* Mermaid container y centrado perfecto */
     .mermaid,
-    .prose-custom .mermaid-card,
-    .prose-custom .mermaid,
-    .prose-custom pre.mermaid {
-      background-color: #F8FAFC !important;
-      background: #F8FAFC !important;
-      border-color: #E2E8F0 !important;
-      color: #0F172A !important;
-      transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+    pre.mermaid {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      text-align: center !important;
+      width: 100% !important;
+      margin: 0 auto !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0.25rem 0 !important;
+      overflow-x: auto;
     }
-    .mermaid svg {
+
+    .mermaid svg,
+    pre.mermaid svg {
+      margin-left: auto !important;
+      margin-right: auto !important;
+      display: block !important;
       max-width: 100% !important;
       height: auto !important;
-      background: transparent !important;
-      font-family: inherit !important;
-    }
-    .mermaid .label text,
-    .mermaid .edgeLabel,
-    .mermaid text {
-      fill: #0F172A !important;
-      color: #0F172A !important;
-    }
-
-    /* MODO OSCURO: Mermaid con fondo Slate Oscuro y texto/nodos adaptados */
-    html.dark .mermaid-card,
-    html.dark .mermaid,
-    html.dark .prose-custom .mermaid-card,
-    html.dark .prose-custom .mermaid,
-    html.dark .prose-custom pre.mermaid {
-      background-color: #0F172A !important;
-      background: #0F172A !important;
-      border-color: #1E293B !important;
-      color: #FFFFFF !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
-    }
-    html.dark .mermaid .label text,
-    html.dark .mermaid .edgeLabel,
-    html.dark .mermaid .edgeLabel text,
-    html.dark .mermaid text,
-    html.dark .mermaid span {
-      fill: #FFFFFF !important;
-      color: #FFFFFF !important;
-    }
-    html.dark .mermaid .node rect,
-    html.dark .mermaid .node circle,
-    html.dark .mermaid .node polygon {
-      stroke: #38BDF8 !important;
-      fill: #1E293B !important;
-    }
-    html.dark .mermaid .edgePaths path,
-    html.dark .mermaid .flowchart-link {
-      stroke: #94A3B8 !important;
-    }
-    html.dark .mermaid marker path {
-      fill: #94A3B8 !important;
-      stroke: #94A3B8 !important;
-    }
-    html.dark .mermaid .cluster rect {
-      fill: #0B0F19 !important;
-      stroke: #334155 !important;
     }
 
     /* ==========================================================================
-       📐 9. KATEX (MATEMÁTICAS & FÓRMULAS) NORMALIZADO Y 100% ADAPTABLE AL TEMA
+       📐 KATEX (MATEMÁTICAS & FÓRMULAS) NORMALIZADO Y 100% ADAPTABLE AL TEMA
        ========================================================================== */
     .katex-display {
-      margin: 1.25rem 0;
-      padding: 0.85rem 1.25rem;
-      overflow-x: auto;
+      margin: 1rem 0;
+      padding: 0.75rem 1.25rem;
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
-      border-radius: 14px;
-      color: #0F172A !important;
+      border-radius: 12px;
+      overflow-x: auto;
       text-align: center;
       transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
     }
     .katex {
-      font-size: 1.05em;
-      color: #0F172A !important;
-      transition: color 0.28s ease;
+      font-size: 1.08em;
+      color: #0F172A;
     }
 
-    /* MODO OSCURO: KaTeX 100% Blanco Puro y Nítido */
+    /* MODO OSCURO: KaTeX 100% Blanco Puro sobre Carbón Neutro */
     html.dark .katex-display {
-      background: #0F172A !important;
-      border: 1px solid #1E293B !important;
+      background: #18181B !important;
+      border: 1px solid #27272A !important;
       color: #FFFFFF !important;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4) !important;
     }
     html.dark .katex,
     html.dark .katex * {
@@ -811,1044 +275,1124 @@
       stroke: #FFFFFF !important;
     }
 
-    /* ==========================================================================
-       🎬 10. ANIMACIONES SUAVES NORMALIZADAS
-       ========================================================================== */
-    @keyframes m3FadeIn {
-      from { opacity: 0; transform: translate3d(0, 8px, 0); }
-      to { opacity: 1; transform: translate3d(0, 0, 0); }
+    /* Animación de pulso para badges */
+    @keyframes subtlePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.02); }
     }
-    .animate-m3FadeIn {
-      animation: m3FadeIn var(--m3-duration-medium) var(--m3-easing-standard) forwards;
-    }
-
-    /* ==========================================================================
-       🌫️ 11. DESVANECIMIENTO GRADUAL SCROLL Y FOOTER FLOTANTE GEMINI
-       ========================================================================== */
-    .gemini-scroll-fade {
-      mask-image: linear-gradient(
-        to bottom,
-        transparent 0px,
-        black 24px,
-        black calc(100% - 110px),
-        transparent 100%
-      );
-      -webkit-mask-image: linear-gradient(
-        to bottom,
-        transparent 0px,
-        black 24px,
-        black calc(100% - 110px),
-        transparent 100%
-      );
-    }
-
-    /* Gradiente dinámico de fondo para el footer flotante */
-    .gemini-floating-footer {
-      background: linear-gradient(to top, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 60%, transparent 100%);
-    }
-    html.dark .gemini-floating-footer {
-      background: linear-gradient(to top, #090D16 0%, rgba(9, 13, 22, 0.96) 60%, transparent 100%) !important;
+    .badge-pulse {
+      animation: subtlePulse 3s ease-in-out infinite;
     }
   </style>
+  <link rel="stylesheet" href="/static/mobile.css">
+  <script src="/static/mobile.js" defer></script>
 </head>
-<body class="h-screen w-screen overflow-hidden flex bg-white dark:bg-[#090D16] antialiased">
+<body class="bg-white dark:bg-[#0E0E10] text-[#1F1F1F] dark:text-[#F4F4F5] font-sans antialiased selection:bg-[#0F172A] selection:text-white dark:selection:bg-white dark:selection:text-[#0E0E10]">
 
   <!-- ======================================================== -->
-  <!-- M3 MODAL BACKDROP (MÓVILES)                              -->
+  <!-- 1. HEADER / NAVBAR STICKY GLASSMORPHIC                   -->
   <!-- ======================================================== -->
-  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-[#000000]/40 backdrop-blur-xs z-30 hidden lg:hidden transition-opacity"></div>
-
-  <!-- ======================================================== -->
-  <!-- NAVIGATION RAIL / SIDEBAR (ESTILO STRIP LIMPIO)          -->
-  <!-- ======================================================== -->
-  <aside id="sidebar" class="flex-shrink-0 flex flex-col justify-between py-3 px-2 select-none h-screen z-30 transition-all duration-200">
-    
-    <!-- Contenido del Sidebar: Solo acciones y botones limpios -->
-    <div class="space-y-2.5 w-full flex flex-col items-center">
+  <header class="sticky top-0 z-50 w-full border-b border-gray-200/80 dark:border-[#27272A]/80 bg-white/85 dark:bg-[#0E0E10]/85 backdrop-blur-md transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
-      <!-- Botón Toggle de Menú y Logo Oficial AulaIA (Minimalista y Sobrio) -->
-      <div class="relative group flex justify-center w-full px-1 py-0.5">
-        <button onclick="toggleSidebar()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition group" title="Alternar menú lateral">
-          <img src="/static/logo.svg" alt="AulaIA" class="w-6 h-6 rounded-[7px] flex-shrink-0 object-contain shadow-xs">
-          <span class="sidebar-label ml-3 font-bold text-base text-[#0F172A] dark:text-[#F8FAFC] whitespace-nowrap tracking-tight">AulaIA</span>
-          <span class="sidebar-label ml-auto material-symbols-outlined text-xl text-[#747775] dark:text-[#94A3B8] group-hover:text-[#0F172A] dark:group-hover:text-[#F8FAFC] transition">menu_open</span>
-        </button>
-        <span class="sidebar-tooltip">Menú AulaIA</span>
-      </div>
-
-      <!-- Icon 1: Nueva Consulta (Lápiz / Edición como en la captura) -->
-      <div class="relative group flex justify-center w-full">
-        <button onclick="clearChat()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition">
-          <span class="material-symbols-outlined text-xl flex-shrink-0">drive_file_rename_outline</span>
-          <span class="sidebar-label ml-3 text-xs font-semibold tracking-wide whitespace-nowrap">Nueva consulta</span>
-        </button>
-        <span class="sidebar-tooltip">Nueva consulta</span>
-      </div>
-
-      <!-- Icon 2: Búsqueda / Enfoque al input -->
-      <div class="relative group flex justify-center w-full">
-        <button onclick="document.getElementById('userInput').focus()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition">
-          <span class="material-symbols-outlined text-xl flex-shrink-0">search</span>
-          <span class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Escribir consulta</span>
-        </button>
-        <span class="sidebar-tooltip">Escribir consulta</span>
-      </div>
-
-      <div class="sidebar-divider h-px bg-[#E5E7EB] dark:bg-[#1E293B] w-full my-1"></div>
-
-      <!-- Modos Pedagógicos -->
-      <div class="space-y-1.5 w-full flex flex-col items-center">
-        <!-- Modo Intuitivo -->
-        <div class="relative group flex justify-center w-full">
-          <button onclick="setNivel('intuitivo')" id="btnIntuitivo" class="sidebar-nav-btn bg-[#E5E7EB] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#38BDF8] font-semibold transition">
-            <span class="material-symbols-outlined text-xl flex-shrink-0">lightbulb</span>
-            <span class="sidebar-label ml-3 text-xs whitespace-nowrap">Modo Intuitivo</span>
-          </button>
-          <span class="sidebar-tooltip">Modo Intuitivo</span>
+      <!-- Brand Logo -->
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-9 h-9 rounded-xl bg-[#121214] border border-white/10 flex items-center justify-center p-1.5 shadow-sm group-hover:scale-105 transition-transform">
+          <img src="/static/logo.svg" alt="AulaIA Logo" class="w-full h-full object-contain">
         </div>
-
-        <!-- Modo Formal -->
-        <div class="relative group flex justify-center w-full">
-          <button onclick="setNivel('formal')" id="btnFormal" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#444746] dark:text-[#94A3B8] hover:text-[#1F1F1F] dark:hover:text-[#F8FAFC] transition">
-            <span class="material-symbols-outlined text-xl flex-shrink-0">menu_book</span>
-            <span class="sidebar-label ml-3 text-xs whitespace-nowrap">Modo Formal</span>
-          </button>
-          <span class="sidebar-tooltip">Modo Formal</span>
-        </div>
-
-        <!-- Modo Código Python -->
-        <div class="relative group flex justify-center w-full">
-          <button onclick="setNivel('codigo')" id="btnCodigo" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#444746] dark:text-[#94A3B8] hover:text-[#1F1F1F] dark:hover:text-[#F8FAFC] transition">
-            <span class="material-symbols-outlined text-xl flex-shrink-0">terminal</span>
-            <span class="sidebar-label ml-3 text-xs whitespace-nowrap">Modo Código Python</span>
-          </button>
-          <span class="sidebar-tooltip">Modo Código Python</span>
-        </div>
-      </div>
-
-      <div class="sidebar-divider h-px bg-[#E5E7EB] dark:bg-[#1E293B] w-full my-1"></div>
-
-      <!-- Selector Custom de Clases / Documentos (M3 Popover Integrado) -->
-      <div class="relative flex justify-center w-full topic-wrapper" id="topicWrapper">
-        
-        <!-- Botón Modo Retraído: Icono flotante con indicador de filtro activo -->
-        <div class="relative group flex justify-center">
-          <button
-            id="topicTriggerCollapsed"
-            onclick="toggleTopicMenu(event)"
-            class="topic-icon-only sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition relative cursor-pointer"
-            title="Documentos de clase"
-          >
-            <span class="material-symbols-outlined text-xl flex-shrink-0">layers</span>
-            <span id="topicActiveBadge" class="hidden absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-[#0F172A] dark:bg-[#38BDF8] border-2 border-white dark:border-[#0F172A]"></span>
-          </button>
-          <span class="sidebar-tooltip">Documentos de clase</span>
-        </div>
-
-        <!-- Botón Modo Expandido: Custom Dropdown Trigger M3 -->
-        <div class="sidebar-label w-full px-1">
-          <button
-            id="topicTriggerExpanded"
-            onclick="toggleTopicMenu(event)"
-            class="w-full flex items-center justify-between bg-white dark:bg-[#0F172A] hover:bg-[#F0F4F9] dark:hover:bg-[#1E293B] border border-[#E0E2EC] dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-600 rounded-[14px] px-3.5 py-2.5 text-xs text-[#1F1F1F] dark:text-[#F8FAFC] transition shadow-xs group/btn"
-          >
-            <div class="flex items-center space-x-2 truncate pr-1">
-              <span class="material-symbols-outlined text-base text-[#747775] dark:text-[#94A3B8] group-hover/btn:text-[#0F172A] dark:group-hover/btn:text-[#38BDF8] transition">layers</span>
-              <span id="topicSelectedLabel" class="truncate font-medium text-[#1F1F1F] dark:text-[#F8FAFC]">Todas las Clases</span>
-            </div>
-            <span id="topicChevron" class="material-symbols-outlined text-base text-[#747775] dark:text-[#94A3B8] transition-transform duration-200">expand_more</span>
-          </button>
-        </div>
-
-        <!-- Popover Desplegable M3 (Custom & Integrado al Sistema) -->
-        <div
-          id="topicDropdownMenu"
-          class="hidden absolute z-50 bg-white/95 dark:bg-[#0F172A]/98 backdrop-blur-md border border-[#E0E2EC] dark:border-[#1E293B] rounded-[20px] shadow-elevation-3 py-2 w-72 sm:w-80 max-h-80 flex flex-col animate-m3FadeIn text-left select-none"
-        >
-          <div id="topicDropdownHeader" class="px-3.5 py-2 border-b border-[#E0E2EC] dark:border-[#1E293B] flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <span class="material-symbols-outlined text-base text-[#0F172A] dark:text-[#38BDF8]">folder_open</span>
-              <span class="text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC]">Filtrar por Documento</span>
-            </div>
-            <button
-              type="button"
-              onclick="selectTopic('', 'Todas las Clases')"
-              class="text-[10px] text-[#747775] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#38BDF8] font-medium px-2 py-0.5 rounded-full hover:bg-[#F0F4F9] dark:hover:bg-[#1E293B] transition"
-            >
-              Restablecer
-            </button>
+        <div class="flex flex-col">
+          <div class="flex items-center space-x-2">
+            <span class="font-extrabold text-xl tracking-tight text-[#0F172A] dark:text-white">AulaIA</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#E2E8F0] dark:bg-[#27272A] text-[#0F172A] dark:text-[#D4D4D8]">v2.0 RAG</span>
           </div>
-          <div id="topicOptionsList" class="overflow-y-auto p-1.5 space-y-1 flex-1"></div>
+          <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium leading-none">Tutor Académico Oficial</span>
         </div>
+      </a>
 
-      </div>
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+        <a href="#como-funciona" class="px-3 py-1.5 rounded-lg hover:text-[#0F172A] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22] transition">¿Cómo funciona?</a>
+        <a href="#capacidades" class="px-3 py-1.5 rounded-lg hover:text-[#0F172A] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22] transition">¿Qué puedes hacer?</a>
+        <a href="#temario" class="px-3 py-1.5 rounded-lg hover:text-[#0F172A] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22] transition">Temario Oficial</a>
+        <a href="#arquitectura" class="px-3 py-1.5 rounded-lg hover:text-[#0F172A] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22] transition">Arquitectura</a>
+        <a href="#faq" class="px-3 py-1.5 rounded-lg hover:text-[#0F172A] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1E1E22] transition">Preguntas</a>
+      </nav>
 
-      <!-- Limpiar / Historial (Clock como en la captura) -->
-      <div class="relative group flex justify-center w-full">
-        <button onclick="clearChat()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition">
-          <span class="material-symbols-outlined text-xl flex-shrink-0">history</span>
-          <span class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Reiniciar chat</span>
-        </button>
-        <span class="sidebar-tooltip">Reiniciar chat</span>
-      </div>
-
-      <div class="sidebar-divider h-px bg-[#E5E7EB] dark:bg-[#1E293B] w-full my-1"></div>
-
-      <!-- Botón Simulador de Quiz (Birrete Académico como en la captura) -->
-      <div class="relative group flex justify-center w-full">
-        <button onclick="openQuizModal()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition">
-          <span class="material-symbols-outlined text-xl flex-shrink-0">school</span>
-          <span class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Simulador de Quiz</span>
-        </button>
-        <span class="sidebar-tooltip">Simulador de Quiz</span>
-      </div>
-
-    </div>
-
-    <!-- Selector / Switcher de Modo Oscuro / Claro en el fondo del sidebar -->
-    <div class="relative group flex justify-center w-full px-1 py-1">
-      <button
-        id="themeToggleBtn"
-        onclick="toggleTheme()"
-        class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#1E293B] text-[#1F1F1F] dark:text-[#F8FAFC] transition group relative cursor-pointer"
-        title="Cambiar tema (Oscuro / Claro)"
-        aria-label="Cambiar tema de la aplicación"
-      >
-        <span id="themeToggleIcon" class="material-symbols-outlined text-xl flex-shrink-0 transition-transform duration-300">dark_mode</span>
-        <span id="themeToggleLabel" class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Modo Oscuro</span>
-      </button>
-      <span id="themeTooltip" class="sidebar-tooltip">Modo Oscuro</span>
-    </div>
-  </aside>
-
-  <!-- ======================================================== -->
-  <!-- CANVAS PRINCIPAL (ÁREA DE CHAT Y BIENVENIDA)             -->
-  <!-- ======================================================== -->
-  <div id="canvasPrincipal" class="flex-1 flex flex-col h-full overflow-hidden relative bg-white dark:bg-[#090D16]">
-    
-    <!-- ======================================================== -->
-    <!-- 🌌 AURORA BOREAL AMBIENTAL (FONDO VIVO IA)               -->
-    <!-- ======================================================== -->
-    <div id="auroraContainer" class="aurora-wrapper pointer-events-none">
-      <div class="aurora-blob aurora-blob-1"></div>
-      <div class="aurora-blob aurora-blob-2"></div>
-      <div class="aurora-blob aurora-blob-3"></div>
-      <div class="aurora-blob aurora-blob-4"></div>
-    </div>
-
-    <!-- M3 Top App Bar (Completamente Transparente para dar la ilusión de iconos flotantes) -->
-    <header id="topNavbar" class="h-14 flex items-center justify-between px-4 sm:px-6 z-10 flex-shrink-0 bg-transparent border-b border-transparent transition-all duration-300">
+      <!-- Right Action Buttons -->
       <div class="flex items-center space-x-3">
-        <!-- Espacio reservado para flujo libre -->
-      </div>
-      <div></div>
-    </header>
-
-    <!-- Contenedor Scrollable de Mensajes (Scroll Suave con Desvanecimiento Orgánico Gemini) -->
-    <main id="chatContainer" class="flex-1 overflow-y-auto w-full px-4 sm:px-6 pt-4 pb-44 relative z-10 gemini-scroll-fade">
-      <div class="max-w-3xl w-full mx-auto space-y-6">
-
-        <!-- ======================================================== -->
-        <!-- PANTALLA DE ESPERA VIVA (ESTILO GOOGLE GEMINI AI M3)     -->
-        <!-- ======================================================== -->
-        <div id="welcomeView" class="py-12 sm:py-20 flex flex-col items-center justify-center text-center space-y-8 select-none animate-m3FadeIn">
-          
-          <!-- Headline Medium M3 -->
-          <div class="space-y-2 max-w-lg">
-            <h2 id="welcomeTitle" class="text-2xl sm:text-3xl font-medium tracking-tight text-[#1F1F1F] dark:text-[#F8FAFC]">
-              ¿En qué puedo ayudarte hoy?
-            </h2>
-            <p id="welcomeSubtitle" class="text-xs sm:text-sm text-[#444746] dark:text-[#94A3B8] leading-relaxed font-normal">
-              Tutor inteligente para el curso de Teoría de Autómatas e Inteligencia Artificial con trazabilidad documental en tus diapositivas.
-            </p>
-          </div>
-
-          <!-- M3 Outlined Cards (Tarjetas de Sugerencias con Glassmorphism suave) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl text-left pt-2">
-            
-            <button onclick="sendQuickPrompt('¿Cómo funciona el método de subconjuntos para transformar un AFND en AFD?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#0F172A]/75 backdrop-blur-md hover:bg-white dark:hover:bg-[#1E293B] border border-[#E0E2EC]/90 dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-500 hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
-              <div class="pr-3">
-                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] transition">Conversión AFND a AFD</span>
-                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#94A3B8] mt-1 line-clamp-1">¿Cómo funciona el método de subconjuntos?</span>
-              </div>
-              <span class="material-symbols-outlined text-[#747775] dark:text-[#64748B] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] text-lg transition">arrow_outward</span>
-            </button>
-
-            <button onclick="sendQuickPrompt('¿Cómo opera la memoria de pila LIFO en un autómata a pila para a^n b^n?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#0F172A]/75 backdrop-blur-md hover:bg-white dark:hover:bg-[#1E293B] border border-[#E0E2EC]/90 dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-500 hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
-              <div class="pr-3">
-                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] transition">Autómatas a Pila</span>
-                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#94A3B8] mt-1 line-clamp-1">¿Cómo opera la memoria LIFO para a^n b^n?</span>
-              </div>
-              <span class="material-symbols-outlined text-[#747775] dark:text-[#64748B] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] text-lg transition">arrow_outward</span>
-            </button>
-
-            <button onclick="sendQuickPrompt('¿Cómo funciona la cinta infinita y el cabezal de una Máquina de Turing?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#0F172A]/75 backdrop-blur-md hover:bg-white dark:hover:bg-[#1E293B] border border-[#E0E2EC]/90 dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-500 hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
-              <div class="pr-3">
-                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] transition">Máquinas de Turing</span>
-                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#94A3B8] mt-1 line-clamp-1">¿Cómo opera la cinta y el cabezal?</span>
-              </div>
-              <span class="material-symbols-outlined text-[#747775] dark:text-[#64748B] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] text-lg transition">arrow_outward</span>
-            </button>
-
-            <button onclick="sendQuickPrompt('¿Cuáles son los componentes de la 5-tupla formal de un autómata finito?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#0F172A]/75 backdrop-blur-md hover:bg-white dark:hover:bg-[#1E293B] border border-[#E0E2EC]/90 dark:border-[#1E293B] hover:border-slate-400 dark:hover:border-slate-500 hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
-              <div class="pr-3">
-                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] transition">Definición Formal</span>
-                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#94A3B8] mt-1 line-clamp-1">Componentes de la 5-tupla formal</span>
-              </div>
-              <span class="material-symbols-outlined text-[#747775] dark:text-[#64748B] group-hover:text-[#0F172A] dark:group-hover:text-[#38BDF8] text-lg transition">arrow_outward</span>
-            </button>
-
-          </div>
-        </div>
-
-        <!-- Lista de Mensajes del Chat -->
-        <div id="messagesList" class="space-y-6"></div>
-      </div>
-    </main>
-
-    <!-- ======================================================== -->
-    <!-- M3 SEARCH BAR / CHAT INPUT (ESTILO GEMINI FLOTANTE)      -->
-    <!-- ======================================================== -->
-    <footer class="absolute bottom-0 left-0 right-0 z-20 pt-16 pb-5 px-4 sm:px-6 gemini-floating-footer pointer-events-none">
-      <div class="max-w-3xl mx-auto pointer-events-auto">
-        <form id="chatForm" onsubmit="handleChatSubmit(event)" class="relative flex items-center bg-[#F0F4F9]/90 dark:bg-[#0F172A]/85 backdrop-blur-md hover:bg-[#E9EEF6] dark:hover:bg-[#1E293B] focus-within:bg-white dark:focus-within:bg-[#0F172A] border border-transparent dark:border-[#1E293B] focus-within:border-[#0F172A] dark:focus-within:border-[#38BDF8] rounded-[28px] px-5 py-2.5 shadow-xs focus-within:shadow-elevation-2 transition-all duration-200">
-          
-          <textarea
-            id="userInput"
-            rows="1"
-            placeholder="Escribe tu consulta sobre autómatas, gramáticas o ejercicios..."
-            class="w-full bg-transparent px-2 py-1.5 pr-12 text-sm text-[#1F1F1F] dark:text-[#F8FAFC] placeholder-[#747775] dark:placeholder-[#64748B] resize-none focus:outline-none max-h-32"
-            onkeydown="handleKeyDown(event)"
-          ></textarea>
-          
-          <!-- Botón circular M3 Filled Icon Button con flecha arriba -->
-          <button
-            type="submit"
-            id="sendBtn"
-            class="absolute right-3 w-10 h-10 rounded-full bg-[#0F172A] dark:bg-[#F8FAFC] hover:bg-[#1E293B] dark:hover:bg-[#E2E8F0] text-white dark:text-[#0F172A] flex items-center justify-center transition shadow-xs disabled:opacity-35 disabled:cursor-not-allowed flex-shrink-0"
-          >
-            <span id="sendIcon" class="material-symbols-outlined text-xl">arrow_upward</span>
-            <div id="spinIcon" class="hidden w-4 h-4 border-2 border-white dark:border-[#0F172A] border-t-transparent dark:border-t-transparent rounded-full animate-spin"></div>
-          </button>
-        </form>
-
-        <div id="footerHint" class="flex items-center justify-center space-x-2 text-[11px] text-[#747775] dark:text-[#94A3B8] mt-2.5 text-center">
-          <span><b>Enter</b> para enviar • <b>Shift + Enter</b> para nueva línea</span>
-          <span>•</span>
-          <span>Respaldado por las diapositivas oficiales</span>
-        </div>
-      </div>
-    </footer>
-
-  </div>
-
-  <!-- ======================================================== -->
-  <!-- MODAL: M3 DIALOG (SIMULADOR DE QUIZ INTERACTIVO)         -->
-  <!-- ======================================================== -->
-  <div id="quizModal" class="hidden fixed inset-0 z-50 bg-[#000000]/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#0F172A] border border-[#E0E2EC] dark:border-[#1E293B] rounded-[28px] max-w-xl w-full p-6 shadow-elevation-3 space-y-5 max-h-[90vh] flex flex-col animate-m3FadeIn text-[#1F1F1F] dark:text-[#F8FAFC]">
-      <div class="flex items-center justify-between border-b border-[#E0E2EC] dark:border-[#1E293B] pb-3">
-        <div class="flex items-center space-x-2.5">
-          <span class="material-symbols-outlined filled text-[#0F172A] dark:text-[#38BDF8] text-2xl">quiz</span>
-          <h3 class="text-base font-semibold text-[#1F1F1F] dark:text-[#F8FAFC]">Simulador de Evaluación</h3>
-        </div>
-        <button onclick="closeQuizModal()" class="w-9 h-9 rounded-full flex items-center justify-center text-[#444746] dark:text-[#94A3B8] hover:bg-[#F0F4F9] dark:hover:bg-[#1E293B] transition">
-          <span class="material-symbols-outlined text-xl">close</span>
+        <!-- Theme Toggle Button -->
+        <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl border border-gray-200 dark:border-[#27272A] flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1E1E22] transition" title="Cambiar tema claro/oscuro">
+          <span id="themeIcon" class="material-symbols-outlined text-lg">dark_mode</span>
         </button>
-      </div>
 
-      <!-- Configuración del Quiz -->
-      <div id="quizSetup" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] mb-1.5">Selecciona el tema de la evaluación:</label>
-          <select id="quizTopic" class="m3-select w-full !text-sm !py-2.5">
-            <option value="Autómatas Finitos No Deterministas (AFND)">Autómatas Finitos No Deterministas (AFND)</option>
-            <option value="Autómatas Finitos con Transiciones Épsilon">Autómatas Finitos con Transiciones Épsilon</option>
-            <option value="Autómatas a Pila">Autómatas a Pila (PDA)</option>
-            <option value="Máquinas de Turing">Máquinas de Turing</option>
-            <option value="Lenguajes y Jerarquía de Chomsky">Lenguajes y Jerarquía de Chomsky</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-[#1F1F1F] dark:text-[#F8FAFC] mb-1.5">Número de preguntas:</label>
-          <input type="number" id="quizCount" value="3" min="1" max="5" class="w-24 bg-white dark:bg-[#1E293B] border border-[#E0E2EC] dark:border-[#334155] rounded-[12px] p-2 text-sm text-[#1F1F1F] dark:text-[#F8FAFC] focus:outline-none focus:border-slate-400">
-        </div>
-
-        <button onclick="startQuiz()" id="startQuizBtn" class="w-full py-3 rounded-full bg-[#0F172A] dark:bg-[#38BDF8] hover:bg-[#1E293B] dark:hover:bg-[#7DD3FC] text-white dark:text-[#0F172A] font-medium text-sm transition shadow-xs hover:shadow-elevation-1">
-          🚀 Iniciar Evaluación
-        </button>
-      </div>
-
-      <!-- Contenedor dinámico de preguntas -->
-      <div id="quizQuestionsContainer" class="hidden overflow-y-auto space-y-4 flex-1 pr-1"></div>
-
-      <!-- Footer del Quiz -->
-      <div id="quizFooter" class="hidden border-t border-[#E0E2EC] dark:border-[#1E293B] pt-3 flex justify-between items-center text-xs">
-        <span id="quizScoreText" class="font-bold text-[#1F1F1F] dark:text-[#38BDF8]"></span>
-        <button onclick="closeQuizModal()" class="px-5 py-2 rounded-full bg-[#F0F4F9] dark:bg-[#1E293B] hover:bg-[#E9EEF6] dark:hover:bg-[#334155] text-[#1F1F1F] dark:text-[#F8FAFC] transition font-medium">Cerrar</button>
+        <!-- Main CTA Button to Chat -->
+        <a href="/chat" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#0F172A] dark:bg-white text-white dark:text-[#0E0E10] font-semibold text-sm hover:bg-[#1E293B] dark:hover:bg-[#E4E4E7] shadow-sm hover:shadow transition transform active:scale-95">
+          <span>Probar Aula IA</span>
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- ======================================================== -->
-  <!-- JAVASCRIPT: SSE, MARKED, KATEX, MERMAID & M3 HANDLERS    -->
+  <!-- 2. HERO SECTION CON EFECTOS AURORA Y PREVIEW INTERACTIVO -->
+  <!-- ======================================================== -->
+  <section class="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden grid-pattern">
+    
+    <!-- Aurora background blobs -->
+    <div class="aurora-bg">
+      <div class="aurora-blob-hero blob-1"></div>
+      <div class="aurora-blob-hero blob-2"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F172A] dark:text-white max-w-4xl mx-auto leading-tight sm:leading-none">
+        Domina tu materia con <br class="hidden sm:inline" />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-300 dark:to-purple-400">
+          Rigor Académico
+        </span> y <span class="underline decoration-wavy decoration-emerald-500/60">Cero Alucinaciones</span>
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p class="mt-6 text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-normal leading-relaxed">
+        El asistente inteligente respaldado <b>100% por las presentaciones oficiales de la cátedra</b>. Resuelve dudas sobre autómatas, máquinas de Turing y lenguajes formales con <b>citas exactas por diapositiva</b>, grafos interactivos y quizzes dinámicos.
+      </p>
+
+      <!-- CTA Buttons Group -->
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="/chat" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-8 py-3.5 rounded-xl bg-[#0F172A] dark:bg-white text-white dark:text-[#0E0E10] font-bold text-base hover:bg-[#1E293B] dark:hover:bg-[#E4E4E7] shadow-elevation-2 hover:shadow-elevation-3 transition transform active:scale-95">
+          <span class="material-symbols-outlined text-xl">smart_toy</span>
+          <span>Probar Aula IA Ahora</span>
+          <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </a>
+        <a href="#como-funciona" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-xl border border-gray-300 dark:border-[#27272A] bg-white/80 dark:bg-[#18181B]/80 text-[#0F172A] dark:text-white font-semibold text-base hover:bg-gray-50 dark:hover:bg-[#202024] transition">
+          <span class="material-symbols-outlined text-xl">explore</span>
+          <span>Descubrir cómo funciona</span>
+        </a>
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="mt-12 pt-8 border-t border-gray-200/80 dark:border-[#27272A]/80 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div class="p-3 text-center">
+          <div class="text-2xl sm:text-3xl font-extrabold text-[#0F172A] dark:text-white">160+</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">Diapositivas Indexadas</div>
+        </div>
+        <div class="p-3 text-center">
+          <div class="text-2xl sm:text-3xl font-extrabold text-[#0F172A] dark:text-white">8 Clases</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">Presentaciones Oficiales</div>
+        </div>
+        <div class="p-3 text-center">
+          <div class="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">&lt; 2 ms</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">Búsqueda FAISS + BM25</div>
+        </div>
+        <div class="p-3 text-center">
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">100%</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">Citas por Diapositiva</div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- PREVIEW CARD INTERACTIVO DEL CHAT (LIVE DEMO SHOWCASE)  -->
+      <!-- ======================================================== -->
+      <div class="mt-12 max-w-4xl mx-auto text-left">
+        <div class="rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#141416] shadow-elevation-3 overflow-hidden">
+          
+          <!-- Mockup Window Bar -->
+          <div class="px-4 py-3 bg-gray-50 dark:bg-[#18181B] border-b border-gray-200 dark:border-[#27272A] flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
+              <span class="ml-2 text-xs font-mono text-gray-500 dark:text-gray-400">aulaia-preview-session.local</span>
+            </div>
+            <div class="flex items-center space-x-2">
+            </div>
+          </div>
+
+          <!-- Question Asked by Student -->
+          <div class="p-4 sm:p-6 space-y-4">
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-[#27272A] flex items-center justify-center flex-shrink-0 text-gray-700 dark:text-gray-300 font-bold text-xs">
+                EST
+              </div>
+              <div class="flex-1 bg-gray-100 dark:bg-[#1E1E22] rounded-2xl rounded-tl-none p-3.5 text-sm text-gray-800 dark:text-gray-200">
+                <p class="font-medium">¿Cómo se define formalmente la 5-tupla de un autómata finito y cómo sería el diagrama para reconocer cadenas binarias terminadas en <code class="bg-gray-200 dark:bg-[#2A2A30] px-1.5 py-0.5 rounded text-xs">01</code>?</p>
+              </div>
+            </div>
+
+            <!-- Answer from AulaIA with Interactive Tabs -->
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-full bg-[#0F172A] dark:bg-white flex items-center justify-center flex-shrink-0 text-white dark:text-[#0F172A] font-bold text-xs shadow-xs">
+                IA
+              </div>
+              <div class="flex-1 bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] rounded-2xl rounded-tl-none p-4 sm:p-5 shadow-xs">
+                
+                <!-- Pedagogical Level Tabs in Preview -->
+                <div class="flex items-center justify-between border-b border-gray-100 dark:border-[#27272A] pb-3 mb-3">
+                  <div class="flex items-center space-x-1 text-xs font-semibold">
+                    <button id="tabFormalBtn" onclick="switchPreviewTab('formal')" class="px-2.5 py-1 rounded-lg bg-[#0F172A] text-white dark:bg-white dark:text-[#0F172A] transition">
+                      📚 Modo Formal
+                    </button>
+                    <button id="tabIntuitivoBtn" onclick="switchPreviewTab('intuitivo')" class="px-2.5 py-1 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#202024] transition">
+                      💡 Modo Intuitivo
+                    </button>
+                    <button id="tabCodigoBtn" onclick="switchPreviewTab('codigo')" class="px-2.5 py-1 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#202024] transition">
+                      💻 Modo Código Python
+                    </button>
+                  </div>
+                  <span class="hidden sm:inline-block text-[11px] text-gray-400 dark:text-gray-500">Haz clic para alternar</span>
+                </div>
+
+                <!-- Tab 1: Formal View -->
+                <div id="previewTabFormal" class="space-y-3.5 text-sm text-gray-700 dark:text-gray-300">
+                  <p>
+                    De acuerdo con las diapositivas de la cátedra, un <b>Autómata Finito Determinista (AFD)</b> se define formalmente mediante una 5-tupla:
+                  </p>
+                  
+                  <!-- 5-Tupla Formal con KaTeX Display -->
+                  <div class="katex-display my-2 text-center text-sm sm:text-base">
+                    $$M = (Q, \Sigma, \delta, q_0, F)$$
+                  </div>
+
+                  <ul class="text-xs sm:text-sm space-y-2 text-gray-600 dark:text-gray-300">
+                    <li class="flex items-center space-x-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                      <span><b>$Q$:</b> $\{q_0, q_1, q_2\}$ &nbsp;(Conjunto finito de estados)</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                      <span><b>$\Sigma$:</b> $\{0, 1\}$ &nbsp;(Alfabeto binario de entrada)</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                      <span><b>$\delta$:</b> Función de transición $\delta: Q \times \Sigma \to Q$</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                      <span><b>$q_0$:</b> Estado inicial</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                      <span><b>$F$:</b> $\{q_2\}$ &nbsp;(Estado de aceptación final tras recibir "01")</span>
+                    </li>
+                  </ul>
+                  
+                  <!-- Diagrama de Autómata con Mermaid Centrado -->
+                  <div class="mt-3 p-4 bg-gray-50 dark:bg-[#1E1E22] rounded-xl border border-gray-200 dark:border-[#27272A] flex flex-col items-center justify-center text-center">
+                    <div class="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Diagrama de Estados Generado en Vivo</div>
+                    <div class="w-full flex items-center justify-center overflow-x-auto">
+                      <pre class="mermaid text-xs w-full flex items-center justify-center">
+stateDiagram-v2
+    direction LR
+    [*] --> q0
+    q0 --> q0: 1
+    q0 --> q1: 0
+    q1 --> q1: 0
+    q1 --> q2: 1
+    q2 --> q0: 1
+    q2 --> q1: 0
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tab 2: Intuitivo View (Hidden by default) -->
+                <div id="previewTabIntuitivo" class="hidden space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                  <p>
+                    <b>Imagina este autómata como un vigilante en una puerta:</b>
+                  </p>
+                  <p class="leading-relaxed">
+                    El vigilante busca una contraseña que termine exactamente en los dos últimos caracteres <b>"01"</b>:
+                  </p>
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 my-2">
+                    <div class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-900/40">
+                      <div class="font-bold text-xs text-blue-800 dark:text-blue-300">Estado q0 (Neutro)</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">No tiene nada relevante. Si ve un '1', sigue esperando.</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/60 dark:border-amber-900/40">
+                      <div class="font-bold text-xs text-amber-800 dark:text-amber-300">Estado q1 (Alerta)</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Acaba de ver un '0'. Ya tiene la mitad de la contraseña.</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-900/40">
+                      <div class="font-bold text-xs text-emerald-800 dark:text-emerald-300">Estado q2 (Éxito)</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Vio el '1' inmediatamente después del '0'. Cadena aceptada.</div>
+                    </div>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 italic">
+                    Sin jerga pesada: entiendes primero el mecanismo mental antes de resolver el examen.
+                  </p>
+                </div>
+
+                <!-- Tab 3: Código Python View (Hidden by default) -->
+                <div id="previewTabCodigo" class="hidden space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                  <p>Aquí tienes la simulación ejecutable en Python puro:</p>
+                  <div class="bg-gray-900 text-gray-100 p-3.5 rounded-xl font-mono text-xs overflow-x-auto">
+<pre>class AFDCadenas01:
+    def __init__(self):
+        # Función de transición delta: (estado_actual, simbolo) -> nuevo_estado
+        self.transiciones = {
+            ('q0', '0'): 'q1', ('q0', '1'): 'q0',
+            ('q1', '0'): 'q1', ('q1', '1'): 'q2',
+            ('q2', '0'): 'q1', ('q2', '1'): 'q0'
+        }
+        self.estado_inicial = 'q0'
+        self.estados_finales = {'q2'}
+
+    def procesar(self, cadena: str) -> bool:
+        estado = self.estado_inicial
+        for bit in cadena:
+            estado = self.transiciones.get((estado, bit), self.estado_inicial)
+        return estado in self.estados_finales
+
+# Prueba rápida:
+afd = AFDCadenas01()
+print(afd.procesar("1101"))  # True  (termina en 01)
+print(afd.procesar("1010"))  # False (termina en 10)</pre>
+                  </div>
+                </div>
+
+                <!-- Citas y Metadatos de la Fuente -->
+                <div class="mt-4 pt-3 border-t border-gray-100 dark:border-[#27272A] flex flex-wrap items-center justify-between gap-2">
+                  <div class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-900/60 text-blue-800 dark:text-blue-300 text-xs font-medium">
+                    <span class="material-symbols-outlined text-sm">description</span>
+                    <span>03 Introducción a la Teoría de los Autómatas 2026-2.pptx</span>
+                    <span class="font-bold">• Diapositiva 9</span>
+                  </div>
+                  <a href="/chat?q=Expl%C3%ADcame%20la%205-tupla%20de%20un%20aut%C3%B3mata%20finito" class="inline-flex items-center space-x-1 text-xs font-semibold text-[#0F172A] dark:text-white hover:underline">
+                    <span>Hacer esta pregunta en el chat</span>
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 3. SECCIÓN: ¿CÓMO FUNCIONA AULA IA? (PIPELINE RAG)       -->
+  <!-- ======================================================== -->
+  <section id="como-funciona" class="py-20 bg-gray-50 dark:bg-[#121214] border-y border-gray-200/80 dark:border-[#27272A]/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold tracking-widest uppercase text-blue-600 dark:text-blue-400">Pipeline de Ingeniería RAG</span>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+          ¿Cómo Funciona AulaIA Paso a Paso?
+        </h2>
+        <p class="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-300">
+          A diferencia de los LLMs convencionales que inventan cuando dudan, AulaIA utiliza un pipeline híbrido de 4 etapas para garantizar exactitud y grounding con la cátedra universitaria.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Step 1 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] shadow-elevation-1 hover:shadow-elevation-2 transition group">
+          <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-5 font-bold text-lg group-hover:scale-110 transition-transform">
+            01
+          </div>
+          <h3 class="text-lg font-bold text-[#0F172A] dark:text-white mb-2">Ingesta Oficial</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Se extraen las <b>8 presentaciones PPTX</b> del curso mediante <code class="text-xs bg-gray-100 dark:bg-[#202024] px-1 py-0.5 rounded">python-pptx</code>, indexando textos, tablas de transición y número exacto de diapositiva.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] shadow-elevation-1 hover:shadow-elevation-2 transition group">
+          <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-5 font-bold text-lg group-hover:scale-110 transition-transform">
+            02
+          </div>
+          <h3 class="text-lg font-bold text-[#0F172A] dark:text-white mb-2">Búsqueda Híbrida</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Fusión dual con <b>Reciprocal Rank Fusion (RRF)</b>: vectores densos con <b>FAISS</b> para captar el concepto y <b>BM25Okapi</b> para términos clave matemáticos exactos ($\delta$, $\epsilon$, transiciones, etc.).
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] shadow-elevation-1 hover:shadow-elevation-2 transition group">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-950/70 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-5 font-bold text-lg group-hover:scale-110 transition-transform">
+            03
+          </div>
+          <h3 class="text-lg font-bold text-[#0F172A] dark:text-white mb-2">Razonamiento Gemini</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            El modelo <b>Gemini 2.5 Flash</b> recibe el contexto de las diapositivas y el nivel pedagógico elegido, estructurando una explicación lógica con citas verificables.
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] shadow-elevation-1 hover:shadow-elevation-2 transition group">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-5 font-bold text-lg group-hover:scale-110 transition-transform">
+            04
+          </div>
+          <h3 class="text-lg font-bold text-[#0F172A] dark:text-white mb-2">Streaming & Visuales</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Salida en tiempo real mediante <b>Server-Sent Events (SSE)</b> con diagramas visuales en <b>Mermaid.js</b>, fórmulas con <b>KaTeX</b> y cita de la fuente original.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Live CTA inside section -->
+      <div class="mt-12 text-center">
+        <a href="/chat" class="inline-flex items-center space-x-2 text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline">
+          <span>Ver el pipeline en acción en el chat</span>
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 4. SECCIÓN: ¿QUÉ PUEDES HACER CON AULA IA? (CAPACIDADES) -->
+  <!-- ======================================================== -->
+  <section id="capacidades" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold tracking-widest uppercase text-purple-600 dark:text-purple-400">Funcionalidades Principales</span>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+          ¿Qué Puedes Hacer con Aula IA?
+        </h2>
+        <p class="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-300">
+          Diseñado a la medida de un estudiante de computación e inteligencia artificial, adaptando el lenguaje según tu objetivo de estudio.
+        </p>
+      </div>
+
+      <!-- Bento Grid de Capacidades -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Card 1: 3 Niveles Pedagógicos -->
+        <div class="p-7 rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-blue-500/50 dark:hover:border-blue-400/50 transition group flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-2xl">school</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#0F172A] dark:text-white mb-2">3 Niveles Pedagógicos</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              Cambia la profundidad de la respuesta con un solo clic según el momento:
+            </p>
+            <div class="space-y-2 text-xs">
+              <div class="p-2 rounded-lg bg-gray-50 dark:bg-[#202024] flex items-center space-x-2">
+                <span class="material-symbols-outlined text-base text-amber-500">lightbulb</span>
+                <span><b>Intuitivo:</b> Analogías de la vida real sin jerga técnica.</span>
+              </div>
+              <div class="p-2 rounded-lg bg-gray-50 dark:bg-[#202024] flex items-center space-x-2">
+                <span class="material-symbols-outlined text-base text-blue-500">menu_book</span>
+                <span><b>Formal:</b> Definiciones matemáticas rigurosas para exámenes.</span>
+              </div>
+              <div class="p-2 rounded-lg bg-gray-50 dark:bg-[#202024] flex items-center space-x-2">
+                <span class="material-symbols-outlined text-base text-emerald-500">code</span>
+                <span><b>Código:</b> Scripts de simulación en Python con tablas de transición.</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-gray-100 dark:border-[#27272A]">
+            <a href="/chat" class="text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+              <span>Probar los niveles en el chat</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: Diagramas Mermaid en Vivo -->
+        <div class="p-7 rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-purple-500/50 dark:hover:border-purple-400/50 transition group flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-2xl">account_tree</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#0F172A] dark:text-white mb-2">Diagramación de Autómatas</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              Genera y visualiza al instante los grafos de estados para autómatas finitos deterministas (AFD), no deterministas (AFND), autómatas a pila y máquinas de Turing.
+            </p>
+            <div class="p-3 rounded-xl bg-gray-50 dark:bg-[#202024] text-xs font-mono text-gray-700 dark:text-gray-300 border border-gray-200/60 dark:border-[#27272A]">
+              q0 -- 0 --> q1<br/>
+              q1 -- 1 --> [q2] (Aceptación)
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-gray-100 dark:border-[#27272A]">
+            <a href="/chat?q=Genera%20el%20diagrama%20Mermaid%20para%20un%20aut%C3%B3mata%20que%20acepte%20m%C3%BAltiplos%20de%203%20en%20binario" class="text-xs font-semibold text-purple-600 dark:text-purple-400 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+              <span>Ver generación de diagrama</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 3: Simulador de Quizzes de Autoevaluación -->
+        <div class="p-7 rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-emerald-500/50 dark:hover:border-emerald-400/50 transition group flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-2xl">quiz</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#0F172A] dark:text-white mb-2">Simulador de Quizzes</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              Practica antes de tu examen parcial. Genera exámenes de opción múltiple estructurados en JSON de 5 a 15 preguntas con dificultad graduable y retroalimentación con cita directa.
+            </p>
+            <div class="space-y-1.5 text-xs text-gray-600 dark:text-gray-400">
+              <div class="flex items-center space-x-2">
+                <span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+                <span>Calificación automática con justificación</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+                <span>Fácil, Intermedio y Difícil (Nivel Examen)</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-gray-100 dark:border-[#27272A]">
+            <a href="/chat" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+              <span>Abrir modo Quiz</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 4: Filtro por Temas y Clases -->
+        <div class="p-7 rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-amber-500/50 dark:hover:border-amber-400/50 transition group flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-2xl">filter_list</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#0F172A] dark:text-white mb-2">Filtro por Clase Específica</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              ¿Estás repasando solo Máquinas de Turing? Puedes limitar la búsqueda a una presentación puntual o dejar que AulaIA busque en todo el temario del curso.
+            </p>
+            <div class="p-2.5 rounded-xl bg-gray-50 dark:bg-[#202024] text-xs text-gray-600 dark:text-gray-300">
+              Menú desplegable con los 8 archivos PPTX del curso integrados nativamente.
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-gray-100 dark:border-[#27272A]">
+            <a href="/chat" class="text-xs font-semibold text-amber-600 dark:text-amber-400 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+              <span>Probar filtros temáticos</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 5: Cero Alucinaciones & Grounding -->
+        <div class="p-7 rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-rose-500/50 dark:hover:border-rose-400/50 transition group flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-2xl">verified</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#0F172A] dark:text-white mb-2">Cero Alucinaciones</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              Si le preguntas sobre un tema ajeno al curso (como Backpropagation en Redes Profundas), AulaIA no inventará: te informará con honestidad que no está en el material oficial.
+            </p>
+            <div class="p-2.5 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200/50 dark:border-rose-900/40 text-xs text-rose-800 dark:text-rose-300">
+              Guardrails pedagógicos: solo datos 100% fundamentados.
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-gray-100 dark:border-[#27272A]">
+            <a href="/chat?q=Expl%C3%ADcame%20Backpropagation%20en%20Redes%20Neuronales" class="text-xs font-semibold text-rose-600 dark:text-rose-400 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+              <span>Comprobar guardrail anti-alucinación</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 6: Rigor Matemático KaTeX LaTeX -->
+        <div class="p-7 rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition group flex flex-col justify-between">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-2xl">functions</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#0F172A] dark:text-white mb-2">Matemáticas con KaTeX</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              Renderizado instantáneo de símbolos matemáticos, alfabetos $\Sigma$, transiciones $\delta: Q \times \Sigma \to Q$ y clausuras de Kleene $L^*$ con fidelidad tipográfica.
+            </p>
+            <div class="katex-display my-2 text-center text-xs">
+              $$\delta(q_i, a) = q_j \quad | \quad \Gamma = \{Z_0, 0, 1\}$$
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-gray-100 dark:border-[#27272A]">
+            <a href="/chat?q=Cu%C3%A1l%20es%20la%20funci%C3%B3n%20de%20transici%C3%B3n%20de%20un%20AFND%20en%20notaci%C3%B3n%20formal" class="text-xs font-semibold text-cyan-600 dark:text-cyan-400 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+              <span>Ver notación formal</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 5. SECCIÓN: TEMARIO OFICIAL DEL CURSO (8 PRESENTACIONES) -->
+  <!-- ======================================================== -->
+  <section id="temario" class="py-20 bg-gray-50 dark:bg-[#121214] border-y border-gray-200/80 dark:border-[#27272A]/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold tracking-widest uppercase text-emerald-600 dark:text-emerald-400">Base Documental Oficial</span>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+          Temario del Curso Indexado
+        </h2>
+        <p class="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-300">
+          AulaIA cuenta con <b>160+ diapositivas</b> extraídas de las 8 presentaciones universitarias de la cátedra de Inteligencia Artificial y Computabilidad.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- PPTX 1 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] hover:border-gray-400 dark:hover:border-gray-600 transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">Clase 01</span>
+            <span class="text-[11px] text-gray-400">PPTX</span>
+          </div>
+          <h4 class="font-bold text-sm text-[#0F172A] dark:text-white mb-1.5">Introducción al Curso IA</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            Sumilla oficial, conceptos de inteligencia artificial, agentes racionales y estructura del sílabo.
+          </p>
+        </div>
+
+        <!-- PPTX 2 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] hover:border-gray-400 dark:hover:border-gray-600 transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">Clase 02</span>
+            <span class="text-[11px] text-gray-400">PPTX</span>
+          </div>
+          <h4 class="font-bold text-sm text-[#0F172A] dark:text-white mb-1.5">Máquinas, Lenguajes y Problemas</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            Alfabetos, cadenas, cerradura de Kleene, operaciones con lenguajes y problemas de decisión.
+          </p>
+        </div>
+
+        <!-- PPTX 3 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] hover:border-gray-400 dark:hover:border-gray-600 transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">Clase 03</span>
+            <span class="text-[11px] text-gray-400">PPTX</span>
+          </div>
+          <h4 class="font-bold text-sm text-[#0F172A] dark:text-white mb-1.5">Teoría de Autómatas (AFD)</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            5-tupla formal, función de transición $\delta$, tablas de estados y lenguajes regulares reconocidos.
+          </p>
+        </div>
+
+        <!-- PPTX 4 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] hover:border-gray-400 dark:hover:border-gray-600 transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">Clase 04</span>
+            <span class="text-[11px] text-gray-400">PPTX</span>
+          </div>
+          <h4 class="font-bold text-sm text-[#0F172A] dark:text-white mb-1.5">Autómatas No Deterministas (AFND)</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            No determinismo, caminos múltiples de computación y algoritmo de construcción de subconjuntos.
+          </p>
+        </div>
+
+        <!-- PPTX 5 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] hover:border-gray-400 dark:hover:border-gray-600 transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">Clase 05</span>
+            <span class="text-[11px] text-gray-400">PPTX</span>
+          </div>
+          <h4 class="font-bold text-sm text-[#0F172A] dark:text-white mb-1.5">Transiciones Épsilon ($\epsilon$)</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            Transiciones vacías, cálculo formal de $\epsilon$-clausura y conversión algorítmica a AFD estándar.
+          </p>
+        </div>
+
+        <!-- PPTX 6 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] hover:border-gray-400 dark:hover:border-gray-600 transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">Clase 06</span>
+            <span class="text-[11px] text-gray-400">PPTX</span>
+          </div>
+          <h4 class="font-bold text-sm text-[#0F172A] dark:text-white mb-1.5">Autómatas a Pila (AP)</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            Memoria auxiliar LIFO (push/pop), lenguajes libres de contexto y reconocimiento de $a^n b^n$.
+          </p>
+        </div>
+
+        <!-- PPTX 7 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] hover:border-gray-400 dark:hover:border-gray-600 transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">Clase 07</span>
+            <span class="text-[11px] text-gray-400">PPTX</span>
+          </div>
+          <h4 class="font-bold text-sm text-[#0F172A] dark:text-white mb-1.5">Máquinas de Turing</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            Cinta bidireccional infinita, cabezal de lectura/escritura, formalismo 7-tupla y computabilidad.
+          </p>
+        </div>
+
+        <!-- PPTX 7.1 -->
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#18181B] border border-gray-200 dark:border-[#27272A] hover:border-gray-400 dark:hover:border-gray-600 transition">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">Clase 07.1</span>
+            <span class="text-[11px] text-gray-400">PPTX</span>
+          </div>
+          <h4 class="font-bold text-sm text-[#0F172A] dark:text-white mb-1.5">Ejercicios Máquinas de Turing</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            Problemas resueltos, simulaciones paso a paso de la cinta y funciones de transición prácticas.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 6. SECCIÓN: PROMPT LAUNCHERS / PREGUNTAS FRECUENTES     -->
+  <!-- ======================================================== -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-xs font-bold tracking-widest uppercase text-blue-600 dark:text-blue-400">Preguntas de Prueba Rápida</span>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+          Pruébalo con Preguntas Reales de Examen
+        </h2>
+        <p class="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-300">
+          Haz clic en cualquiera de estas consultas para abrir directamente el chat con la respuesta calculada en tiempo real.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+        
+        <!-- Prompt 1 -->
+        <a href="/chat?q=%C2%BFC%C3%B3mo%20convertir%20un%20AFND%20a%20un%20AFD%20usando%20el%20algoritmo%20de%20subconjuntos%3F" class="p-4 rounded-xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-[#0F172A] dark:hover:border-white transition group flex items-start space-x-3">
+          <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-xl flex-shrink-0 mt-0.5">terminal</span>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-[#0F172A] dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+              Conversión AFND a AFD
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              ¿Cómo funciona el algoritmo de construcción de subconjuntos?
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-[#0F172A] dark:group-hover:text-white group-hover:translate-x-1 transition text-lg">arrow_forward</span>
+        </a>
+
+        <!-- Prompt 2 -->
+        <a href="/chat?q=Mu%C3%A9strame%20la%20implementaci%C3%B3n%20en%20Python%20de%20un%20aut%C3%B3mata%20a%20pila%20para%20a%5En%20b%5En" class="p-4 rounded-xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-[#0F172A] dark:hover:border-white transition group flex items-start space-x-3">
+          <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-xl flex-shrink-0 mt-0.5">code</span>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-[#0F172A] dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">
+              Autómata a Pila en Python
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              Simulación ejecutable para reconocer el lenguaje $a^n b^n$.
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-[#0F172A] dark:group-hover:text-white group-hover:translate-x-1 transition text-lg">arrow_forward</span>
+        </a>
+
+        <!-- Prompt 3 -->
+        <a href="/chat?q=%C2%BFQu%C3%A9%20es%20la%20%CE%B5-clausura%20y%20c%C3%B3mo%20se%20calcula%20formalmente%3F" class="p-4 rounded-xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-[#0F172A] dark:hover:border-white transition group flex items-start space-x-3">
+          <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-xl flex-shrink-0 mt-0.5">functions</span>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-[#0F172A] dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition">
+              Cálculo de $\epsilon$-clausura
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              Definición recursiva y ejemplo formal de transiciones vacías.
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-[#0F172A] dark:group-hover:text-white group-hover:translate-x-1 transition text-lg">arrow_forward</span>
+        </a>
+
+        <!-- Prompt 4 -->
+        <a href="/chat?q=%C2%BFCu%C3%A1les%20son%20los%207%20elementos%20de%20la%20tupla%20formal%20de%20una%20M%C3%A1quina%20de%20Turing%3F" class="p-4 rounded-xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-[#0F172A] dark:hover:border-white transition group flex items-start space-x-3">
+          <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-xl flex-shrink-0 mt-0.5">settings</span>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-[#0F172A] dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition">
+              7-Tupla Máquina de Turing
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              Cinta, símbolos en blanco, estados de aceptación y función delta.
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-[#0F172A] dark:group-hover:text-white group-hover:translate-x-1 transition text-lg">arrow_forward</span>
+        </a>
+
+        <!-- Prompt 5 -->
+        <a href="/chat?q=Expl%C3%ADcame%20con%20una%20analog%C3%ADa%20cotidiana%20qu%C3%A9%20es%20un%20aut%C3%B3mata%20finito" class="p-4 rounded-xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-[#0F172A] dark:hover:border-white transition group flex items-start space-x-3">
+          <span class="material-symbols-outlined text-pink-600 dark:text-pink-400 text-xl flex-shrink-0 mt-0.5">lightbulb</span>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-[#0F172A] dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-400 transition">
+              Analogía Intuitiva de Autómata
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              Explicación visual sin tecnicismos del concepto de estado y memoria.
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-[#0F172A] dark:group-hover:text-white group-hover:translate-x-1 transition text-lg">arrow_forward</span>
+        </a>
+
+        <!-- Prompt 6 -->
+        <a href="/chat?q=%C2%BFCu%C3%A1l%20es%20la%20diferencia%20entre%20un%20lenguaje%20regular%20y%20un%20lenguaje%20libre%20de%20contexto%3F" class="p-4 rounded-xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] hover:border-[#0F172A] dark:hover:border-white transition group flex items-start space-x-3">
+          <span class="material-symbols-outlined text-cyan-600 dark:text-cyan-400 text-xl flex-shrink-0 mt-0.5">compare_arrows</span>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-[#0F172A] dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition">
+              Jerarquía de Chomsky
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              Diferencia entre lenguajes regulares y libres de contexto.
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-[#0F172A] dark:group-hover:text-white group-hover:translate-x-1 transition text-lg">arrow_forward</span>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 7. SECCIÓN: COMPARATIVA CHATGPT VS AULA IA               -->
+  <!-- ======================================================== -->
+  <section id="arquitectura" class="py-20 bg-gray-50 dark:bg-[#121214] border-y border-gray-200/80 dark:border-[#27272A]/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+          Comparativa: Modelos Genéricos vs. AulaIA
+        </h2>
+        <p class="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-300">
+          ¿Por qué no usar simplemente ChatGPT para estudiar este curso?
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto overflow-hidden rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] shadow-elevation-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-200 dark:divide-[#27272A]">
+          
+          <!-- Columna ChatGPT Genérico -->
+          <div class="p-6 sm:p-8 bg-gray-50/50 dark:bg-[#141416]/50">
+            <div class="flex items-center space-x-2 text-gray-500 mb-4">
+              <span class="material-symbols-outlined text-2xl text-gray-400">smart_toy</span>
+              <h3 class="font-bold text-lg text-gray-600 dark:text-gray-400">ChatGPT Genérico</h3>
+            </div>
+            <ul class="space-y-3.5 text-sm text-gray-600 dark:text-gray-400">
+              <li class="flex items-start space-x-2">
+                <span class="material-symbols-outlined text-red-500 text-lg flex-shrink-0 mt-0.5">cancel</span>
+                <span>Alucina definiciones usando notaciones de otros libros que tu profesor no enseña.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="material-symbols-outlined text-red-500 text-lg flex-shrink-0 mt-0.5">cancel</span>
+                <span>No te indica en qué archivo ni diapositiva está el tema para corroborarlo.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="material-symbols-outlined text-red-500 text-lg flex-shrink-0 mt-0.5">cancel</span>
+                <span>No adapta explicaciones a la convención específica de la cátedra de tu universidad.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="material-symbols-outlined text-red-500 text-lg flex-shrink-0 mt-0.5">cancel</span>
+                <span>Inventa respuestas cuando le preguntas sobre temas fuera de alcance.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Columna Aula IA -->
+          <div class="p-6 sm:p-8 bg-white dark:bg-[#18181B]">
+            <div class="flex items-center space-x-2 text-blue-600 dark:text-blue-400 mb-4">
+              <img src="/static/logo.svg" alt="AulaIA" class="w-6 h-6 rounded-md">
+              <h3 class="font-bold text-lg text-[#0F172A] dark:text-white">AulaIA Tutor RAG</h3>
+            </div>
+            <ul class="space-y-3.5 text-sm text-gray-700 dark:text-gray-200">
+              <li class="flex items-start space-x-2">
+                <span class="material-symbols-outlined text-emerald-500 text-lg flex-shrink-0 mt-0.5">check_circle</span>
+                <span><b>Grounding estricto:</b> 100% fiel a las 8 presentaciones del curso oficial.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="material-symbols-outlined text-emerald-500 text-lg flex-shrink-0 mt-0.5">check_circle</span>
+                <span><b>Cita exacta por slide:</b> Archivo y número de diapositiva verificables.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="material-symbols-outlined text-emerald-500 text-lg flex-shrink-0 mt-0.5">check_circle</span>
+                <span><b>Diagramas Mermaid en vivo:</b> Grafos de autómatas renderizados en pantalla.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="material-symbols-outlined text-emerald-500 text-lg flex-shrink-0 mt-0.5">check_circle</span>
+                <span><b>3 Niveles pedagógicos:</b> Intuitivo, Formal y Código Python con un clic.</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 8. SECCIÓN: PREGUNTAS FRECUENTES (FAQ ACCORDION)         -->
+  <!-- ======================================================== -->
+  <section id="faq" class="py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-14">
+        <span class="text-xs font-bold tracking-widest uppercase text-blue-600 dark:text-blue-400">Resolviendo Inquietudes</span>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+          Preguntas Frecuentes
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- FAQ Item 1 -->
+        <div class="rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] p-5 shadow-xs">
+          <details class="group cursor-pointer">
+            <summary class="flex items-center justify-between font-bold text-base text-[#0F172A] dark:text-white select-none">
+              <span>¿De dónde provienen los datos y respuestas de AulaIA?</span>
+              <span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed border-t border-gray-100 dark:border-[#27272A] pt-3">
+              Provienen directamente de las 8 presentaciones oficiales de PowerPoint (.pptx) proporcionadas en la cátedra universitaria de Inteligencia Artificial y Teoría de la Computación (160+ diapositivas en total). Cada respuesta incluye el nombre del archivo y número de diapositiva citado.
+            </p>
+          </details>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] p-5 shadow-xs">
+          <details class="group cursor-pointer">
+            <summary class="flex items-center justify-between font-bold text-base text-[#0F172A] dark:text-white select-none">
+              <span>¿Cómo se evitan las alucinaciones del modelo de lenguaje?</span>
+              <span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed border-t border-gray-100 dark:border-[#27272A] pt-3">
+              AulaIA utiliza un pipeline RAG con <i>guardrails</i> pedagógicos en su <i>system prompt</i>. El modelo está restringido a contestar únicamente con base en los fragmentos recuperados por la búsqueda híbrida (FAISS + BM25Okapi). Si una consulta está fuera del temario del curso, el sistema responderá amablemente indicando que no está en el material oficial.
+            </p>
+          </details>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] p-5 shadow-xs">
+          <details class="group cursor-pointer">
+            <summary class="flex items-center justify-between font-bold text-base text-[#0F172A] dark:text-white select-none">
+              <span>¿Qué tecnología de inteligencia artificial impulsa a AulaIA?</span>
+              <span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed border-t border-gray-100 dark:border-[#27272A] pt-3">
+              Utiliza el modelo <b>Google Gemini 2.5 Flash</b> para la generación con soporte de streaming token a token (SSE), combinado con una base vectorial <b>FAISS (Facebook AI Similarity Search)</b> y un motor léxico <b>BM25Okapi</b> ejecutado 100% en memoria RAM local para respuestas en menos de 2 milisegundos de búsqueda.
+            </p>
+          </details>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="rounded-2xl border border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#18181B] p-5 shadow-xs">
+          <details class="group cursor-pointer">
+            <summary class="flex items-center justify-between font-bold text-base text-[#0F172A] dark:text-white select-none">
+              <span>¿Cómo funciona el generador de Quizzes de autoevaluación?</span>
+              <span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed border-t border-gray-100 dark:border-[#27272A] pt-3">
+              En el modo Quiz, puedes seleccionar un tema específico (ej. "Autómatas a Pila" o "Máquinas de Turing"), elegir la cantidad de preguntas (5, 10 o 15) y la dificultad. El backend genera preguntas estructuradas en JSON con 4 opciones por pregunta, evaluando tus respuestas con retroalimentación inmediata basada en las diapositivas.
+            </p>
+          </details>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 9. FINAL CALL TO ACTION (CTA BANNER)                     -->
+  <!-- ======================================================== -->
+  <section class="py-20 relative overflow-hidden bg-[#0F172A] dark:bg-[#121214] text-white">
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      
+      <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mx-auto mb-6 p-3 shadow-lg">
+        <img src="/static/logo.svg" alt="AulaIA" class="w-full h-full object-contain">
+      </div>
+
+      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-3xl mx-auto leading-tight">
+        ¿Listo para dominar Teoría de la Computación con Aula IA?
+      </h2>
+
+      <p class="mt-6 text-base sm:text-lg text-gray-300 max-w-2xl mx-auto">
+        Entra ahora mismo al chat interactivo. Sin necesidad de crear cuenta, con respuestas instantáneas y todas las diapositivas de la cátedra a tu alcance.
+      </p>
+
+      <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="/chat" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-9 py-4 rounded-xl bg-white text-[#0F172A] font-extrabold text-base hover:bg-gray-100 shadow-elevation-3 transition transform active:scale-95">
+          <span class="material-symbols-outlined text-xl">smart_toy</span>
+          <span>Iniciar Consulta en el Chat</span>
+          <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="mt-6 text-xs text-gray-400">
+        Compatible con computadoras, tablets y teléfonos móviles • RAG local activo
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 10. FOOTER ESTILO DISCORD MINIMALISTA & LIMPIO           -->
+  <!-- ======================================================== -->
+  <footer class="relative overflow-hidden border-t border-gray-200 dark:border-[#27272A] bg-white dark:bg-[#0A0A0C] text-gray-600 dark:text-gray-300 transition-colors pt-12">
+    
+    <!-- Resplandor ambiental carmesí USMP sutil -->
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-t from-[#BE1917]/15 dark:from-[#BE1917]/20 via-transparent to-transparent blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Barra simple de navegación y volver arriba (sin texto de relleno) -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-8 border-b border-gray-100 dark:border-[#1E1E22] text-sm">
+        <div class="flex items-center space-x-6 text-sm font-medium">
+          <a href="/chat" class="hover:text-[#0F172A] dark:hover:text-white transition">Chat Tutor</a>
+          <a href="#como-funciona" class="hover:text-[#0F172A] dark:hover:text-white transition">¿Cómo funciona?</a>
+          <a href="#capacidades" class="hover:text-[#0F172A] dark:hover:text-white transition">Capacidades</a>
+          <a href="#temario" class="hover:text-[#0F172A] dark:hover:text-white transition">Temario</a>
+          <a href="#faq" class="hover:text-[#0F172A] dark:hover:text-white transition">FAQ</a>
+        </div>
+
+        <a href="#" class="inline-flex items-center space-x-1.5 text-xs font-semibold text-gray-500 hover:text-[#0F172A] dark:text-gray-400 dark:hover:text-white transition group">
+          <span>Volver arriba</span>
+          <span class="material-symbols-outlined text-sm group-hover:-translate-y-0.5 transition-transform">arrow_upward</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PIE ESTILO DISCORD: "USMP" GIGANTE CORTADO AL 75% + LOGO  -->
+    <!-- ======================================================== -->
+    <div class="relative w-full overflow-hidden select-none pointer-events-none pt-12 sm:pt-16">
+      <div class="max-w-7xl mx-auto px-4 flex items-center justify-center space-x-4 sm:space-x-8 md:space-x-12 -mb-[5vw] sm:-mb-[6vw] lg:-mb-[7vw]">
+        
+        <!-- Logo USMP PNG sin fondo al costado (elevado) -->
+        <div class="flex-shrink-0 pointer-events-auto -translate-y-5 sm:-translate-y-8 lg:-translate-y-12 transform hover:scale-105 hover:-rotate-2 transition-all duration-300">
+          <img 
+            src="/static/usmp_logo.png" 
+            alt="USMP" 
+            class="h-[13vw] sm:h-[14vw] lg:h-[15vw] max-h-56 w-auto object-contain drop-shadow-[0_12px_28px_rgba(190,25,23,0.35)] filter"
+          >
+        </div>
+
+        <!-- Texto USMP Gigante estilo Discord recortado abajo (~75% visible) -->
+        <div class="tracking-tighter font-black text-[19vw] sm:text-[20vw] lg:text-[21vw] leading-[0.75] uppercase text-[#0F172A] dark:text-white drop-shadow-sm transition-colors">
+          USMP
+        </div>
+
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- SCRIPTS INTERACTIVOS DE LA LANDING                       -->
   <!-- ======================================================== -->
   <script>
-    let currentNivel = 'intuitivo';
-    let isStreaming = false;
-    let chatHistory = [];
-    let isSidebarExpanded = false;
-    let currentSelectedTopic = null;
-    let availableTopicsList = [];
-
-    // ========================================================
-    // 🌓 ENGINE DE MODO OSCURO / CLARO
-    // ========================================================
-    function initTheme() {
-      const savedTheme = localStorage.getItem('aulaia_theme');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const isDark = savedTheme ? (savedTheme === 'dark') : prefersDark;
-      applyTheme(isDark);
-    }
-
-    function toggleTheme() {
-      const isCurrentlyDark = document.documentElement.classList.contains('dark');
-      const newTheme = !isCurrentlyDark;
-      
-      const icon = document.getElementById('themeToggleIcon');
-      if (icon) {
-        icon.classList.add('rotate-[360deg]');
-        setTimeout(() => icon.classList.remove('rotate-[360deg]'), 350);
-      }
-
-      applyTheme(newTheme);
-      localStorage.setItem('aulaia_theme', newTheme ? 'dark' : 'light');
-      
-      // Re-renderizar diagramas Mermaid existentes con la paleta activa
-      reRenderAllMermaidDiagrams();
-    }
-
-    function applyTheme(isDark) {
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-
-      // Actualizar UI del botón toggle del sidebar
-      const icon = document.getElementById('themeToggleIcon');
-      const label = document.getElementById('themeToggleLabel');
-      const tooltip = document.getElementById('themeTooltip');
-
-      if (icon) {
-        icon.innerText = isDark ? 'light_mode' : 'dark_mode';
-      }
-      if (label) {
-        label.innerText = isDark ? 'Modo Claro' : 'Modo Oscuro';
-      }
-      if (tooltip) {
-        tooltip.innerText = isDark ? 'Modo Claro' : 'Modo Oscuro';
-      }
-
-      // Inicializar Mermaid acorde al tema
-      initMermaid(isDark);
-
-      // Re-sincronizar el nivel pedagógico activo y el menú
-      if (typeof currentNivel !== 'undefined') {
-        setNivel(currentNivel);
-      }
-      if (typeof renderTopicMenuOptions === 'function') {
-        renderTopicMenuOptions();
-      }
-    }
-
-    async function reRenderAllMermaidDiagrams() {
-      const isDark = document.documentElement.classList.contains('dark');
-      initMermaid(isDark);
-      const cards = document.querySelectorAll('.mermaid-card[data-mermaid-src]');
-      for (const card of cards) {
-        const raw = card.getAttribute('data-mermaid-src');
-        if (raw) {
-          card.removeAttribute('data-processed');
-          card.innerHTML = `<div class="mermaid w-full text-center flex justify-center">${raw}</div>`;
-        }
-      }
-      if (cards.length > 0 && window.mermaid) {
+    // 1. Renderizador Oficial de Fórmulas Matemáticas LaTeX (KaTeX)
+    function renderAllMath() {
+      if (typeof renderMathInElement === 'function') {
         try {
-          await mermaid.run();
+          renderMathInElement(document.body, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+              { left: '\\(', right: '\\)', display: false },
+              { left: '\\[', right: '\\]', display: true }
+            ],
+            throwOnError: false,
+            ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+          });
         } catch (e) {
-          console.warn("Mermaid re-render note:", e);
+          console.warn("KaTeX render notice:", e);
         }
       }
     }
 
-    // Inicialización del Sistema
-    window.addEventListener('DOMContentLoaded', async () => {
-      initTheme();
-      loadTopics();
-      initAuroraInteractivity();
-    });
+    // Ejecutar renderizado KaTeX en eventos de carga e intervalos de seguridad
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderAllMath);
+    } else {
+      renderAllMath();
+    }
+    window.addEventListener('load', renderAllMath);
 
-    // Toggle Sidebar: alterna entre modo contraído flotante y expandido
-    function toggleSidebar() {
-      isSidebarExpanded = !isSidebarExpanded;
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-      
-      closeTopicMenu();
-
-      if (isSidebarExpanded) {
-        sidebar.classList.add('sidebar-expanded');
-        if (window.innerWidth < 1024) {
-          overlay.classList.remove('hidden');
-        }
-      } else {
-        sidebar.classList.remove('sidebar-expanded');
-        overlay.classList.add('hidden');
+    let katexCheckAttempts = 0;
+    const katexTimer = setInterval(() => {
+      katexCheckAttempts++;
+      if (typeof renderMathInElement === 'function') {
+        renderAllMath();
+        clearInterval(katexTimer);
+      } else if (katexCheckAttempts > 30) {
+        clearInterval(katexTimer);
       }
-    }
+    }, 80);
 
-    // Efecto interactivo: Parallax atmosférico de la Aurora Boreal al mover el mouse
-    function initAuroraInteractivity() {
-      window.addEventListener('mousemove', (e) => {
-        const welcome = document.getElementById('welcomeView');
-        if (!welcome || welcome.classList.contains('hidden')) return;
+    // 2. Inicializar Mermaid en la landing
+    const isDarkInitial = document.documentElement.classList.contains('dark');
+    initMermaidOnLanding(isDarkInitial);
+    updateThemeIcon(isDarkInitial);
 
-        const aurora = document.getElementById('auroraContainer');
-        if (aurora) {
-          const offsetX = (e.clientX - window.innerWidth / 2) / 55;
-          const offsetY = (e.clientY - window.innerHeight / 2) / 55;
-          aurora.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        }
-      });
-    }
+    // 3. Conmutador de Pestañas en el Preview del Hero
+    function switchPreviewTab(tab) {
+      const formalContent = document.getElementById('previewTabFormal');
+      const intuitivoContent = document.getElementById('previewTabIntuitivo');
+      const codigoContent = document.getElementById('previewTabCodigo');
 
-    // ========================================================
-    // 📚 CONTROL CUSTOM DE DOCUMENTOS DE CLASE (M3 MENU POPOVER)
-    // ========================================================
-    async function loadTopics() {
-      try {
-        const res = await fetch('/api/topics');
-        availableTopicsList = await res.json();
-        renderTopicMenuOptions();
-      } catch (e) {
-        console.warn("Nota: No se pudieron cargar los temas de clase:", e);
-      }
-    }
+      const formalBtn = document.getElementById('tabFormalBtn');
+      const intuitivoBtn = document.getElementById('tabIntuitivoBtn');
+      const codigoBtn = document.getElementById('tabCodigoBtn');
 
-    function renderTopicMenuOptions() {
-      const container = document.getElementById('topicOptionsList');
-      if (!container) return;
+      // Ocultar todos
+      formalContent.classList.add('hidden');
+      intuitivoContent.classList.add('hidden');
+      codigoContent.classList.add('hidden');
 
+      // Resetear clases de botones
       const isDark = document.documentElement.classList.contains('dark');
-      const isAllSelected = !currentSelectedTopic;
-      
-      const activeBtnClass = isDark ? 'bg-[#1E293B] text-[#38BDF8] font-semibold' : 'bg-[#E2E8F0] text-[#0F172A] font-semibold';
-      const inactiveBtnClass = isDark ? 'text-[#CBD5E1] hover:bg-[#1E293B]' : 'text-[#1F1F1F] hover:bg-[#F0F4F9]';
-      const activeIconClass = isDark ? 'text-[#38BDF8]' : 'text-[#0F172A]';
-      const inactiveIconClass = isDark ? 'text-[#64748B]' : 'text-[#747775]';
+      const inactiveClass = 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#202024]';
+      const activeClass = 'bg-[#0F172A] text-white dark:bg-white dark:text-[#0F172A] shadow-xs';
 
-      let html = `
-        <button
-          type="button"
-          onclick="selectTopic('', 'Todas las Clases')"
-          class="w-full text-left px-3 py-2 rounded-[12px] text-xs flex items-center justify-between transition ${isAllSelected ? activeBtnClass : inactiveBtnClass}"
-        >
-          <div class="flex items-center space-x-2.5 truncate pr-2">
-            <span class="material-symbols-outlined text-sm ${isAllSelected ? activeIconClass : inactiveIconClass}">auto_awesome</span>
-            <span class="truncate">Todas las Clases</span>
-          </div>
-          ${isAllSelected ? `<span class="material-symbols-outlined text-sm ${activeIconClass}">check</span>` : ''}
-        </button>
-      `;
-
-      availableTopicsList.forEach(t => {
-        const isSelected = (currentSelectedTopic === t);
-        const displayName = t.replace('.pptx', '').replace('.pdf', '');
-        html += `
-          <button
-            type="button"
-            onclick="selectTopic('${escapeHtml(t)}', '${escapeHtml(displayName)}')"
-            class="w-full text-left px-3 py-2 rounded-[12px] text-xs flex items-center justify-between transition ${isSelected ? activeBtnClass : inactiveBtnClass}"
-          >
-            <div class="flex items-center space-x-2.5 truncate pr-2">
-              <span class="material-symbols-outlined text-sm ${isSelected ? activeIconClass : inactiveIconClass}">description</span>
-              <span class="truncate" title="${displayName}">${displayName}</span>
-            </div>
-            ${isSelected ? `<span class="material-symbols-outlined text-sm ${activeIconClass}">check</span>` : ''}
-          </button>
-        `;
+      [formalBtn, intuitivoBtn, codigoBtn].forEach(btn => {
+        btn.className = `px-2.5 py-1 rounded-lg transition ${inactiveClass}`;
       });
 
-      container.innerHTML = html;
-    }
-
-    function toggleTopicMenu(e) {
-      if (e) e.stopPropagation();
-      const menu = document.getElementById('topicDropdownMenu');
-      const chevron = document.getElementById('topicChevron');
-      if (!menu) return;
-
-      const isHidden = menu.classList.contains('hidden');
-      if (isHidden) {
-        menu.classList.remove('hidden');
-        if (chevron) chevron.classList.add('rotate-180');
-      } else {
-        closeTopicMenu();
+      if (tab === 'formal') {
+        formalContent.classList.remove('hidden');
+        formalBtn.className = `px-2.5 py-1 rounded-lg transition ${activeClass}`;
+        renderAllMath();
+      } else if (tab === 'intuitivo') {
+        intuitivoContent.classList.remove('hidden');
+        intuitivoBtn.className = `px-2.5 py-1 rounded-lg transition ${activeClass}`;
+      } else if (tab === 'codigo') {
+        codigoContent.classList.remove('hidden');
+        codigoBtn.className = `px-2.5 py-1 rounded-lg transition ${activeClass}`;
       }
     }
 
-    function closeTopicMenu() {
-      const menu = document.getElementById('topicDropdownMenu');
-      const chevron = document.getElementById('topicChevron');
-      if (menu && !menu.classList.contains('hidden')) {
-        menu.classList.add('hidden');
-        if (chevron) chevron.classList.remove('rotate-180');
-      }
-    }
-
-    function selectTopic(topicValue, displayName) {
-      currentSelectedTopic = topicValue || null;
-      
-      const label = document.getElementById('topicSelectedLabel');
-      if (label) {
-        label.innerText = displayName || 'Todas las Clases';
-      }
-
-      const badge = document.getElementById('topicActiveBadge');
-      if (badge) {
-        if (currentSelectedTopic) {
-          badge.classList.remove('hidden');
-        } else {
-          badge.classList.add('hidden');
-        }
-      }
-
-      renderTopicMenuOptions();
-      closeTopicMenu();
-    }
-
-    // Cerrar el menú si se hace clic fuera o se pulsa Escape
-    document.addEventListener('click', (e) => {
-      const wrapper = document.getElementById('topicWrapper');
-      if (wrapper && !wrapper.contains(e.target)) {
-        closeTopicMenu();
-      }
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeTopicMenu();
-      }
-    });
-
-    // M3 Navigation Drawer Item Active Indicator (Adaptable a Modo Claro y Oscuro)
-    function setNivel(nivel) {
-      currentNivel = nivel;
+    // Toggle de Tema Oscuro / Claro
+    function toggleTheme() {
       const isDark = document.documentElement.classList.contains('dark');
-      const modes = [
-        { id: 'intuitivo', name: 'Modo Intuitivo', icon: 'lightbulb' },
-        { id: 'formal', name: 'Modo Formal', icon: 'menu_book' },
-        { id: 'codigo', name: 'Modo Código Python', icon: 'terminal' }
-      ];
-
-      modes.forEach(m => {
-        const btn = document.getElementById('btn' + m.id.charAt(0).toUpperCase() + m.id.slice(1));
-        if (btn) {
-          btn.classList.remove('bg-[#E2E8F0]', 'bg-[#E5E7EB]', 'bg-[#1E293B]', 'text-[#0F172A]', 'text-[#38BDF8]', 'text-[#444746]', 'text-[#94A3B8]', 'text-[#1F1F1F]', 'shadow-xs');
-          if (m.id === nivel) {
-            if (isDark) {
-              btn.classList.add('bg-[#1E293B]', 'text-[#38BDF8]', 'font-semibold', 'shadow-xs');
-            } else {
-              btn.classList.add('bg-[#E5E7EB]', 'text-[#0F172A]', 'font-semibold', 'shadow-xs');
-            }
-          } else {
-            if (isDark) {
-              btn.classList.add('text-[#94A3B8]', 'hover:bg-[#1E293B]', 'hover:text-[#F8FAFC]');
-            } else {
-              btn.classList.add('text-[#444746]', 'hover:bg-[#E5E7EB]', 'hover:text-[#1F1F1F]');
-            }
-          }
-        }
-      });
-    }
-
-    function sendQuickPrompt(text) {
-      document.getElementById('userInput').value = text;
-      handleChatSubmit(new Event('submit'));
-    }
-
-    function handleKeyDown(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleChatSubmit(e);
-      }
-    }
-
-    function clearChat() {
-      chatHistory = [];
-      document.getElementById('messagesList').innerHTML = '';
-      document.getElementById('welcomeView').classList.remove('hidden');
-      const aurora = document.getElementById('auroraContainer');
-      if (aurora) aurora.classList.remove('aurora-subtle');
-      if (window.innerWidth < 1024 && isSidebarExpanded) {
-        toggleSidebar();
-      }
-    }
-
-    // ========================================================
-    // ENVÍO DE MENSAJE Y PARSER SERVER-SENT EVENTS (SSE)
-    // ========================================================
-    async function handleChatSubmit(e) {
-      e.preventDefault();
-      if (isStreaming) return;
-
-      const input = document.getElementById('userInput');
-      const query = input.value.trim();
-      if (!query) return;
-
-      input.value = '';
-      document.getElementById('welcomeView').classList.add('hidden');
-      const aurora = document.getElementById('auroraContainer');
-      if (aurora) aurora.classList.add('aurora-subtle');
-
-      // 1. Mensaje del usuario (M3 Primary Container)
-      appendUserMessage(query);
-
-      // 2. Placeholder para respuesta de AulaIA
-      const assistantMsg = createAssistantMessagePlaceholder();
-      const textContainer = assistantMsg.querySelector('.bot-text');
-      const sourcesContainer = assistantMsg.querySelector('.bot-sources');
-
-      setStreamingState(true);
-      closeTopicMenu();
-
-      const topicFilter = currentSelectedTopic || null;
-
-      try {
-        const response = await fetch('/api/chat/stream', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            pregunta: query,
-            nivel: currentNivel,
-            tema_filtro: topicFilter,
-            historial: chatHistory.slice(-6)
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en el servidor: ${response.statusText}`);
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-        let fullAnswer = '';
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          buffer += decoder.decode(value, { stream: true });
-          const normalized = buffer.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-          const events = normalized.split('\n\n');
-          buffer = events.pop() || '';
-
-          for (const ev of events) {
-            if (!ev.trim()) continue;
-            let eventType = 'message';
-            let dataLines = [];
-
-            ev.split('\n').forEach(line => {
-              const trimmed = line.trim();
-              if (trimmed.startsWith('event:')) {
-                eventType = trimmed.substring(6).trim();
-              } else if (trimmed.startsWith('data:')) {
-                dataLines.push(trimmed.substring(5).trim());
-              }
-            });
-
-            const eventData = dataLines.join('\n');
-            if (eventData) {
-              try {
-                const parsed = JSON.parse(eventData);
-
-                if (eventType === 'sources') {
-                  renderSourcesList(sourcesContainer, parsed);
-                } else if (eventType === 'token') {
-                  fullAnswer += parsed.text;
-                  textContainer.innerHTML = renderMarkdownAndMath(fullAnswer);
-                  scrollToBottom();
-                } else if (eventType === 'done') {
-                  textContainer.innerHTML = renderMarkdownAndMath(fullAnswer);
-                  renderMermaidBlocks(textContainer);
-                  chatHistory.push({ role: 'user', content: query });
-                  chatHistory.push({ role: 'assistant', content: fullAnswer });
-                } else if (eventType === 'error') {
-                  textContainer.innerHTML += `<div class="p-3.5 my-2 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200 text-xs">${parsed.error}</div>`;
-                }
-              } catch (parseErr) {
-                console.warn("Fragmento parcial SSE:", parseErr, eventData);
-              }
-            }
-          }
-        }
-
-      } catch (err) {
-        textContainer.innerHTML = `<div class="text-rose-600 dark:text-rose-400 text-sm">❌ Error al conectar con el asistente: ${err.message}</div>`;
-      } finally {
-        setStreamingState(false);
-        scrollToBottom();
-      }
-    }
-
-    // ========================================================
-    // HELPERS DEL DOM Y RENDERIZADO
-    // ========================================================
-    function appendUserMessage(text) {
-      const container = document.getElementById('messagesList');
-      const div = document.createElement('div');
-      div.className = "flex justify-end animate-m3FadeIn";
-      div.innerHTML = `
-        <div class="user-bubble max-w-[85%] sm:max-w-[75%] bg-[#0F172A] dark:bg-[#1E293B] text-white rounded-[20px] rounded-tr-[4px] px-5 py-3 text-sm shadow-elevation-1 leading-relaxed">
-          ${text.replace(/\n/g, '<br>')}
-        </div>
-      `;
-      container.appendChild(div);
-      scrollToBottom();
-    }
-
-    function createAssistantMessagePlaceholder() {
-      const container = document.getElementById('messagesList');
-      const div = document.createElement('div');
-      div.className = "flex space-x-3.5 items-start animate-m3FadeIn";
-      div.innerHTML = `
-        <div class="bot-avatar w-8 h-8 rounded-full bg-[#0F172A] dark:bg-[#1E293B] text-white flex-shrink-0 flex items-center justify-center shadow-xs mt-0.5">
-          <span class="material-symbols-outlined filled text-sm">auto_awesome</span>
-        </div>
-        <div class="flex-1 space-y-2">
-          <div class="bot-text prose-custom text-sm text-[#1F1F1F] dark:text-[#F8FAFC] leading-relaxed">
-            <div class="flex items-center space-x-2 text-[#747775] dark:text-[#94A3B8] text-xs py-1">
-              <div class="w-3.5 h-3.5 border-2 border-[#0F172A] dark:border-[#38BDF8] border-t-transparent dark:border-t-transparent rounded-full animate-spin"></div>
-              <span>Consultando diapositivas de clase...</span>
-            </div>
-          </div>
-          <div class="bot-sources hidden pt-2"></div>
-        </div>
-      `;
-      container.appendChild(div);
-      return div;
-    }
-
-    function renderSourcesList(container, sources) {
-      if (!sources || sources.length === 0) return;
-      container.classList.remove('hidden');
-      container.innerHTML = `
-        <details class="group cursor-pointer">
-          <summary class="source-summary text-xs font-medium text-[#444746] dark:text-[#94A3B8] hover:text-[#1F1F1F] dark:hover:text-[#F8FAFC] list-none flex items-center space-x-1.5 transition">
-            <span class="material-symbols-outlined text-sm">search</span>
-            <span>Fuentes consultadas (${sources.length} diapositivas)</span>
-            <span class="source-pill text-[10px] bg-[#E2E8F0] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#38BDF8] px-2 py-0.5 rounded-full ml-1 font-medium">Ver</span>
-          </summary>
-          <div class="grid grid-cols-1 gap-2 pt-2.5">
-            ${sources.map(s => `
-              <div class="source-item-card p-3 rounded-[14px] bg-[#F0F4F9] dark:bg-[#0F172A] border border-[#E0E2EC] dark:border-[#1E293B] text-xs">
-                <div class="flex items-center justify-between mb-1">
-                  <span class="source-item-title font-medium text-[#1F1F1F] dark:text-[#F8FAFC] truncate max-w-[70%]">${s.archivo}</span>
-                  <span class="source-pill px-2 py-0.5 rounded-full bg-[#E2E8F0] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#38BDF8] font-medium text-[10px]">Slide ${s.slide}</span>
-                </div>
-                <p class="source-item-extract text-[#444746] dark:text-[#94A3B8] text-[11px] line-clamp-2 italic">${s.extracto}</p>
-              </div>
-            `).join('')}
-          </div>
-        </details>
-      `;
-    }
-
-    async function renderMermaidBlocks(container) {
-      const isDark = document.documentElement.classList.contains('dark');
-      initMermaid(isDark);
-      const codeBlocks = container.querySelectorAll('pre code');
-      for (const block of codeBlocks) {
-        if (block.innerText.startsWith('mermaid') || block.classList.contains('language-mermaid')) {
-          const rawMermaid = block.innerText.replace(/^mermaid\n?/, '').trim();
-          const mermaidCard = document.createElement('div');
-          mermaidCard.className = 'mermaid-card my-4 p-5 bg-[#F8FAFC] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-[#1E293B] rounded-[16px] overflow-x-auto flex justify-center items-center shadow-xs';
-          mermaidCard.setAttribute('data-mermaid-src', rawMermaid);
-          const mermaidDiv = document.createElement('div');
-          mermaidDiv.className = 'mermaid w-full text-center flex justify-center';
-          mermaidDiv.textContent = rawMermaid;
-          mermaidCard.appendChild(mermaidDiv);
-          block.parentElement.replaceWith(mermaidCard);
-        }
-      }
-      try {
-        await mermaid.run();
-      } catch (e) {
-        console.warn("Mermaid render note:", e);
-      }
-    }
-
-    function renderMarkdownAndMath(rawMarkdown) {
-      if (!rawMarkdown) return '';
-      const displayMath = [];
-      const inlineMath = [];
-
-      // 1. Proteger fórmulas display $$ ... $$
-      let protectedText = rawMarkdown.replace(/\$\$([\s\S]+?)\$\$/g, (match, formula) => {
-        displayMath.push(formula.trim());
-        return `@@DISPLAYMATH_${displayMath.length - 1}@@`;
-      });
-
-      // 2. Proteger fórmulas en línea $ ... $
-      protectedText = protectedText.replace(/\$([^\$\n\r]+?)\$/g, (match, formula) => {
-        inlineMath.push(formula.trim());
-        return `@@INLINEMATH_${inlineMath.length - 1}@@`;
-      });
-
-      // 3. Parsear Markdown
-      let html = marked.parse(protectedText);
-
-      // Limpiar párrafos envolventes alrededor de bloques de matemáticas display
-      html = html.replace(/<p>\s*(@@DISPLAYMATH_\d+@@)\s*<\/p>/g, '$1');
-
-      // 4. Inyectar KaTeX
-      html = html.replace(/@@DISPLAYMATH_(\d+)@@/g, (match, idx) => {
-        const formula = displayMath[parseInt(idx, 10)] || '';
-        if (window.katex) {
-          try {
-            return `<div class="katex-display my-3 text-center overflow-x-auto shadow-2xs">${katex.renderToString(formula, { displayMode: true, throwOnError: false })}</div>`;
-          } catch (e) {
-            return `<div class="katex-display my-2 text-center text-[#0F172A] font-mono shadow-2xs">$$${formula}$$</div>`;
-          }
-        }
-        return `<div class="katex-display my-2 text-center font-mono shadow-2xs">$$${formula}$$</div>`;
-      });
-
-      html = html.replace(/@@INLINEMATH_(\d+)@@/g, (match, idx) => {
-        const formula = inlineMath[parseInt(idx, 10)] || '';
-        if (window.katex) {
-          try {
-            return katex.renderToString(formula, { displayMode: false, throwOnError: false });
-          } catch (e) {
-            return `<span class="font-mono text-[#0F172A]">$${formula}$</span>`;
-          }
-        }
-        return `<span class="font-mono">$${formula}$</span>`;
-      });
-
-      return html;
-    }
-
-    function setStreamingState(streaming) {
-      isStreaming = streaming;
-      document.getElementById('sendIcon').classList.toggle('hidden', streaming);
-      document.getElementById('spinIcon').classList.toggle('hidden', !streaming);
-      document.getElementById('sendBtn').disabled = streaming;
-    }
-
-    function scrollToBottom() {
-      const main = document.getElementById('chatContainer');
-      main.scrollTo({ top: main.scrollHeight, behavior: 'smooth' });
-    }
-
-    // ========================================================
-    // LÓGICA DEL SIMULADOR DE QUIZ M3
-    // ========================================================
-    function openQuizModal() {
-      document.getElementById('quizModal').classList.remove('hidden');
-    }
-
-    function closeQuizModal() {
-      document.getElementById('quizModal').classList.add('hidden');
-    }
-
-    async function startQuiz() {
-      const topic = document.getElementById('quizTopic').value;
-      const count = parseInt(document.getElementById('quizCount').value) || 3;
-      const btn = document.getElementById('startQuizBtn');
-      const setup = document.getElementById('quizSetup');
-      const questionsContainer = document.getElementById('quizQuestionsContainer');
-      const footer = document.getElementById('quizFooter');
-
-      btn.disabled = true;
-      btn.innerText = "⏳ Generando preguntas...";
-
-      try {
-        const res = await fetch('/api/quiz/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tema: topic, num_preguntas: count })
-        });
-        const questions = await res.json();
-
-        if (!Array.isArray(questions) || questions.length === 0) {
-          throw new Error("No se recibieron preguntas del servidor.");
-        }
-
-        setup.classList.add('hidden');
-        questionsContainer.classList.remove('hidden');
-        footer.classList.remove('hidden');
-
-        questionsContainer.innerHTML = questions.map((q, idx) => `
-          <div class="p-4 rounded-[20px] bg-[#F0F4F9] dark:bg-[#131B2E] border border-[#E0E2EC] dark:border-[#1E293B] space-y-3" id="quizCard_${q.id}">
-            <div class="flex items-start justify-between">
-              <span class="text-xs font-bold text-[#0F172A] dark:text-[#38BDF8]">Pregunta ${idx + 1} de ${questions.length}</span>
-              <span class="text-[10px] text-[#747775] dark:text-[#94A3B8] font-medium">${q.fuente}</span>
-            </div>
-            <p class="text-sm font-semibold text-[#1F1F1F] dark:text-[#F8FAFC]">${q.pregunta}</p>
-            <div class="space-y-2">
-              ${q.opciones.map(opt => `
-                <button
-                  onclick="selectQuizOption(${q.id}, '${opt.charAt(0)}', '${q.respuesta_correcta}', '${escapeHtml(q.explicacion)}')"
-                  class="quiz-opt-btn w-full text-left p-3 rounded-[14px] bg-white dark:bg-[#1E293B] border border-[#E0E2EC] dark:border-[#334155] hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-[#273549] text-xs text-[#1F1F1F] dark:text-[#F8FAFC] transition shadow-xs"
-                  data-qid="${q.id}"
-                >
-                  ${opt}
-                </button>
-              `).join('')}
-            </div>
-            <div id="feedback_${q.id}" class="hidden text-xs p-3.5 rounded-[14px] leading-relaxed"></div>
-          </div>
-        `).join('');
-
-        window.currentQuizState = { total: questions.length, answered: 0, correct: 0 };
-        document.getElementById('quizScoreText').innerText = `Aciertos: 0 / ${questions.length}`;
-
-      } catch (err) {
-        alert("Falla al generar quiz: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "🚀 Iniciar Evaluación";
-      }
-    }
-
-    function selectQuizOption(qid, chosenLetter, correctLetter, explanation) {
-      const card = document.getElementById(`quizCard_${qid}`);
-      const buttons = card.querySelectorAll('.quiz-opt-btn');
-      const feedback = document.getElementById(`feedback_${qid}`);
-
-      buttons.forEach(b => b.disabled = true);
-
-      const isCorrect = (chosenLetter.toUpperCase() === correctLetter.toUpperCase());
-      if (isCorrect) {
-        window.currentQuizState.correct++;
-        feedback.className = "text-xs p-3.5 rounded-[14px] bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 block";
-        feedback.innerHTML = `<b>✅ ¡Correcto!</b> ${explanation}`;
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('aulaia_theme', 'light');
+        updateThemeIcon(false);
+        initMermaidOnLanding(false);
       } else {
-        feedback.className = "text-xs p-3.5 rounded-[14px] bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 block";
-        feedback.innerHTML = `<b>❌ Incorrecto.</b> La respuesta correcta era <b>${correctLetter}</b>.<br><span class="text-[#444746] dark:text-[#94A3B8] mt-1 block">${explanation}</span>`;
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('aulaia_theme', 'dark');
+        updateThemeIcon(true);
+        initMermaidOnLanding(true);
       }
-
-      window.currentQuizState.answered++;
-      document.getElementById('quizScoreText').innerText = `Aciertos: ${window.currentQuizState.correct} / ${window.currentQuizState.total}`;
     }
 
-    function escapeHtml(str) {
-      return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    function updateThemeIcon(isDark) {
+      const icon = document.getElementById('themeIcon');
+      if (icon) {
+        icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+      }
     }
   </script>
+
 </body>
 </html>

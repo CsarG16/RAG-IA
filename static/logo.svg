@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
-  <!-- Fondo Squircle Minimalista Grafito Oscuro con Borde Nítido -->
-  <rect x="1" y="1" width="126" height="126" rx="31" fill="#0F172A" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+  <!-- Fondo Squircle Minimalista Negro Carbón Neutro con Borde Nítido -->
+  <rect x="1" y="1" width="126" height="126" rx="31" fill="#121214" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
   
   <!-- Anillo de Autómata / Órbita de Estados -->
   <circle cx="64" cy="64" r="42" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2.5" stroke-dasharray="5 5"/>
@@ -13,6 +13,6 @@
   
   <!-- Núcleo de Inteligencia Artificial (Estrella Geométrica 4 Puntas) -->
   <path d="M64 28 C64 48 48 64 28 64 C48 64 64 80 64 100 C64 80 80 64 100 64 C80 64 64 48 64 28 Z" fill="#FFFFFF"/>
-  <circle cx="64" cy="64" r="4.5" fill="#0F172A"/>
+  <circle cx="64" cy="64" r="4.5" fill="#121214"/>
   <circle cx="64" cy="64" r="2" fill="#FFFFFF"/>
 </svg>

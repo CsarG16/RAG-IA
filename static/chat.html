@@ -1,0 +1,2995 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AulaIA — Tutor Académico Material Design 3</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
+  
+  <!-- Tipografía Oficial Google: Roboto & Google Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Google Material Symbols Outlined & Filled (Material Design 3) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Tailwind CSS CDN con tokens de Material Design 3 y Soporte Modo Oscuro -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Roboto', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+          },
+          colors: {
+            m3: {
+              surface: 'var(--md-sys-color-surface)',
+              'surface-container': 'var(--md-sys-color-surface-container)',
+              'surface-container-high': 'var(--md-sys-color-surface-container-high)',
+              primary: 'var(--md-sys-color-primary)',
+              'primary-container': 'var(--md-sys-color-primary-container)',
+              'on-primary-container': 'var(--md-sys-color-on-primary-container)',
+              'secondary-container': 'var(--md-sys-color-secondary-container)',
+              'on-secondary-container': 'var(--md-sys-color-on-secondary-container)',
+              'on-surface': 'var(--md-sys-color-on-surface)',
+              'on-surface-variant': 'var(--md-sys-color-on-surface-variant)',
+              outline: 'var(--md-sys-color-outline)',
+              'outline-variant': 'var(--md-sys-color-outline-variant)',
+            }
+          },
+          boxShadow: {
+            'elevation-1': '0px 1px 3px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.12)',
+            'elevation-2': '0px 2px 6px 2px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.12)',
+            'elevation-3': '0px 4px 8px 3px rgba(0, 0, 0, 0.08), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Script Antidestello (Anti-FOUC) para carga instantánea del Tema Preferido -->
+  <script>
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('aulaia_theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Marked.js para Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- KaTeX para renderizar fórmulas matemáticas LaTeX ($ y $$) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+  <!-- Mermaid.js para grafos y autómatas -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    function getMermaidThemeVariables(isDark) {
+      if (isDark) {
+        return {
+          darkMode: true,
+          background: '#18181B',
+          primaryColor: '#27272A',
+          primaryBorderColor: '#52525B',
+          primaryTextColor: '#FFFFFF',
+          lineColor: '#A1A1AA',
+          secondaryColor: '#18181B',
+          tertiaryColor: '#27272A',
+          mainBkg: '#27272A',
+          nodeBorder: '#71717A',
+          clusterBkg: '#121214',
+          clusterBorder: '#3F3F46',
+          titleColor: '#FFFFFF',
+          edgeLabelBackground: '#18181B',
+          stateLabelColor: '#FFFFFF',
+          stateBkg: '#27272A',
+          stateBorder: '#71717A',
+          labelColor: '#FFFFFF',
+          transitionColor: '#A1A1AA',
+          transitionLabelColor: '#FFFFFF',
+          specialStateColor: '#D4D4D8',
+          altBackground: '#18181B'
+        };
+      }
+      return {
+        darkMode: false,
+        background: '#F8FAFC',
+        primaryColor: '#FFFFFF',
+        primaryBorderColor: '#0F172A',
+        primaryTextColor: '#0F172A',
+        lineColor: '#334155',
+        secondaryColor: '#F1F5F9',
+        tertiaryColor: '#FFFFFF',
+        mainBkg: '#FFFFFF',
+        nodeBorder: '#0F172A',
+        clusterBkg: '#F8FAFC',
+        clusterBorder: '#CBD5E1',
+        titleColor: '#0F172A',
+        edgeLabelBackground: '#FFFFFF',
+        stateLabelColor: '#0F172A',
+        stateBkg: '#FFFFFF',
+        stateBorder: '#0F172A',
+        labelColor: '#0F172A',
+        transitionColor: '#334155',
+        transitionLabelColor: '#0F172A',
+        specialStateColor: '#0F172A',
+        altBackground: '#F8FAFC'
+      };
+    }
+
+    function initMermaid(isDark) {
+      if (window.mermaid) {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'base',
+          securityLevel: 'loose',
+          themeVariables: getMermaidThemeVariables(isDark)
+        });
+      }
+    }
+
+    // Inicializar Mermaid acorde al tema detectado
+    initMermaid(document.documentElement.classList.contains('dark'));
+  </script>
+
+  <style>
+    /* ==========================================================================
+       🏛️ 1. DESIGN TOKENS (MATERIAL DESIGN 3 - MODO CLARO & MODO OSCURO)
+       ========================================================================== */
+    :root {
+      /* Superficies Modo Claro */
+      --md-sys-color-surface: #FFFFFF;
+      --md-sys-color-surface-container: #F0F4F9;
+      --md-sys-color-surface-container-high: #E9EEF6;
+      
+      /* Primarios & Acentos (Monocromo Grafito) */
+      --md-sys-color-primary: #0F172A;
+      --md-sys-color-primary-hover: #1E293B;
+      --md-sys-color-primary-container: #E2E8F0;
+      --md-sys-color-on-primary-container: #0F172A;
+      --md-sys-color-secondary-container: #E2E8F0;
+      --md-sys-color-on-secondary-container: #0F172A;
+
+      /* Tipografía y Bordes */
+      --md-sys-color-on-surface: #1F1F1F;
+      --md-sys-color-on-surface-variant: #444746;
+      --md-sys-color-outline: #747775;
+      --md-sys-color-outline-variant: #E0E2EC;
+
+      /* Motion Tokens M3 */
+      --m3-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+      --m3-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+      --m3-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
+      --m3-duration-short: 150ms;
+      --m3-duration-medium: 250ms;
+      --m3-duration-long: 400ms;
+    }
+
+    /* Tokens Modo Oscuro (Neutro Puro: Negro Profundo y Grises Carbón / Zinc) */
+    html.dark {
+      --md-sys-color-surface: #0E0E10;
+      --md-sys-color-surface-container: #18181B;
+      --md-sys-color-surface-container-high: #27272A;
+      
+      --md-sys-color-primary: #FFFFFF;
+      --md-sys-color-primary-hover: #E4E4E7;
+      --md-sys-color-primary-container: #27272A;
+      --md-sys-color-on-primary-container: #FFFFFF;
+      --md-sys-color-secondary-container: #27272A;
+      --md-sys-color-on-secondary-container: #FFFFFF;
+
+      --md-sys-color-on-surface: #F4F4F5;
+      --md-sys-color-on-surface-variant: #A1A1AA;
+      --md-sys-color-outline: #71717A;
+      --md-sys-color-outline-variant: #27272A;
+    }
+
+    /* ==========================================================================
+       🌐 2. RESET & TRANSICIÓN FLUIDA DEL TEMA
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow: hidden;
+    }
+
+    /* Transición suave y limpia entre temas (fondos, textos y bordes) */
+    body, aside, main, header, footer,
+    .sidebar-nav-btn, .prose-custom, .katex-display, .mermaid-card,
+    #chatForm, #topicDropdownMenu, #quizModal > div, .welcome-prompt-card,
+    .user-bubble, .bot-avatar, input, textarea, select {
+      transition: background-color 0.28s cubic-bezier(0.2, 0, 0, 1),
+                  color 0.28s cubic-bezier(0.2, 0, 0, 1),
+                  border-color 0.28s cubic-bezier(0.2, 0, 0, 1),
+                  box-shadow 0.28s cubic-bezier(0.2, 0, 0, 1) !important;
+    }
+
+    ::selection {
+      background-color: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-primary);
+    }
+
+    /* Scrollbar Cross-Browser Normalizada Adaptable */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #C4C7C5 transparent;
+    }
+    html.dark * {
+      scrollbar-color: #3F3F46 transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C4C7C5;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--md-sys-color-outline);
+    }
+    html.dark ::-webkit-scrollbar-thumb {
+      background: #3F3F46;
+    }
+    html.dark ::-webkit-scrollbar-thumb:hover {
+      background: #52525B;
+    }
+
+    /* ==========================================================================
+       ✨ 3. ICONOGRAFÍA MATERIAL SYMBOLS NORMALIZADA
+       ========================================================================== */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+      color: var(--md-sys-color-on-surface);
+      user-select: none;
+    }
+
+    .material-symbols-outlined.filled {
+      font-variation-settings: 'FILL' 1, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* Dentro de botones y "píldoras" con fondo propio, el ícono toma el color de su contenedor
+       (si no, la flecha de enviar queda blanca sobre blanco / negra sobre negro).
+       :where() mantiene la especificidad baja para que los íconos con color propio (text-*) sigan ganando. */
+    :where(button, a, .bot-avatar, #modeToast, #pullRefreshIndicator, .code-copy) .material-symbols-outlined {
+      color: inherit;
+    }
+
+    /* ==========================================================================
+       🌌 4. AURORA BOREAL AMBIENTAL (ACELERACIÓN GPU 3D & NEUTRO OSCURO)
+       ========================================================================== */
+    .aurora-wrapper {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s var(--m3-easing-standard);
+    }
+
+    .aurora-wrapper.aurora-subtle {
+      opacity: 0.12;
+      transform: translate3d(0, 0, 0) scale(1.05);
+    }
+
+    .aurora-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      will-change: transform, opacity;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      transform: translate3d(0, 0, 0);
+      transition: filter 0.4s ease, opacity 0.4s ease;
+    }
+
+    /* En Modo Oscuro: Brillo ambiental sutil, desaturado a tonos grafito/plata (cero saturación azulada) */
+    html.dark .aurora-wrapper {
+      filter: saturate(25%) brightness(0.55);
+    }
+    html.dark .aurora-blob {
+      mix-blend-mode: screen !important;
+      opacity: 0.28;
+      filter: blur(115px);
+    }
+    html.dark .aurora-wrapper.aurora-subtle {
+      opacity: 0.06 !important;
+    }
+
+    /* Blob 1: Azul Google / Gemini */
+    .aurora-blob-1 {
+      width: 580px;
+      height: 580px;
+      top: -8%;
+      left: 12%;
+      background: radial-gradient(circle, rgba(66, 133, 244, 0.38) 0%, rgba(66, 133, 244, 0.14) 50%, transparent 72%);
+      animation: auroraMove1 24s ease-in-out infinite alternate;
+    }
+
+    /* Blob 2: Violeta / Deep Indigo */
+    .aurora-blob-2 {
+      width: 620px;
+      height: 620px;
+      top: 10%;
+      right: 2%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(147, 51, 234, 0.12) 50%, transparent 70%);
+      animation: auroraMove2 28s ease-in-out infinite alternate;
+    }
+
+    /* Blob 3: Rosa / Coral Cálido */
+    .aurora-blob-3 {
+      width: 540px;
+      height: 540px;
+      bottom: 2%;
+      left: 8%;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.28) 0%, rgba(236, 72, 153, 0.10) 55%, transparent 75%);
+      animation: auroraMove3 22s ease-in-out infinite alternate;
+    }
+
+    /* Blob 4: Cian Eléctrico / Turquesa Suave */
+    .aurora-blob-4 {
+      width: 520px;
+      height: 520px;
+      top: 30%;
+      left: 32%;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.30) 0%, rgba(56, 189, 248, 0.12) 50%, transparent 70%);
+      animation: auroraMove4 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes auroraMove1 {
+      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+      50% { transform: translate3d(75px, 50px, 0) scale(1.15) rotate(45deg); }
+      100% { transform: translate3d(-60px, 35px, 0) scale(0.95) rotate(-30deg); }
+    }
+
+    @keyframes auroraMove2 {
+      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+      50% { transform: translate3d(-85px, 60px, 0) scale(1.2) rotate(-50deg); }
+      100% { transform: translate3d(45px, -35px, 0) scale(0.9) rotate(35deg); }
+    }
+
+    @keyframes auroraMove3 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(65px, -70px, 0) scale(1.12); }
+      100% { transform: translate3d(-45px, -25px, 0) scale(0.98); }
+    }
+
+    @keyframes auroraMove4 {
+      0% { transform: translate3d(0, 0, 0) scale(0.95) rotate(0deg); }
+      50% { transform: translate3d(-55px, -45px, 0) scale(1.18) rotate(60deg); }
+      100% { transform: translate3d(60px, 45px, 0) scale(1.05) rotate(-40deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aurora-blob {
+        animation: none !important;
+      }
+      .aurora-wrapper {
+        opacity: 0.15 !important;
+        transform: none !important;
+      }
+    }
+
+    /* ==========================================================================
+       🎛️ 5. SELECTS & FORM CONTROLS NORMALIZADOS
+       ========================================================================== */
+    .m3-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: var(--md-sys-color-surface);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%23444746'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 0.85rem;
+      padding: 0.45rem 2rem 0.45rem 0.85rem;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+      cursor: pointer;
+      transition: border-color var(--m3-duration-short) var(--m3-easing-standard), box-shadow var(--m3-duration-short) var(--m3-easing-standard);
+    }
+    .m3-select:hover {
+      border-color: var(--md-sys-color-outline);
+    }
+    .m3-select:focus {
+      outline: none;
+      border-color: var(--md-sys-color-primary);
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.12);
+    }
+    html.dark .m3-select {
+      background-color: #27272A !important;
+      border-color: #3F3F46 !important;
+      color: #F4F4F5 !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%23A1A1AA'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    }
+
+    /* ==========================================================================
+       🧭 6. SIDEBAR FLOTANTE & TOOLTIPS (TOTALMENTE INVISIBLE EN MODO RETRAÍDO)
+       ========================================================================== */
+    aside#sidebar {
+      width: 64px;
+      background-color: transparent !important;
+      border: none !important;
+      border-right: none !important;
+      box-shadow: none !important;
+      transition: width var(--m3-duration-medium) var(--m3-easing-standard), background-color var(--m3-duration-medium) ease, border-color var(--m3-duration-medium) ease, box-shadow var(--m3-duration-medium) ease;
+    }
+
+    aside#sidebar.sidebar-expanded {
+      width: 270px;
+      background-color: var(--md-sys-color-surface-container) !important;
+      border-right: 1px solid var(--md-sys-color-outline-variant) !important;
+      box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    html.dark aside#sidebar.sidebar-expanded {
+      background-color: #18181B !important;
+      border-right: 1px solid #27272A !important;
+      box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.65) !important;
+    }
+
+    /* En modo retraído, las líneas divisorias son invisibles para que los iconos floten libres */
+    aside#sidebar:not(.sidebar-expanded) .sidebar-divider {
+      display: none !important;
+    }
+
+    html.dark .sidebar-divider {
+      background-color: #27272A !important;
+    }
+
+    /* Ocultar textos cuando está contraído (modo iconos flotantes) */
+    aside#sidebar:not(.sidebar-expanded) .sidebar-label,
+    aside#sidebar:not(.sidebar-expanded) .sidebar-logo-text {
+      display: none !important;
+    }
+
+    /* Estilo base y hover redondo de los botones del sidebar (Círculo flotante) */
+    .sidebar-nav-btn {
+      display: flex;
+      align-items: center;
+      border-radius: 9999px !important;
+      transition: background-color var(--m3-duration-short) var(--m3-easing-standard), color var(--m3-duration-short) var(--m3-easing-standard), transform var(--m3-duration-short) var(--m3-easing-standard);
+    }
+    html.dark .sidebar-nav-btn {
+      color: #D4D4D8;
+    }
+    html.dark .sidebar-nav-btn:hover {
+      background-color: #27272A !important;
+      color: #FFFFFF !important;
+    }
+
+    /* Tamaño y hover de botones en modo contraído (Círculo perfecto de 42x42) */
+    aside#sidebar:not(.sidebar-expanded) .sidebar-nav-btn {
+      width: 42px !important;
+      height: 42px !important;
+      padding: 0 !important;
+      justify-content: center !important;
+      border-radius: 9999px !important;
+    }
+
+    /* En modo expandido: Píldora redondeada suave M3 */
+    aside#sidebar.sidebar-expanded .sidebar-nav-btn {
+      width: 100% !important;
+      height: auto !important;
+      padding: 10px 16px !important;
+      justify-content: flex-start !important;
+      border-radius: 9999px !important;
+    }
+
+    .sidebar-tooltip {
+      position: absolute;
+      left: calc(100% + 12px);
+      top: 50%;
+      transform: translateY(-50%) translateX(-6px);
+      padding: 5px 11px;
+      background-color: var(--md-sys-color-primary);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      border-radius: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      transition: all 0.16s var(--m3-easing-standard);
+      z-index: 60;
+    }
+
+    html.dark .sidebar-tooltip {
+      background-color: #27272A !important;
+      border: 1px solid #3F3F46 !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .sidebar-tooltip::before {
+      content: '';
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 4px;
+      border-style: solid;
+      border-color: transparent var(--md-sys-color-primary) transparent transparent;
+    }
+    html.dark .sidebar-tooltip::before {
+      border-color: transparent #27272A transparent transparent !important;
+    }
+
+    .group:hover .sidebar-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(-50%) translateX(0px);
+    }
+
+    aside#sidebar.sidebar-expanded .sidebar-tooltip {
+      display: none !important;
+    }
+
+    /* Posicionamiento adaptativo del menú M3 de Documentos de Clase */
+    aside#sidebar:not(.sidebar-expanded) .topic-wrapper {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto;
+      border-radius: 9999px;
+    }
+
+    aside#sidebar:not(.sidebar-expanded) #topicDropdownMenu {
+      left: calc(100% + 14px) !important;
+      top: -10px !important;
+      width: 290px !important;
+    }
+
+    aside#sidebar.sidebar-expanded #topicDropdownMenu {
+      left: 4px !important;
+      top: calc(100% + 6px) !important;
+      width: calc(100% - 8px) !important;
+    }
+
+    aside#sidebar.sidebar-expanded .topic-icon-only {
+      display: none !important;
+    }
+
+    /* Sidebar contraído en PC: debe quedar por encima del área principal y no recortar
+       los tooltips ni el menú de modos que salen hacia la derecha */
+    @media (min-width: 768px) {
+      aside#sidebar {
+        position: relative;
+        z-index: 40 !important;
+      }
+      aside#sidebar:not(.sidebar-expanded) {
+        overflow: visible !important;
+      }
+    }
+    .sidebar-tooltip { z-index: 60; }
+
+    /* ---------- Menú de Modo de respuesta ---------- */
+    .mode-menu {
+      display: none;
+      position: fixed;               /* popover (sidebar contraído) posicionado por JS */
+      z-index: 70;
+      width: 270px;
+      padding: 6px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid #E0E2EC;
+      box-shadow: 0 10px 32px rgba(15, 23, 42, 0.16);
+      backdrop-filter: blur(10px);
+    }
+    .mode-menu.open { display: block; animation: modeMenuIn 160ms var(--m3-easing-standard); }
+    @keyframes modeMenuIn {
+      from { opacity: 0; transform: translateX(-6px) scale(0.98); }
+      to   { opacity: 1; transform: none; }
+    }
+    .mode-menu-header {
+      padding: 6px 12px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #747775;
+    }
+    .mode-menu-list { display: flex; flex-direction: column; gap: 2px; }
+    .mode-opt {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      text-align: left;
+      cursor: pointer;
+      color: #1F1F1F;
+      background: transparent;
+      transition: background-color 140ms ease, transform 140ms ease;
+    }
+    .mode-opt:hover { background: #F0F4F9; }
+    .mode-opt:active { transform: scale(0.98); }
+    .mode-opt.selected { background: #E2E8F0; }
+    .mode-opt-icon { font-size: 20px; flex-shrink: 0; }
+    .mode-opt-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .mode-opt-name { font-size: 12px; font-weight: 600; }
+    .mode-opt-desc { font-size: 10.5px; color: #747775; line-height: 1.25; }
+    .mode-opt-check { font-size: 16px; color: #0F172A; opacity: 0; transition: opacity 140ms ease; }
+    .mode-opt.selected .mode-opt-check { opacity: 1; }
+
+    html.dark .mode-menu { background: rgba(24, 24, 27, 0.98); border-color: #27272A; box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65); }
+    html.dark .mode-menu-header, html.dark .mode-opt-desc { color: #A1A1AA; }
+    html.dark .mode-opt { color: #F4F4F5; }
+    html.dark .mode-opt:hover { background: #27272A; }
+    html.dark .mode-opt.selected { background: #27272A; box-shadow: inset 0 0 0 1px #3F3F46; }
+    html.dark .mode-opt-check { color: #FFFFFF; }
+
+    /* Sidebar abierto (y celular): el menú se despliega dentro del sidebar, como acordeón */
+    aside#sidebar.sidebar-expanded .mode-menu {
+      position: static;
+      width: 100%;
+      padding: 2px 0 4px;
+      margin-top: 2px;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+      border-radius: 0;
+    }
+    aside#sidebar.sidebar-expanded .mode-menu.open { animation: modeAccordionIn 200ms var(--m3-easing-standard); }
+    @keyframes modeAccordionIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: none; }
+    }
+    aside#sidebar.sidebar-expanded .mode-menu-header { display: none; }
+    aside#sidebar.sidebar-expanded .mode-opt { border-radius: 9999px; padding: 8px 16px; }
+    aside#sidebar.sidebar-expanded .mode-opt:hover { background: #E5E7EB; }
+    html.dark aside#sidebar.sidebar-expanded .mode-opt:hover { background: #27272A; }
+    /* Con el popover abierto no se muestra el tooltip del botón */
+    #modeSelectorWrapper.menu-open .sidebar-tooltip { display: none !important; }
+
+    /* Aviso breve al cambiar de modo */
+    #modeToast {
+      position: fixed;
+      left: 50%;
+      bottom: 150px;
+      z-index: 80;
+      transform: translate(-50%, 8px);
+      opacity: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #FFFFFF;
+      background: #0F172A;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25);
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+    #modeToast.show { opacity: 1; transform: translate(-50%, 0); }
+    #modeToast .material-symbols-outlined { font-size: 18px; }
+    html.dark #modeToast { background: #F4F4F5; color: #0E0E10; }
+
+    /* Sidebar expandido: scroll vertical propio con barra bien visible */
+    aside#sidebar.sidebar-expanded {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+      scrollbar-color: #94A3B8 rgba(148, 163, 184, 0.15);
+    }
+    aside#sidebar.sidebar-expanded::-webkit-scrollbar { width: 8px; }
+    aside#sidebar.sidebar-expanded::-webkit-scrollbar-track {
+      background: rgba(148, 163, 184, 0.15);
+      border-radius: 9999px;
+      margin: 8px 0;
+    }
+    aside#sidebar.sidebar-expanded::-webkit-scrollbar-thumb {
+      background: #94A3B8;
+      border-radius: 9999px;
+    }
+    aside#sidebar.sidebar-expanded::-webkit-scrollbar-thumb:hover { background: #64748B; }
+    html.dark aside#sidebar.sidebar-expanded {
+      scrollbar-color: #52525B rgba(63, 63, 70, 0.35);
+    }
+    html.dark aside#sidebar.sidebar-expanded::-webkit-scrollbar-track { background: rgba(63, 63, 70, 0.35); }
+    html.dark aside#sidebar.sidebar-expanded::-webkit-scrollbar-thumb { background: #52525B; }
+    html.dark aside#sidebar.sidebar-expanded::-webkit-scrollbar-thumb:hover { background: #71717A; }
+
+    /* Acordeón de clases dentro del sidebar */
+    #topicAccordion {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 260ms var(--m3-easing-standard), opacity 200ms ease, margin 200ms ease;
+    }
+    #topicAccordion.open {
+      opacity: 1;
+      margin-top: 4px;
+    }
+    /* Ningún bloque interno del sidebar hace scroll propio: scrollea todo el sidebar */
+    aside#sidebar > * { flex-shrink: 0; }
+    aside#sidebar:not(.sidebar-expanded) #topicAccordion { display: none !important; }
+    .topic-check {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      cursor: pointer;
+      accent-color: #0F172A;
+    }
+    html.dark .topic-check { accent-color: #E4E4E7; }
+
+    html.dark #topicDropdownMenu {
+      background-color: rgba(24, 24, 27, 0.98) !important;
+      border-color: #27272A !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65) !important;
+    }
+    html.dark #topicTriggerExpanded {
+      color: #F4F4F5 !important;
+    }
+
+    /* ==========================================================================
+       📝 7. PROSE / MARKDOWN & TIPOGRAFÍA NORMALIZADA
+       ========================================================================== */
+    .prose-custom {
+      color: var(--md-sys-color-on-surface);
+      line-height: 1.65;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .prose-custom p {
+      margin-bottom: 0.85rem;
+      line-height: 1.65;
+      color: var(--md-sys-color-on-surface);
+    }
+    .prose-custom ul {
+      list-style-type: disc;
+      margin-left: 1.25rem;
+      margin-bottom: 0.85rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .prose-custom ol {
+      list-style-type: decimal;
+      margin-left: 1.25rem;
+      margin-bottom: 0.85rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .prose-custom li {
+      margin-bottom: 0.3rem;
+    }
+    .prose-custom h1, .prose-custom h2, .prose-custom h3 {
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface);
+      margin-top: 1.25rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.015em;
+    }
+    .prose-custom pre {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-surface-container);
+      border-radius: 14px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      font-size: 0.88rem;
+    }
+    html.dark .prose-custom pre {
+      background: #18181B !important;
+      border: 1px solid #27272A !important;
+      color: #E4E4E7 !important;
+    }
+    .prose-custom code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.88em;
+      background: var(--md-sys-color-surface-container-high);
+      padding: 0.15rem 0.4rem;
+      border-radius: 6px;
+      color: var(--md-sys-color-primary);
+      font-weight: 500;
+    }
+    html.dark .prose-custom code {
+      background: #27272A !important;
+      color: #FFFFFF !important;
+      border: 1px solid #3F3F46 !important;
+    }
+    .prose-custom pre code {
+      background: transparent !important;
+      padding: 0 !important;
+      color: inherit !important;
+      font-weight: 400;
+    }
+
+    /* ---------- Bloques de código con barra de lenguaje fija (sticky) ---------- */
+    .code-block {
+      position: relative;
+      margin-bottom: 1rem;
+      border-radius: 14px;
+      background: #0F172A;
+      /* sin overflow: hidden, si no la barra sticky deja de pegarse */
+    }
+    .code-block-header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 30px;
+      padding: 0 8px 0 14px;
+      border-radius: 14px 14px 0 0;
+      background: #1E293B;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      color: #94A3B8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+    .code-block-header { transition: border-radius 150ms ease; }
+    /* Cuando la barra queda pegada arriba durante el scroll: esquinas rectas */
+    .code-block-header.stuck { border-radius: 0; }
+    .code-lang { text-transform: lowercase; }
+
+    /* El mensaje no crece con la línea más larga: el código hace scroll dentro de su bloque */
+    #messagesList .flex-1 { min-width: 0; }
+    .code-block { max-width: 100%; }
+    .prose-custom .code-block pre {
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+      scrollbar-width: thin;                              /* Firefox */
+      scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+    }
+    .prose-custom .code-block pre code {
+      white-space: pre;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+    }
+    /* Scroll horizontal minimalista (Chrome/Edge/Safari) */
+    .code-block pre::-webkit-scrollbar { height: 5px; }
+    .code-block pre::-webkit-scrollbar-track { background: transparent; margin: 0 12px; }
+    .code-block pre::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 9999px;
+    }
+    .code-block pre:hover::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.55); }
+    html.dark .code-block pre { scrollbar-color: rgba(161, 161, 170, 0.3) transparent; }
+    html.dark .code-block pre::-webkit-scrollbar-thumb { background: rgba(161, 161, 170, 0.25); }
+    html.dark .code-block pre:hover::-webkit-scrollbar-thumb { background: rgba(161, 161, 170, 0.5); }
+    .code-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 11px;
+      color: #94A3B8;
+      background: transparent;
+      cursor: pointer;
+      transition: color 140ms ease, background-color 140ms ease;
+    }
+    .code-copy:hover { color: #F1F5F9; background: rgba(148, 163, 184, 0.16); }
+    .code-copy .material-symbols-outlined { font-size: 14px; }
+    .prose-custom .code-block pre {
+      margin: 0 !important;
+      border: 0 !important;
+      border-radius: 0 0 14px 14px !important;
+      background: transparent !important;
+    }
+    html.dark .code-block {
+      background: #18181B;
+      box-shadow: inset 0 0 0 1px #27272A;
+    }
+    html.dark .code-block-header {
+      background: #202024;
+      border: 1px solid #27272A;
+      border-bottom-color: #2E2E33;
+      color: #A1A1AA;
+    }
+    html.dark .code-copy { color: #A1A1AA; }
+    html.dark .code-copy:hover { color: #FFFFFF; background: #2E2E33; }
+    .prose-custom blockquote {
+      border-left: 3px solid var(--md-sys-color-primary);
+      padding-left: 0.85rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 0.85rem;
+      font-style: italic;
+      background: var(--md-sys-color-surface-container);
+      padding-top: 0.4rem;
+      padding-bottom: 0.4rem;
+      border-radius: 0 8px 8px 0;
+    }
+    html.dark .prose-custom blockquote {
+      background: #18181B !important;
+      border-left-color: #71717A !important;
+      color: #A1A1AA !important;
+    }
+    .prose-custom table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+    .prose-custom th, .prose-custom td {
+      border: 1px solid var(--md-sys-color-outline-variant);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+    .prose-custom th {
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+      font-weight: 600;
+    }
+    html.dark .prose-custom th {
+      background: #18181B !important;
+      border-color: #27272A !important;
+      color: #FFFFFF !important;
+    }
+    html.dark .prose-custom td {
+      border-color: #27272A !important;
+      color: #D4D4D8 !important;
+    }
+
+    /* ==========================================================================
+       📊 8. MERMAID DIAGRAMAS (ADAPTABLES A MODO CLARO Y OSCURO NEUTRO)
+       ========================================================================== */
+    .mermaid-card,
+    .mermaid,
+    .prose-custom .mermaid-card,
+    .prose-custom .mermaid,
+    .prose-custom pre.mermaid {
+      background-color: #F8FAFC !important;
+      background: #F8FAFC !important;
+      border-color: #E2E8F0 !important;
+      color: #0F172A !important;
+      transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+    }
+    .mermaid svg {
+      max-width: 100% !important;
+      height: auto !important;
+      background: transparent !important;
+      font-family: inherit !important;
+    }
+    .mermaid .label text,
+    .mermaid .edgeLabel,
+    .mermaid text {
+      fill: #0F172A !important;
+      color: #0F172A !important;
+    }
+
+    /* MODO OSCURO: Mermaid con fondo Carbón y bordes grises/plata neutros */
+    html.dark .mermaid-card,
+    html.dark .mermaid,
+    html.dark .prose-custom .mermaid-card,
+    html.dark .prose-custom .mermaid,
+    html.dark .prose-custom pre.mermaid {
+      background-color: #18181B !important;
+      background: #18181B !important;
+      border-color: #27272A !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45) !important;
+    }
+    html.dark .mermaid .label text,
+    html.dark .mermaid .edgeLabel,
+    html.dark .mermaid .edgeLabel text,
+    html.dark .mermaid text,
+    html.dark .mermaid span {
+      fill: #FFFFFF !important;
+      color: #FFFFFF !important;
+    }
+    html.dark .mermaid .node rect,
+    html.dark .mermaid .node circle,
+    html.dark .mermaid .node polygon {
+      stroke: #71717A !important;
+      fill: #27272A !important;
+    }
+    html.dark .mermaid .edgePaths path,
+    html.dark .mermaid .flowchart-link {
+      stroke: #A1A1AA !important;
+    }
+    html.dark .mermaid marker path {
+      fill: #A1A1AA !important;
+      stroke: #A1A1AA !important;
+    }
+    html.dark .mermaid .cluster rect {
+      fill: #121214 !important;
+      stroke: #3F3F46 !important;
+    }
+
+    /* ==========================================================================
+       📐 9. KATEX (MATEMÁTICAS & FÓRMULAS) NORMALIZADO Y 100% ADAPTABLE AL TEMA
+       ========================================================================== */
+    .katex-display {
+      margin: 1.25rem 0;
+      padding: 0.85rem 1.25rem;
+      overflow-x: auto;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 14px;
+      color: #0F172A !important;
+      text-align: center;
+      transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+    }
+    .katex {
+      font-size: 1.05em;
+      color: #0F172A !important;
+      transition: color 0.28s ease;
+    }
+
+    /* MODO OSCURO: KaTeX 100% Blanco Puro sobre Carbón Neutro */
+    html.dark .katex-display {
+      background: #18181B !important;
+      border: 1px solid #27272A !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4) !important;
+    }
+    html.dark .katex,
+    html.dark .katex * {
+      color: #FFFFFF !important;
+      fill: #FFFFFF !important;
+      border-color: #FFFFFF !important;
+    }
+    html.dark .katex .frac-line {
+      border-bottom-color: #FFFFFF !important;
+    }
+    html.dark .katex .sqrt > path {
+      fill: #FFFFFF !important;
+      stroke: #FFFFFF !important;
+    }
+
+    /* ==========================================================================
+       🎬 10. ANIMACIONES SUAVES NORMALIZADAS
+       ========================================================================== */
+    @keyframes m3FadeIn {
+      from { opacity: 0; transform: translate3d(0, 8px, 0); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .animate-m3FadeIn {
+      animation: m3FadeIn var(--m3-duration-medium) var(--m3-easing-standard) forwards;
+    }
+
+    /* ==========================================================================
+       🌫️ 11. DESVANECIMIENTO GRADUAL SCROLL Y FOOTER FLOTANTE GEMINI
+       ========================================================================== */
+    /* La barra superior está vacía en PC: no ocupa espacio para que el chat llegue hasta arriba */
+    @media (min-width: 768px) {
+      #topNavbar { display: none !important; }
+    }
+
+    /* Desvanecimiento sutil solo abajo (arriba el texto llega al borde sin efecto) */
+    .gemini-scroll-fade {
+      mask-image: linear-gradient(
+        to bottom,
+        black 0px,
+        black calc(100% - 48px),
+        rgba(0, 0, 0, 0.35) 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        black 0px,
+        black calc(100% - 48px),
+        rgba(0, 0, 0, 0.35) 100%
+      );
+    }
+
+    /* Gradiente de fondo del footer flotante: zona de transición más corta y suave */
+    .gemini-floating-footer {
+      padding-top: 1.75rem !important;
+      background: linear-gradient(to top, #FFFFFF 0%, #FFFFFF 62%, rgba(255, 255, 255, 0.75) 82%, rgba(255, 255, 255, 0) 100%);
+    }
+    html.dark .gemini-floating-footer {
+      background: linear-gradient(to top, #0E0E10 0%, #0E0E10 62%, rgba(14, 14, 16, 0.75) 82%, rgba(14, 14, 16, 0) 100%) !important;
+    }
+
+    /* Modo claro: sobre fondo blanco el degradado se nota mucho más, así que se suaviza aún más */
+    html:not(.dark) .gemini-scroll-fade {
+      mask-image: linear-gradient(
+        to bottom,
+        black 0px,
+        black calc(100% - 32px),
+        rgba(0, 0, 0, 0.7) 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        black 0px,
+        black calc(100% - 32px),
+        rgba(0, 0, 0, 0.7) 100%
+      );
+    }
+    html:not(.dark) .gemini-floating-footer {
+      background: linear-gradient(to top, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 55%, rgba(255, 255, 255, 0.45) 80%, rgba(255, 255, 255, 0) 100%);
+    }
+  </style>
+  <link rel="stylesheet" href="/static/mobile.css">
+  <script src="/static/mobile.js" defer></script>
+</head>
+<body class="h-screen w-screen overflow-hidden flex bg-white dark:bg-[#0E0E10] antialiased">
+
+  <!-- ======================================================== -->
+  <!-- M3 MODAL BACKDROP (MÓVILES)                              -->
+  <!-- ======================================================== -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-[#000000]/50 backdrop-blur-xs z-30 hidden lg:hidden transition-opacity"></div>
+
+  <!-- ======================================================== -->
+  <!-- NAVIGATION RAIL / SIDEBAR (ESTILO STRIP LIMPIO)          -->
+  <!-- ======================================================== -->
+  <aside id="sidebar" class="flex-shrink-0 flex flex-col justify-between py-3 px-2 select-none h-screen z-30 transition-all duration-200 overflow-hidden">
+    
+    <!-- Contenido del Sidebar: Solo acciones y botones limpios -->
+    <div class="space-y-2.5 w-full flex flex-col items-center flex-shrink-0">
+      
+      <!-- Botón Toggle de Menú y Logo Oficial AulaIA (Minimalista y Sobrio) -->
+      <div class="relative group flex justify-center w-full px-1 py-0.5">
+        <button onclick="toggleSidebar()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] transition group" title="Alternar menú lateral">
+          <img src="/static/logo.svg" alt="AulaIA" class="w-6 h-6 rounded-[7px] flex-shrink-0 object-contain shadow-xs">
+          <span class="sidebar-label ml-3 font-bold text-base text-[#0F172A] dark:text-[#FFFFFF] whitespace-nowrap tracking-tight">AulaIA</span>
+          <span class="sidebar-label ml-auto material-symbols-outlined text-xl text-[#747775] dark:text-[#A1A1AA] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] transition">menu_open</span>
+        </button>
+        <span class="sidebar-tooltip">Menú AulaIA</span>
+      </div>
+
+      <!-- Icon 0: Volver a la Landing / Inicio -->
+      <div class="relative group flex justify-center w-full">
+        <a href="/" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] transition flex items-center" title="Volver a la Landing Page">
+          <span class="material-symbols-outlined text-xl flex-shrink-0">home</span>
+          <span class="sidebar-label ml-3 text-xs font-semibold tracking-wide whitespace-nowrap">Inicio / Landing</span>
+        </a>
+        <span class="sidebar-tooltip">Volver al Inicio</span>
+      </div>
+
+      <!-- Icon 1: Nueva Consulta (Lápiz / Edición como en la captura) -->
+      <div class="relative group flex justify-center w-full">
+        <button onclick="startNewConversation()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] transition">
+          <span class="material-symbols-outlined text-xl flex-shrink-0">drive_file_rename_outline</span>
+          <span class="sidebar-label ml-3 text-xs font-semibold tracking-wide whitespace-nowrap">Nueva consulta</span>
+        </button>
+        <span class="sidebar-tooltip">Nueva consulta</span>
+      </div>
+
+      <div class="sidebar-divider h-px bg-[#E5E7EB] dark:bg-[#27272A] w-full my-1"></div>
+
+      <!-- Selector de Modo Pedagógico: acordeón con el sidebar abierto, popover con el sidebar contraído -->
+      <div class="relative group flex flex-col items-center w-full" id="modeSelectorWrapper">
+        <button
+          id="btnModoSmart"
+          type="button"
+          onclick="toggleModeMenu(event)"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] transition relative cursor-pointer"
+        >
+          <span id="smartModeIcon" class="material-symbols-outlined text-xl flex-shrink-0 transition-transform duration-200">lightbulb</span>
+          <span id="smartModeLabel" class="sidebar-label ml-3 text-xs font-semibold whitespace-nowrap">Modo Intuitivo</span>
+          <span id="modeChevron" class="sidebar-label ml-auto material-symbols-outlined text-base text-[#747775] dark:text-[#A1A1AA] transition-transform duration-200">expand_more</span>
+        </button>
+        <span id="smartModeTooltip" class="sidebar-tooltip">Modo Intuitivo</span>
+
+        <div id="modeDropdownMenu" class="mode-menu" role="menu" aria-hidden="true">
+          <div class="mode-menu-header">Modo de respuesta</div>
+          <div class="mode-menu-list">
+            <button type="button" role="menuitemradio" data-mode="intuitivo" id="modeOpt_intuitivo" onclick="selectModeOption('intuitivo')" class="mode-opt">
+              <span class="material-symbols-outlined mode-opt-icon text-amber-500">lightbulb</span>
+              <span class="mode-opt-text">
+                <span class="mode-opt-name">Intuitivo</span>
+                <span class="mode-opt-desc">Analogías y conceptos claros</span>
+              </span>
+              <span class="material-symbols-outlined mode-opt-check">check</span>
+            </button>
+            <button type="button" role="menuitemradio" data-mode="formal" id="modeOpt_formal" onclick="selectModeOption('formal')" class="mode-opt">
+              <span class="material-symbols-outlined mode-opt-icon text-sky-500">menu_book</span>
+              <span class="mode-opt-text">
+                <span class="mode-opt-name">Formal</span>
+                <span class="mode-opt-desc">Rigor matemático y tuplas</span>
+              </span>
+              <span class="material-symbols-outlined mode-opt-check">check</span>
+            </button>
+            <button type="button" role="menuitemradio" data-mode="codigo" id="modeOpt_codigo" onclick="selectModeOption('codigo')" class="mode-opt">
+              <span class="material-symbols-outlined mode-opt-icon text-emerald-500">terminal</span>
+              <span class="mode-opt-text">
+                <span class="mode-opt-name">Código Python</span>
+                <span class="mode-opt-desc">Scripts y simulaciones</span>
+              </span>
+              <span class="material-symbols-outlined mode-opt-check">check</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selector Custom de Clases / Documentos (Botón en Rail) -->
+      <div class="relative flex justify-center w-full topic-wrapper" id="topicWrapper">
+        
+        <!-- Botón Modo Retraído: Icono flotante con indicador de filtro activo -->
+        <div class="relative group flex justify-center">
+          <button
+            id="topicTriggerCollapsed"
+            onclick="openTopicAccordionFromRail(event)"
+            class="topic-icon-only sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] transition relative cursor-pointer"
+            title="Filtrar por clase"
+          >
+            <span class="material-symbols-outlined text-xl flex-shrink-0">layers</span>
+            <span id="topicActiveBadge" class="hidden absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-[#0F172A] dark:bg-[#FFFFFF] border-2 border-white dark:border-[#18181B]"></span>
+          </button>
+          <span class="sidebar-tooltip">Filtrar por clase</span>
+        </div>
+
+        <!-- Botón Modo Expandido: Custom Dropdown Trigger M3 -->
+        <div class="sidebar-label w-full px-1">
+          <button
+            id="topicTriggerExpanded"
+            onclick="toggleTopicAccordion(event)"
+            class="w-full flex items-center justify-between bg-transparent border-0 px-3 py-2.5 text-xs text-[#1F1F1F] dark:text-[#F4F4F5] transition group/btn cursor-pointer"
+          >
+            <div class="flex items-center truncate pr-1">
+              <span class="material-symbols-outlined text-xl flex-shrink-0">layers</span>
+              <span id="topicSelectedLabel" class="ml-3 truncate font-semibold tracking-wide">Todas las Clases</span>
+            </div>
+            <span id="topicChevron" class="material-symbols-outlined text-base text-[#747775] dark:text-[#A1A1AA] group-hover/btn:text-[#0F172A] dark:group-hover/btn:text-[#FFFFFF] transition-transform duration-200">expand_more</span>
+          </button>
+
+          <!-- Acordeón desplegable con checkboxes por clase -->
+          <div id="topicAccordion" class="w-full" aria-hidden="true">
+            <div class="flex items-center justify-between pl-3.5 pr-2 pt-1 pb-1">
+              <span id="topicCountLabel" class="text-[10px] font-bold tracking-wider uppercase text-[#747775] dark:text-[#A1A1AA]">Clases cargadas</span>
+              <button type="button" onclick="setAllTopics(true)" class="text-[10px] font-medium text-[#747775] dark:text-[#A1A1AA] hover:text-[#0F172A] dark:hover:text-white px-2 py-0.5 rounded-full hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] transition cursor-pointer">Restablecer</button>
+            </div>
+            <div id="topicAccordionList" class="space-y-0.5"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón Simulador de Quiz (Birrete Académico como en la captura) -->
+      <div class="relative group flex justify-center w-full">
+        <button onclick="openQuizModal()" class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] transition">
+          <span class="material-symbols-outlined text-xl flex-shrink-0">school</span>
+          <span class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Simulador de Quiz</span>
+        </button>
+        <span class="sidebar-tooltip">Simulador de Quiz</span>
+      </div>
+
+    </div>
+
+    <!-- SECCIÓN: HISTORIAL DE CHATS RECIENTES EN MODO EXPANDIDO (SQLITE) -->
+    <div class="sidebar-label w-full grow shrink-0 flex flex-col mt-2 px-1 border-t border-[#E5E7EB] dark:border-[#27272A] pt-2">
+      <div class="flex items-center justify-between px-2 py-1 mb-1">
+        <span class="text-[10px] font-bold tracking-wider uppercase text-[#747775] dark:text-[#A1A1AA]">Recientes</span>
+        <button
+          type="button"
+          onclick="startNewConversation()"
+          title="Nueva consulta"
+          class="w-6 h-6 rounded-full flex items-center justify-center hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#747775] dark:text-[#A1A1AA] hover:text-[#0F172A] dark:hover:text-white transition cursor-pointer"
+        >
+          <span class="material-symbols-outlined text-sm">add</span>
+        </button>
+      </div>
+      <div id="chatHistoryList" class="space-y-1 pr-1">
+        <!-- Renderizado dinámico desde SQLite -->
+      </div>
+    </div>
+
+    <!-- Selector / Switcher de Modo Oscuro / Claro en el fondo del sidebar -->
+    <div class="relative group flex justify-center w-full px-1 py-1 flex-shrink-0">
+      <button
+        id="themeToggleBtn"
+        onclick="toggleTheme()"
+        class="sidebar-nav-btn hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] transition group relative cursor-pointer"
+        title="Cambiar tema (Oscuro / Claro)"
+        aria-label="Cambiar tema de la aplicación"
+      >
+        <span id="themeToggleIcon" class="material-symbols-outlined text-xl flex-shrink-0 transition-transform duration-300">dark_mode</span>
+        <span id="themeToggleLabel" class="sidebar-label ml-3 text-xs font-medium whitespace-nowrap">Modo Oscuro</span>
+      </button>
+      <span id="themeTooltip" class="sidebar-tooltip">Modo Oscuro</span>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- CANVAS PRINCIPAL (ÁREA DE CHAT Y BIENVENIDA)             -->
+  <!-- ======================================================== -->
+  <div id="canvasPrincipal" class="flex-1 flex flex-col h-full overflow-hidden relative bg-white dark:bg-[#0E0E10]">
+    
+    <!-- ======================================================== -->
+    <!-- 🌌 AURORA BOREAL AMBIENTAL (FONDO VIVO IA)               -->
+    <!-- ======================================================== -->
+    <div id="auroraContainer" class="aurora-wrapper pointer-events-none">
+      <div class="aurora-blob aurora-blob-1"></div>
+      <div class="aurora-blob aurora-blob-2"></div>
+      <div class="aurora-blob aurora-blob-3"></div>
+      <div class="aurora-blob aurora-blob-4"></div>
+    </div>
+
+    <!-- M3 Top App Bar (Completamente Transparente para dar la ilusión de iconos flotantes) -->
+    <header id="topNavbar" class="h-14 flex items-center justify-between px-4 sm:px-6 z-10 flex-shrink-0 bg-transparent border-b border-transparent transition-all duration-300">
+      <div class="flex items-center space-x-3">
+        <!-- Espacio reservado para flujo libre -->
+      </div>
+      <div></div>
+    </header>
+
+    <!-- Contenedor Scrollable de Mensajes (Scroll Suave con Desvanecimiento Orgánico Gemini) -->
+    <main id="chatContainer" class="flex-1 overflow-y-auto w-full px-4 sm:px-6 pt-0 pb-44 relative z-10 gemini-scroll-fade">
+      <div class="max-w-3xl w-full mx-auto space-y-6">
+
+        <!-- ======================================================== -->
+        <!-- PANTALLA DE ESPERA VIVA (ESTILO GOOGLE GEMINI AI M3)     -->
+        <!-- ======================================================== -->
+        <div id="welcomeView" class="py-12 sm:py-20 flex flex-col items-center justify-center text-center space-y-8 select-none animate-m3FadeIn">
+          
+          <!-- Headline Medium M3 -->
+          <div class="space-y-2 max-w-lg">
+            <h2 id="welcomeTitle" class="text-2xl sm:text-3xl font-medium tracking-tight text-[#1F1F1F] dark:text-[#FFFFFF]">
+              ¿En qué puedo ayudarte hoy?
+            </h2>
+            <p id="welcomeSubtitle" class="text-xs sm:text-sm text-[#444746] dark:text-[#A1A1AA] leading-relaxed font-normal">
+              Tutor inteligente para el curso de Teoría de Autómatas e Inteligencia Artificial con trazabilidad documental en tus diapositivas.
+            </p>
+          </div>
+
+          <!-- M3 Outlined Cards (Tarjetas de Sugerencias con Glassmorphism suave) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl text-left pt-2">
+            
+            <button onclick="sendQuickPrompt('¿Cómo funciona el método de subconjuntos para transformar un AFND en AFD?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#18181B]/85 backdrop-blur-md hover:bg-white dark:hover:bg-[#242427] border border-[#E0E2EC]/90 dark:border-[#27272A] hover:border-slate-400 dark:hover:border-[#3F3F46] hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
+              <div class="pr-3">
+                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F4F4F5] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] transition">Conversión AFND a AFD</span>
+                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#A1A1AA] mt-1 line-clamp-1">¿Cómo funciona el método de subconjuntos?</span>
+              </div>
+              <span class="material-symbols-outlined text-[#747775] dark:text-[#71717A] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] text-lg transition">arrow_outward</span>
+            </button>
+
+            <button onclick="sendQuickPrompt('¿Cómo opera la memoria de pila LIFO en un autómata a pila para a^n b^n?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#18181B]/85 backdrop-blur-md hover:bg-white dark:hover:bg-[#242427] border border-[#E0E2EC]/90 dark:border-[#27272A] hover:border-slate-400 dark:hover:border-[#3F3F46] hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
+              <div class="pr-3">
+                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F4F4F5] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] transition">Autómatas a Pila</span>
+                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#A1A1AA] mt-1 line-clamp-1">¿Cómo opera la memoria LIFO para a^n b^n?</span>
+              </div>
+              <span class="material-symbols-outlined text-[#747775] dark:text-[#71717A] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] text-lg transition">arrow_outward</span>
+            </button>
+
+            <button onclick="sendQuickPrompt('¿Cómo funciona la cinta infinita y el cabezal de una Máquina de Turing?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#18181B]/85 backdrop-blur-md hover:bg-white dark:hover:bg-[#242427] border border-[#E0E2EC]/90 dark:border-[#27272A] hover:border-slate-400 dark:hover:border-[#3F3F46] hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
+              <div class="pr-3">
+                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F4F4F5] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] transition">Máquinas de Turing</span>
+                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#A1A1AA] mt-1 line-clamp-1">¿Cómo opera la cinta y el cabezal?</span>
+              </div>
+              <span class="material-symbols-outlined text-[#747775] dark:text-[#71717A] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] text-lg transition">arrow_outward</span>
+            </button>
+
+            <button onclick="sendQuickPrompt('¿Cuáles son los componentes de la 5-tupla formal de un autómata finito?')" class="welcome-prompt-card p-4 rounded-[18px] bg-white/80 dark:bg-[#18181B]/85 backdrop-blur-md hover:bg-white dark:hover:bg-[#242427] border border-[#E0E2EC]/90 dark:border-[#27272A] hover:border-slate-400 dark:hover:border-[#3F3F46] hover:shadow-elevation-1 hover:-translate-y-0.5 transition-all duration-200 text-left group flex items-start justify-between">
+              <div class="pr-3">
+                <span class="welcome-prompt-title block text-xs font-semibold text-[#1F1F1F] dark:text-[#F4F4F5] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] transition">Definición Formal</span>
+                <span class="welcome-prompt-desc block text-[11px] text-[#444746] dark:text-[#A1A1AA] mt-1 line-clamp-1">Componentes de la 5-tupla formal</span>
+              </div>
+              <span class="material-symbols-outlined text-[#747775] dark:text-[#71717A] group-hover:text-[#0F172A] dark:group-hover:text-[#FFFFFF] text-lg transition">arrow_outward</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Lista de Mensajes del Chat -->
+        <div id="messagesList" class="space-y-6"></div>
+      </div>
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- M3 SEARCH BAR / CHAT INPUT (ESTILO GEMINI FLOTANTE)      -->
+    <!-- ======================================================== -->
+    <footer class="absolute bottom-0 left-0 right-0 z-20 pt-16 pb-5 px-4 sm:px-6 gemini-floating-footer pointer-events-none">
+      <div class="max-w-3xl mx-auto pointer-events-auto">
+        
+        <!-- Barra de Selección y Filtro de Clase Activa (Estilo M3 Chip) -->
+        <div class="relative flex items-center justify-between px-2 mb-2 select-none">
+          <div class="relative">
+            <button
+              id="footerTopicBtn"
+              type="button"
+              onclick="toggleTopicMenu(event)"
+              class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/95 dark:bg-[#18181B]/95 hover:bg-white dark:hover:bg-[#242428] border border-[#E0E2EC] dark:border-[#27272A] text-[#444746] dark:text-[#A1A1AA] hover:text-[#0F172A] dark:hover:text-[#FFFFFF] shadow-2xs backdrop-blur-md transition cursor-pointer"
+              title="Filtrar búsqueda por presentación o clase"
+            >
+              <span class="material-symbols-outlined text-[15px] text-[#0F172A] dark:text-[#CBD5E1]">layers</span>
+              <span id="footerTopicLabel" class="truncate max-w-[210px] sm:max-w-[320px]">Todas las Clases</span>
+              <span id="footerTopicChevron" class="material-symbols-outlined text-[14px] transition-transform duration-200">expand_more</span>
+            </button>
+
+            <!-- Menú Desplegable de Clases (Abre hacia arriba sobre el input) -->
+            <div
+              id="topicDropdownMenu"
+              class="hidden absolute bottom-full mb-2 left-0 z-50 bg-white/98 dark:bg-[#18181B]/98 backdrop-blur-md border border-[#E0E2EC] dark:border-[#27272A] rounded-[20px] shadow-elevation-3 py-2 w-72 sm:w-84 max-h-80 flex flex-col animate-m3FadeIn text-left select-none"
+            >
+              <div class="px-3.5 py-2 border-b border-[#E0E2EC] dark:border-[#27272A] flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="material-symbols-outlined text-base text-[#0F172A] dark:text-[#FFFFFF]">folder_open</span>
+                  <span class="text-xs font-semibold text-[#1F1F1F] dark:text-[#F4F4F5]">Filtrar por Clase</span>
+                </div>
+                <button
+                  type="button"
+                  onclick="setAllTopics(true)"
+                  class="text-[10px] text-[#747775] dark:text-[#A1A1AA] hover:text-[#0F172A] dark:hover:text-[#FFFFFF] font-medium px-2 py-0.5 rounded-full hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] transition cursor-pointer"
+                >
+                  Restablecer
+                </button>
+              </div>
+              <div id="topicOptionsList" class="overflow-y-auto p-1.5 space-y-1 flex-1"></div>
+            </div>
+          </div>
+
+          <!-- Botón / Chip para restablecer rápidamente el filtro -->
+          <div id="footerTopicResetPill" class="hidden">
+            <button
+              type="button"
+              onclick="setAllTopics(true)"
+              class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium text-[#747775] dark:text-[#A1A1AA] hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition cursor-pointer"
+              title="Quitar filtro de clase y buscar en todo el temario"
+            >
+              <span>Ver todo</span>
+              <span class="material-symbols-outlined text-[13px]">close</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="chatForm" onsubmit="handleChatSubmit(event)" class="relative flex items-center bg-[#F0F4F9]/90 dark:bg-[#18181B]/90 backdrop-blur-md hover:bg-[#E9EEF6] dark:hover:bg-[#202024] focus-within:bg-white dark:focus-within:bg-[#141416] border border-transparent dark:border-[#27272A] focus-within:border-[#0F172A] dark:focus-within:border-[#52525B] rounded-[28px] px-5 py-2.5 shadow-xs focus-within:shadow-elevation-2 transition-all duration-200">
+          
+          <textarea
+            id="userInput"
+            rows="1"
+            placeholder="Escribe tu consulta sobre autómatas, gramáticas o ejercicios..."
+            class="w-full bg-transparent px-2 py-1.5 pr-12 text-sm text-[#1F1F1F] dark:text-[#F4F4F5] placeholder-[#747775] dark:placeholder-[#71717A] resize-none focus:outline-none max-h-32"
+            onkeydown="handleKeyDown(event)"
+          ></textarea>
+          
+          <!-- Botón circular M3 Filled Icon Button con flecha arriba -->
+          <button
+            type="submit"
+            id="sendBtn"
+            class="absolute right-3 w-10 h-10 rounded-full bg-[#0F172A] dark:bg-[#FFFFFF] hover:bg-[#1E293B] dark:hover:bg-[#E4E4E7] text-white dark:text-[#121214] flex items-center justify-center transition shadow-xs disabled:opacity-35 disabled:cursor-not-allowed flex-shrink-0"
+          >
+            <span id="sendIcon" class="material-symbols-outlined text-xl">arrow_upward</span>
+            <div id="spinIcon" class="hidden w-4 h-4 border-2 border-white dark:border-[#121214] border-t-transparent dark:border-t-transparent rounded-full animate-spin"></div>
+          </button>
+        </form>
+
+        <div id="footerHint" class="flex items-center justify-center space-x-2 text-[11px] text-[#747775] dark:text-[#71717A] mt-2.5 text-center">
+          <span><b>Enter</b> para enviar • <b>Shift + Enter</b> para nueva línea</span>
+          <span>•</span>
+          <span>Respaldado por las diapositivas oficiales</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: M3 DIALOG (SIMULADOR DE QUIZ INTERACTIVO)         -->
+  <!-- ======================================================== -->
+  <div id="quizModal" class="hidden fixed inset-0 z-50 bg-[#000000]/65 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#18181B] border border-[#E0E2EC] dark:border-[#27272A] rounded-[28px] max-w-xl w-full p-6 shadow-elevation-3 space-y-5 max-h-[90vh] flex flex-col animate-m3FadeIn text-[#1F1F1F] dark:text-[#F4F4F5]">
+      <div class="flex items-center justify-between border-b border-[#E0E2EC] dark:border-[#27272A] pb-3">
+        <div class="flex items-center space-x-2.5">
+          <span class="material-symbols-outlined filled text-[#0F172A] dark:text-[#FFFFFF] text-2xl">quiz</span>
+          <h3 class="text-base font-semibold text-[#1F1F1F] dark:text-[#FFFFFF]">Simulador de Evaluación</h3>
+        </div>
+        <button onclick="closeQuizModal()" class="w-9 h-9 rounded-full flex items-center justify-center text-[#444746] dark:text-[#A1A1AA] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] transition">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Configuración del Quiz -->
+      <div id="quizSetup" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-[#1F1F1F] dark:text-[#F4F4F5] mb-1.5">Selecciona el tema de la evaluación:</label>
+          <select id="quizTopic" class="m3-select w-full !text-sm !py-2.5">
+            <option value="Autómatas Finitos No Deterministas (AFND)">Autómatas Finitos No Deterministas (AFND)</option>
+            <option value="Autómatas Finitos con Transiciones Épsilon">Autómatas Finitos con Transiciones Épsilon</option>
+            <option value="Autómatas a Pila">Autómatas a Pila (PDA)</option>
+            <option value="Máquinas de Turing">Máquinas de Turing</option>
+            <option value="Lenguajes y Jerarquía de Chomsky">Lenguajes y Jerarquía de Chomsky</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#1F1F1F] dark:text-[#F4F4F5] mb-1.5">Nivel de dificultad:</label>
+          <div class="grid grid-cols-3 gap-2" id="quizDiffSelector">
+            <button
+              type="button"
+              onclick="setQuizDifficulty('facil')"
+              id="quizDiff_facil"
+              class="quiz-diff-chip py-2 px-3 rounded-[14px] text-xs font-medium border border-[#E0E2EC] dark:border-[#27272A] text-[#444746] dark:text-[#A1A1AA] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] transition text-center flex items-center justify-center space-x-1 cursor-pointer"
+            >
+              <span>🟢 Fácil</span>
+            </button>
+            <button
+              type="button"
+              onclick="setQuizDifficulty('medio')"
+              id="quizDiff_medio"
+              class="quiz-diff-chip py-2 px-3 rounded-[14px] text-xs font-semibold bg-[#0F172A] dark:bg-[#FFFFFF] text-white dark:text-[#121214] border border-transparent transition text-center flex items-center justify-center space-x-1 shadow-2xs cursor-pointer"
+            >
+              <span>🟡 Medio</span>
+            </button>
+            <button
+              type="button"
+              onclick="setQuizDifficulty('dificil')"
+              id="quizDiff_dificil"
+              class="quiz-diff-chip py-2 px-3 rounded-[14px] text-xs font-medium border border-[#E0E2EC] dark:border-[#27272A] text-[#444746] dark:text-[#A1A1AA] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] transition text-center flex items-center justify-center space-x-1 cursor-pointer"
+            >
+              <span>🔴 Difícil</span>
+            </button>
+          </div>
+          <input type="hidden" id="quizDifficulty" value="medio">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#1F1F1F] dark:text-[#F4F4F5] mb-1.5">Cantidad de preguntas:</label>
+          <div class="grid grid-cols-3 gap-2" id="quizCountSelector">
+            <button
+              type="button"
+              onclick="setQuizCount(5)"
+              id="quizCount_5"
+              class="quiz-count-chip py-2 px-3 rounded-[14px] text-xs font-semibold bg-[#0F172A] dark:bg-[#FFFFFF] text-white dark:text-[#121214] border border-transparent transition text-center shadow-2xs cursor-pointer"
+            >
+              5 preguntas
+            </button>
+            <button
+              type="button"
+              onclick="setQuizCount(10)"
+              id="quizCount_10"
+              class="quiz-count-chip py-2 px-3 rounded-[14px] text-xs font-medium border border-[#E0E2EC] dark:border-[#27272A] text-[#444746] dark:text-[#A1A1AA] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] transition text-center cursor-pointer"
+            >
+              10 preguntas
+            </button>
+            <button
+              type="button"
+              onclick="setQuizCount(15)"
+              id="quizCount_15"
+              class="quiz-count-chip py-2 px-3 rounded-[14px] text-xs font-medium border border-[#E0E2EC] dark:border-[#27272A] text-[#444746] dark:text-[#A1A1AA] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] transition text-center cursor-pointer"
+            >
+              15 preguntas
+            </button>
+          </div>
+          <input type="hidden" id="quizCount" value="5">
+        </div>
+
+        <button onclick="startQuiz()" id="startQuizBtn" class="w-full py-3 rounded-full bg-[#0F172A] dark:bg-[#FFFFFF] hover:bg-[#1E293B] dark:hover:bg-[#E4E4E7] text-white dark:text-[#121214] font-medium text-sm transition shadow-xs hover:shadow-elevation-1 cursor-pointer">
+          🚀 Iniciar Evaluación
+        </button>
+      </div>
+
+      <!-- Barra de Progreso del Quiz (Sticky Superior) -->
+      <div id="quizProgressWrapper" class="hidden space-y-1.5 pb-2 border-b border-[#E0E2EC] dark:border-[#27272A]">
+        <div class="flex items-center justify-between text-[11px] text-[#747775] dark:text-[#A1A1AA] font-semibold">
+          <span id="quizProgressLabel">Preguntas respondidas: 0 / 5</span>
+          <span id="quizLiveAccuracy" class="text-emerald-600 dark:text-emerald-400 font-bold">0% precisión</span>
+        </div>
+        <div class="w-full bg-[#E0E2EC] dark:bg-[#27272A] h-2 rounded-full overflow-hidden">
+          <div id="quizProgressBar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Contenedor dinámico de preguntas -->
+      <div id="quizQuestionsContainer" class="hidden overflow-y-auto space-y-4 flex-1 pr-1"></div>
+
+      <!-- Footer del Quiz -->
+      <div id="quizFooter" class="hidden border-t border-[#E0E2EC] dark:border-[#27272A] pt-3 flex justify-between items-center text-xs">
+        <span id="quizScoreText" class="font-bold text-[#1F1F1F] dark:text-[#FFFFFF]"></span>
+        <div class="flex items-center space-x-2">
+          <button onclick="resetQuizSetup()" class="px-4 py-2 rounded-full bg-white dark:bg-[#18181B] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] border border-[#E0E2EC] dark:border-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] transition font-medium cursor-pointer">
+            🔄 Nueva prueba
+          </button>
+          <button onclick="closeQuizModal()" class="px-4 py-2 rounded-full bg-[#0F172A] dark:bg-[#FFFFFF] hover:bg-[#1E293B] dark:hover:bg-[#E4E4E7] text-white dark:text-[#121214] transition font-medium cursor-pointer">
+            Finalizar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: SSE, MARKED, KATEX, MERMAID & M3 HANDLERS    -->
+  <!-- ======================================================== -->
+  <script>
+    let currentNivel = 'intuitivo';
+    let isStreaming = false;
+    let chatHistory = [];
+    let isSidebarExpanded = false;
+    let selectedTopics = new Set();   // clases marcadas con checkbox (todas por defecto)
+    let availableTopicsList = [];
+    let activeConversationId = null;
+    let conversationsList = [];
+
+    // ========================================================
+    // 🌓 ENGINE DE MODO OSCURO / CLARO
+    // ========================================================
+    function initTheme() {
+      const savedTheme = localStorage.getItem('aulaia_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = savedTheme ? (savedTheme === 'dark') : prefersDark;
+      applyTheme(isDark);
+    }
+
+    function toggleTheme() {
+      const isCurrentlyDark = document.documentElement.classList.contains('dark');
+      const newTheme = !isCurrentlyDark;
+      
+      const icon = document.getElementById('themeToggleIcon');
+      if (icon) {
+        icon.classList.add('rotate-[360deg]');
+        setTimeout(() => icon.classList.remove('rotate-[360deg]'), 350);
+      }
+
+      applyTheme(newTheme);
+      localStorage.setItem('aulaia_theme', newTheme ? 'dark' : 'light');
+      
+      // Re-renderizar diagramas Mermaid existentes con la paleta activa
+      reRenderAllMermaidDiagrams();
+    }
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      // Actualizar UI del botón toggle del sidebar
+      const icon = document.getElementById('themeToggleIcon');
+      const label = document.getElementById('themeToggleLabel');
+      const tooltip = document.getElementById('themeTooltip');
+
+      if (icon) {
+        icon.innerText = isDark ? 'light_mode' : 'dark_mode';
+      }
+      if (label) {
+        label.innerText = isDark ? 'Modo Claro' : 'Modo Oscuro';
+      }
+      if (tooltip) {
+        tooltip.innerText = isDark ? 'Modo Claro' : 'Modo Oscuro';
+      }
+
+      // Inicializar Mermaid acorde al tema
+      initMermaid(isDark);
+
+      // Re-sincronizar el nivel pedagógico activo y el menú
+      if (typeof currentNivel !== 'undefined') {
+        setNivel(currentNivel);
+      }
+      if (typeof renderTopicMenuOptions === 'function') {
+        renderTopicMenuOptions();
+      }
+    }
+
+    async function reRenderAllMermaidDiagrams() {
+      const isDark = document.documentElement.classList.contains('dark');
+      initMermaid(isDark);
+      const cards = document.querySelectorAll('.mermaid-card[data-mermaid-src]');
+      for (const card of cards) {
+        const raw = card.getAttribute('data-mermaid-src');
+        if (raw) {
+          card.removeAttribute('data-processed');
+          card.innerHTML = `<div class="mermaid w-full text-center flex justify-center">${raw}</div>`;
+        }
+      }
+      if (cards.length > 0 && window.mermaid) {
+        try {
+          await mermaid.run();
+        } catch (e) {
+          console.warn("Mermaid re-render note:", e);
+        }
+      }
+    }
+
+    // Inicialización del Sistema
+    window.addEventListener('DOMContentLoaded', async () => {
+      initTheme();
+      loadTopics();
+      initAuroraInteractivity();
+      await loadChatHistory();
+
+      // Verificar si viene una consulta inicial desde la Landing Page
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryParam = urlParams.get('q') || urlParams.get('prompt');
+        const convParam = urlParams.get('c');
+        if (convParam && !queryParam) {
+          await selectConversation(convParam);
+        } else if (queryParam) {
+          setTimeout(() => {
+            sendQuickPrompt(queryParam);
+          }, 350);
+        }
+      } catch (err) {
+        console.warn("Error leyendo parámetro de URL:", err);
+      }
+    });
+
+    // Toggle Sidebar: alterna entre modo contraído flotante y expandido
+    function toggleSidebar() {
+      isSidebarExpanded = !isSidebarExpanded;
+      closeModeMenu();
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      
+      closeTopicMenu();
+
+      if (isSidebarExpanded) {
+        sidebar.classList.add('sidebar-expanded');
+        if (window.innerWidth < 1024) {
+          overlay.classList.remove('hidden');
+        }
+      } else {
+        sidebar.classList.remove('sidebar-expanded');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Efecto interactivo: Parallax atmosférico de la Aurora Boreal al mover el mouse
+    function initAuroraInteractivity() {
+      window.addEventListener('mousemove', (e) => {
+        const welcome = document.getElementById('welcomeView');
+        if (!welcome || welcome.classList.contains('hidden')) return;
+
+        const aurora = document.getElementById('auroraContainer');
+        if (aurora) {
+          const offsetX = (e.clientX - window.innerWidth / 2) / 55;
+          const offsetY = (e.clientY - window.innerHeight / 2) / 55;
+          aurora.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        }
+      });
+    }
+
+    // ========================================================
+    // 📚 CONTROL CUSTOM DE DOCUMENTOS DE CLASE (M3 MENU POPOVER)
+    // ========================================================
+    async function loadTopics() {
+      try {
+        const res = await fetch('/api/topics');
+        availableTopicsList = await res.json();
+        selectedTopics = new Set(availableTopicsList);
+        updateTopicUI();
+      } catch (e) {
+        console.warn("Nota: No se pudieron cargar los temas de clase:", e);
+      }
+    }
+
+    function topicDisplayName(t) {
+      return t.replace(/\.(pptx|pdf|md)$/i, '');
+    }
+
+    function allTopicsSelected() {
+      return availableTopicsList.length > 0 && selectedTopics.size === availableTopicsList.length;
+    }
+
+    // Lista de clases a enviar al backend (null = buscar en todo el temario)
+    function getTopicFilterPayload() {
+      if (selectedTopics.size === 0 || allTopicsSelected()) return null;
+      return availableTopicsList.filter(t => selectedTopics.has(t));
+    }
+
+    function topicSummaryLabel() {
+      const n = selectedTopics.size;
+      if (n === 0) return 'Ninguna clase (se usará todo)';
+      if (allTopicsSelected()) return 'Todas las Clases';
+      if (n === 1) return topicDisplayName([...selectedTopics][0]);
+      return `${n} clases seleccionadas`;
+    }
+
+    function buildTopicChecklistHTML(prefix) {
+      const all = allTopicsSelected();
+      const some = selectedTopics.size > 0 && !all;
+      let html = `
+        <label class="flex items-center space-x-3 px-3.5 py-2 rounded-full text-xs cursor-pointer transition hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] text-[#1F1F1F] dark:text-[#F4F4F5] font-semibold">
+          <input type="checkbox" class="topic-check" id="${prefix}_all" ${all ? 'checked' : ''} data-indeterminate="${some}" onchange="setAllTopics(this.checked)">
+          <span class="truncate">Todas las Clases</span>
+        </label>
+        <div class="h-px bg-[#E5E7EB] dark:bg-[#27272A] mx-3.5 my-1"></div>
+      `;
+      availableTopicsList.forEach((t, i) => {
+        const checked = selectedTopics.has(t);
+        const name = escapeText(topicDisplayName(t));
+        html += `
+          <label class="flex items-center space-x-3 px-3.5 py-2 rounded-full text-xs cursor-pointer transition hover:bg-[#E5E7EB] dark:hover:bg-[#27272A] ${checked ? 'text-[#0F172A] dark:text-[#FFFFFF] font-medium' : 'text-[#747775] dark:text-[#71717A]'}" title="${name}">
+            <input type="checkbox" class="topic-check" ${checked ? 'checked' : ''} onchange="toggleTopicChecked(${i}, this.checked)">
+            <span class="truncate">${name}</span>
+          </label>
+        `;
+      });
+      return html;
+    }
+
+    function renderTopicMenuOptions() {
+      const targets = [
+        ['topicOptionsList', 'pop'],
+        ['topicAccordionList', 'side']
+      ];
+      for (const [id, prefix] of targets) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        el.innerHTML = buildTopicChecklistHTML(prefix);
+        el.querySelectorAll('input[data-indeterminate="true"]').forEach(cb => { cb.indeterminate = true; });
+      }
+      const count = document.getElementById('topicCountLabel');
+      if (count) count.textContent = `Clases cargadas · ${selectedTopics.size}/${availableTopicsList.length}`;
+      refreshTopicAccordionHeight();
+    }
+
+    function updateTopicUI() {
+      const label = topicSummaryLabel();
+      const sideLabel = document.getElementById('topicSelectedLabel');
+      if (sideLabel) sideLabel.innerText = label;
+      const footerLabel = document.getElementById('footerTopicLabel');
+      if (footerLabel) footerLabel.innerText = label;
+
+      const filtered = getTopicFilterPayload() !== null;
+      const footerBtn = document.getElementById('footerTopicBtn');
+      const resetPill = document.getElementById('footerTopicResetPill');
+      const badge = document.getElementById('topicActiveBadge');
+      const activeCls = ['bg-[#E2E8F0]', 'dark:bg-[#27272A]', 'text-[#0F172A]', 'dark:text-[#FFFFFF]', 'border-slate-400', 'font-semibold'];
+      if (badge) badge.classList.toggle('hidden', !filtered);
+      if (resetPill) resetPill.classList.toggle('hidden', !filtered);
+      if (footerBtn) activeCls.forEach(c => footerBtn.classList.toggle(c, filtered));
+
+      renderTopicMenuOptions();
+    }
+
+    function toggleTopicChecked(index, checked) {
+      const t = availableTopicsList[index];
+      if (!t) return;
+      if (checked) selectedTopics.add(t); else selectedTopics.delete(t);
+      updateTopicUI();
+    }
+
+    function setAllTopics(checked) {
+      selectedTopics = checked ? new Set(availableTopicsList) : new Set();
+      updateTopicUI();
+    }
+
+    // ---- Acordeón del sidebar ----
+    function refreshTopicAccordionHeight() {
+      const acc = document.getElementById('topicAccordion');
+      if (acc && acc.classList.contains('open')) {
+        acc.style.maxHeight = acc.scrollHeight + 'px';
+      }
+    }
+
+    function toggleTopicAccordion(e, forceOpen) {
+      if (e) e.stopPropagation();
+      const acc = document.getElementById('topicAccordion');
+      const chevron = document.getElementById('topicChevron');
+      if (!acc) return;
+      const open = forceOpen === undefined ? !acc.classList.contains('open') : forceOpen;
+      acc.classList.toggle('open', open);
+      acc.setAttribute('aria-hidden', open ? 'false' : 'true');
+      acc.style.maxHeight = open ? acc.scrollHeight + 'px' : '0px';
+      if (chevron) chevron.classList.toggle('rotate-180', open);
+      if (open) {
+        setTimeout(() => acc.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 270);
+      }
+    }
+
+    function openTopicAccordionFromRail(e) {
+      if (e) e.stopPropagation();
+      if (!isSidebarExpanded) toggleSidebar();
+      setTimeout(() => toggleTopicAccordion(null, true), 120);
+    }
+
+    // Compatibilidad: selección única
+    function selectTopic(topicValue) {
+      if (!topicValue) setAllTopics(true);
+      else { selectedTopics = new Set([topicValue]); updateTopicUI(); }
+      closeTopicMenu();
+    }
+
+    function toggleTopicMenu(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('topicDropdownMenu');
+      const footerChevron = document.getElementById('footerTopicChevron');
+      const sideChevron = document.getElementById('topicChevron');
+      if (!menu) return;
+
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (footerChevron) footerChevron.classList.add('rotate-180');
+      } else {
+        closeTopicMenu();
+      }
+    }
+
+    function closeTopicMenu() {
+      const menu = document.getElementById('topicDropdownMenu');
+      const footerChevron = document.getElementById('footerTopicChevron');
+      const sideChevron = document.getElementById('topicChevron');
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        if (footerChevron) footerChevron.classList.remove('rotate-180');
+      }
+    }
+
+    // Cerrar el menú si se hace clic fuera o se pulsa Escape
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('topicDropdownMenu');
+      const footerBtn = document.getElementById('footerTopicBtn');
+      const sideBtn1 = document.getElementById('topicTriggerCollapsed');
+      const sideBtn2 = document.getElementById('topicTriggerExpanded');
+      if (menu && !menu.classList.contains('hidden')) {
+        const isClickInside = menu.contains(e.target) || 
+                              (footerBtn && footerBtn.contains(e.target)) || 
+                              (sideBtn1 && sideBtn1.contains(e.target)) || 
+                              (sideBtn2 && sideBtn2.contains(e.target));
+        if (!isClickInside) {
+          closeTopicMenu();
+        }
+      }
+
+      // Cerrar menú de modos si se hace clic fuera
+      const modeMenu = document.getElementById('modeDropdownMenu');
+      const modeBtn = document.getElementById('btnModoSmart');
+      if (modeMenu && modeMenu.classList.contains('open')) {
+        if (!modeMenu.contains(e.target) && (!modeBtn || !modeBtn.contains(e.target))) {
+          closeModeMenu();
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeTopicMenu();
+        closeModeMenu();
+      }
+    });
+
+    // ========================================================
+    // SELECTOR INTELIGENTE DE MODO PEDAGÓGICO (3 EN 1)
+    // ========================================================
+    function positionModePopover() {
+      const menu = document.getElementById('modeDropdownMenu');
+      const btn = document.getElementById('btnModoSmart');
+      if (!menu || !btn) return;
+      if (isSidebarExpanded) {            // acordeón dentro del sidebar: sin posición fija
+        menu.style.left = '';
+        menu.style.top = '';
+        return;
+      }
+      const r = btn.getBoundingClientRect();
+      const menuH = menu.offsetHeight || 230;
+      const top = Math.max(8, Math.min(r.top - 6, window.innerHeight - menuH - 8));
+      menu.style.left = (r.right + 12) + 'px';
+      menu.style.top = top + 'px';
+    }
+
+    function toggleModeMenu(e, forceOpen) {
+      if (e) e.stopPropagation();
+      closeTopicMenu();
+      const menu = document.getElementById('modeDropdownMenu');
+      const btn = document.getElementById('btnModoSmart');
+      const wrapper = document.getElementById('modeSelectorWrapper');
+      const chevron = document.getElementById('modeChevron');
+      if (!menu) return;
+      const open = forceOpen === undefined ? !menu.classList.contains('open') : forceOpen;
+      menu.classList.toggle('open', open);
+      menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+      if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (wrapper) wrapper.classList.toggle('menu-open', open);
+      if (chevron) chevron.classList.toggle('rotate-180', open);
+      if (open) {
+        positionModePopover();
+        const sel = menu.querySelector('.mode-opt.selected') || menu.querySelector('.mode-opt');
+        if (sel && !isSidebarExpanded) sel.focus({ preventScroll: true });
+      }
+    }
+
+    function closeModeMenu() {
+      toggleModeMenu(null, false);
+    }
+
+    let modeToastTimer = null;
+    function showModeToast(icon, text) {
+      let toast = document.getElementById('modeToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'modeToast';
+        toast.setAttribute('role', 'status');
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<span class="material-symbols-outlined">${icon}</span><span>${text}</span>`;
+      requestAnimationFrame(() => toast.classList.add('show'));
+      clearTimeout(modeToastTimer);
+      modeToastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+    }
+
+    // Elegido por el usuario desde el menú: aplica, cierra y avisa
+    function selectModeOption(nivel) {
+      const changed = nivel !== currentNivel;
+      setNivel(nivel);
+      closeModeMenu();
+      if (changed) {
+        const names = { intuitivo: 'Modo Intuitivo activado', formal: 'Modo Formal activado', codigo: 'Modo Código Python activado' };
+        const icons = { intuitivo: 'lightbulb', formal: 'menu_book', codigo: 'terminal' };
+        showModeToast(icons[nivel] || 'check', names[nivel] || 'Modo actualizado');
+        const icon = document.getElementById('smartModeIcon');
+        if (icon) {
+          icon.classList.add('scale-125');
+          setTimeout(() => icon.classList.remove('scale-125'), 220);
+        }
+      }
+    }
+
+    window.addEventListener('resize', () => closeModeMenu());
+
+    function setNivel(nivel) {
+      currentNivel = nivel;
+      const isDark = document.documentElement.classList.contains('dark');
+      const modeData = {
+        intuitivo: { name: 'Modo Intuitivo', icon: 'lightbulb' },
+        formal: { name: 'Modo Formal', icon: 'menu_book' },
+        codigo: { name: 'Modo Código Python', icon: 'terminal' }
+      };
+
+      const current = modeData[nivel] || modeData.intuitivo;
+
+      // 1. Actualizar icono del botón inteligente principal
+      const smartIcon = document.getElementById('smartModeIcon');
+      if (smartIcon) {
+        smartIcon.innerText = current.icon;
+      }
+
+      // 2. Actualizar etiquetas y tooltips
+      const smartLabel = document.getElementById('smartModeLabel');
+      if (smartLabel) {
+        smartLabel.innerText = current.name;
+      }
+      const smartTooltip = document.getElementById('smartModeTooltip');
+      if (smartTooltip) {
+        smartTooltip.innerText = current.name;
+      }
+
+      // 3. Marcar la opción activa dentro del menú
+      document.querySelectorAll('#modeDropdownMenu .mode-opt').forEach(btn => {
+        const isSel = btn.dataset.mode === nivel;
+        btn.classList.toggle('selected', isSel);
+        btn.setAttribute('aria-checked', isSel ? 'true' : 'false');
+      });
+
+    }
+
+    function sendQuickPrompt(text) {
+      document.getElementById('userInput').value = text;
+      handleChatSubmit(new Event('submit'));
+    }
+
+    function handleKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleChatSubmit(e);
+      }
+    }
+
+    // Mantiene la URL sincronizada con la conversación activa (como Gemini: recargar conserva el chat)
+    function syncConversationUrl() {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('q');
+        url.searchParams.delete('prompt');
+        if (activeConversationId) url.searchParams.set('c', activeConversationId);
+        else url.searchParams.delete('c');
+        window.history.replaceState(null, '', url.pathname + url.search);
+      } catch (e) { /* sin URL API: ignorar */ }
+    }
+
+    function startNewConversation() {
+      if (isStreaming) return;
+      activeConversationId = null;
+      syncConversationUrl();
+      chatHistory = [];
+      document.getElementById('messagesList').innerHTML = '';
+      document.getElementById('welcomeView').classList.remove('hidden');
+      const aurora = document.getElementById('auroraContainer');
+      if (aurora) aurora.classList.remove('aurora-subtle');
+      renderChatHistoryItems();
+      document.getElementById('userInput').focus();
+      if (window.innerWidth < 1024 && isSidebarExpanded) {
+        toggleSidebar();
+      }
+    }
+
+    function clearChat() {
+      startNewConversation();
+    }
+
+    // ========================================================
+    // GESTIÓN DE HISTORIAL DE CHATS SQLITE (ESTILO GEMINI)
+    // ========================================================
+    async function loadChatHistory() {
+      try {
+        const res = await fetch('/api/chats');
+        if (res.ok) {
+          conversationsList = await res.json();
+          renderChatHistoryItems();
+        }
+      } catch (err) {
+        console.warn("No se pudo cargar el historial de chats:", err);
+      }
+    }
+
+    function renderChatHistoryItems() {
+      const container = document.getElementById('chatHistoryList');
+      if (!container) return;
+
+      if (!conversationsList || conversationsList.length === 0) {
+        container.innerHTML = `
+          <div class="px-2 py-4 text-center text-[11px] text-[#747775] dark:text-[#A1A1AA]">
+            Sin consultas previas
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = conversationsList.map(c => {
+        const isActive = (c.id === activeConversationId);
+        const activeClass = isActive
+          ? "bg-[#E2E8F0] dark:bg-[#27272A] text-[#0F172A] dark:text-[#FFFFFF] font-semibold shadow-2xs border-l-2 border-[#0F172A] dark:border-[#FFFFFF]"
+          : "text-[#444746] dark:text-[#D4D4D8] hover:bg-[#F0F4F9] dark:hover:bg-[#202023] hover:text-[#1F1F1F] dark:hover:text-[#FFFFFF]";
+
+        return `
+          <div
+            onclick="selectConversation('${c.id}')"
+            class="group/chat-item w-full flex items-center justify-between px-2.5 py-2 rounded-[12px] text-xs transition cursor-pointer ${activeClass}"
+            title="${escapeHtml(c.title)} • ${c.updated_at || ''}"
+          >
+            <div class="flex items-center space-x-2 truncate pr-1 flex-1">
+              <span class="material-symbols-outlined text-[16px] flex-shrink-0 opacity-70 group-hover/chat-item:opacity-100">chat_bubble_outline</span>
+              <span class="chat-title truncate" data-conv-id="${c.id}">${escapeText(c.title)}</span>
+            </div>
+            <button
+              type="button"
+              onclick="startRenameConversation('${c.id}', event)"
+              class="opacity-0 group-hover/chat-item:opacity-100 p-1 rounded-md hover:bg-[#E2E8F0] dark:hover:bg-[#3F3F46] text-[#747775] dark:text-[#A1A1AA] transition flex-shrink-0 cursor-pointer"
+              title="Renombrar conversación"
+            >
+              <span class="material-symbols-outlined text-[15px]">edit</span>
+            </button>
+            <button
+              type="button"
+              onclick="deleteConversation('${c.id}', event)"
+              class="opacity-0 group-hover/chat-item:opacity-100 p-1 rounded-md hover:bg-rose-100 dark:hover:bg-rose-950/60 hover:text-rose-600 dark:hover:text-rose-400 text-[#747775] dark:text-[#A1A1AA] transition flex-shrink-0 cursor-pointer"
+              title="Eliminar conversación"
+            >
+              <span class="material-symbols-outlined text-[15px]">delete_outline</span>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function selectConversation(convId) {
+      if (isStreaming) return;
+      activeConversationId = convId;
+      renderChatHistoryItems();
+
+      try {
+        const res = await fetch(`/api/chats/${convId}`);
+        if (!res.ok) {
+          activeConversationId = null;
+          syncConversationUrl();
+          renderChatHistoryItems();
+          throw new Error("No se pudo cargar la conversación.");
+        }
+        syncConversationUrl();
+        const conv = await res.json();
+
+        chatHistory = [];
+        const messagesList = document.getElementById('messagesList');
+        messagesList.innerHTML = '';
+        document.getElementById('welcomeView').classList.add('hidden');
+        const aurora = document.getElementById('auroraContainer');
+        if (aurora) aurora.classList.add('aurora-subtle');
+
+        for (const msg of conv.messages) {
+          if (msg.role === 'user') {
+            appendUserMessage(msg.content);
+            chatHistory.push({ role: 'user', content: msg.content });
+          } else if (msg.role === 'assistant') {
+            renderAssistantHistoricalMessage(msg.content, msg.sources);
+            chatHistory.push({ role: 'assistant', content: msg.content });
+          }
+        }
+
+        await renderMermaidBlocks(messagesList);
+        scrollToBottom();
+
+        if (window.innerWidth < 1024 && isSidebarExpanded) {
+          toggleSidebar();
+        }
+      } catch (err) {
+        console.error("Error al seleccionar conversación:", err);
+      }
+    }
+
+    function startRenameConversation(convId, e) {
+      if (e) e.stopPropagation();
+      const span = document.querySelector(`.chat-title[data-conv-id="${convId}"]`);
+      if (!span) return;
+      const current = (conversationsList.find(c => c.id === convId) || {}).title || '';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = current;
+      input.maxLength = 80;
+      input.className = 'flex-1 min-w-0 bg-white dark:bg-[#18181B] border border-[#CBD5E1] dark:border-[#3F3F46] rounded-md px-1.5 py-0.5 text-xs outline-none focus:ring-1 focus:ring-[#0F172A] dark:focus:ring-white';
+      input.onclick = (ev) => ev.stopPropagation();
+      let finished = false;
+      const finish = async (save) => {
+        if (finished) return;
+        finished = true;
+        const title = input.value.trim();
+        if (save && title && title !== current) {
+          try {
+            await fetch(`/api/chats/${convId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ title })
+            });
+          } catch (err) {
+            console.error("Error al renombrar conversación:", err);
+          }
+        }
+        await loadChatHistory();
+      };
+      input.onkeydown = (ev) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); finish(true); }
+        else if (ev.key === 'Escape') { ev.preventDefault(); finish(false); }
+      };
+      input.onblur = () => finish(true);
+      span.replaceWith(input);
+      input.focus();
+      input.select();
+    }
+
+    async function deleteConversation(convId, e) {
+      if (e) e.stopPropagation();
+      try {
+        const res = await fetch(`/api/chats/${convId}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error("Falla al eliminar la conversación");
+        if (activeConversationId === convId) {
+          startNewConversation();
+        }
+        await loadChatHistory();
+      } catch (err) {
+        console.error("Error al eliminar conversación:", err);
+      }
+    }
+
+    function renderAssistantHistoricalMessage(content, sources) {
+      const container = document.getElementById('messagesList');
+      const div = document.createElement('div');
+      div.className = "flex space-x-3.5 items-start animate-m3FadeIn";
+      div.dataset.rawAnswer = content;
+      div.innerHTML = `
+        <div class="bot-avatar w-8 h-8 rounded-full bg-[#0F172A] dark:bg-[#27272A] border border-transparent dark:border-[#3F3F46] text-white dark:text-[#FFFFFF] flex-shrink-0 flex items-center justify-center shadow-xs mt-0.5">
+          <span class="material-symbols-outlined filled text-sm">auto_awesome</span>
+        </div>
+        <div class="flex-1 min-w-0 space-y-2">
+          <div class="bot-text prose-custom text-sm text-[#1F1F1F] dark:text-[#F4F4F5] leading-relaxed">
+            ${renderMarkdownAndMath(content)}
+          </div>
+          <div class="bot-sources ${sources && sources.length > 0 ? '' : 'hidden'} pt-2"></div>
+          <div class="bot-actions pt-2 flex items-center space-x-2 select-none">
+            <button
+              type="button"
+              onclick="copyAssistantResponse(this)"
+              class="copy-btn inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-[8px] text-[#747775] dark:text-[#A1A1AA] hover:text-[#0F172A] dark:hover:text-[#FFFFFF] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] border border-transparent hover:border-[#E0E2EC] dark:hover:border-[#3F3F46] transition text-xs cursor-pointer group"
+              title="Copiar respuesta"
+            >
+              <span class="material-symbols-outlined text-[16px] transition-transform group-hover:scale-110">content_copy</span>
+              <span class="copy-label text-[11px] font-medium">Copiar</span>
+            </button>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+      if (sources && sources.length > 0) {
+        const sContainer = div.querySelector('.bot-sources');
+        renderSourcesList(sContainer, sources);
+      }
+    }
+
+    // ========================================================
+    // ENVÍO DE MENSAJE Y PARSER SERVER-SENT EVENTS (SSE)
+    // ========================================================
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      if (isStreaming) return;
+
+      const input = document.getElementById('userInput');
+      const query = input.value.trim();
+      if (!query) return;
+
+      input.value = '';
+      document.getElementById('welcomeView').classList.add('hidden');
+      const aurora = document.getElementById('auroraContainer');
+      if (aurora) aurora.classList.add('aurora-subtle');
+
+      // 1. Mensaje del usuario (M3 Primary Container)
+      appendUserMessage(query);
+
+      // 2. Placeholder para respuesta de AulaIA
+      const assistantMsg = createAssistantMessagePlaceholder();
+      const textContainer = assistantMsg.querySelector('.bot-text');
+      const sourcesContainer = assistantMsg.querySelector('.bot-sources');
+      const thinkingIcon = assistantMsg.querySelector('.thinking-icon');
+      const thinkingLabel = assistantMsg.querySelector('.thinking-label');
+      const botActions = assistantMsg.querySelector('.bot-actions');
+
+      const startTime = performance.now();
+      let firstTokenReceived = false;
+
+      setStreamingState(true);
+      closeTopicMenu();
+
+      const topicFilter = getTopicFilterPayload();
+
+      try {
+        const response = await fetch('/api/chat/stream', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pregunta: query,
+            nivel: currentNivel,
+            temas_filtro: topicFilter,
+            historial: chatHistory.slice(-6),
+            conversation_id: activeConversationId
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error en el servidor: ${response.statusText}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let fullAnswer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const normalized = buffer.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+          const events = normalized.split('\n\n');
+          buffer = events.pop() || '';
+
+          for (const ev of events) {
+            if (!ev.trim()) continue;
+            let eventType = 'message';
+            let dataLines = [];
+
+            ev.split('\n').forEach(line => {
+              const trimmed = line.trim();
+              if (trimmed.startsWith('event:')) {
+                eventType = trimmed.substring(6).trim();
+              } else if (trimmed.startsWith('data:')) {
+                dataLines.push(trimmed.substring(5).trim());
+              }
+            });
+
+            const eventData = dataLines.join('\n');
+            if (eventData) {
+              try {
+                const parsed = JSON.parse(eventData);
+
+                if (eventType === 'conversation') {
+                  activeConversationId = parsed.conversation_id;
+                  syncConversationUrl();
+                } else if (eventType === 'sources') {
+                  renderSourcesList(sourcesContainer, parsed);
+                } else if (eventType === 'reset') {
+                  // El servidor reintenta la respuesta (Gemini falló a mitad): borrar el texto parcial
+                  fullAnswer = '';
+                  textContainer.innerHTML = '';
+                  if (thinkingLabel) thinkingLabel.textContent = 'Reintentando…';
+                  if (thinkingIcon) thinkingIcon.classList.add('animate-pulse');
+                  firstTokenReceived = false;
+                } else if (eventType === 'token') {
+                  if (!firstTokenReceived) {
+                    firstTokenReceived = true;
+                    const thinkSecs = ((performance.now() - startTime) / 1000).toFixed(1);
+                    if (thinkingIcon) thinkingIcon.classList.remove('animate-pulse');
+                    if (thinkingLabel) thinkingLabel.textContent = `Pensó durante ${thinkSecs}s`;
+                  }
+                  fullAnswer += parsed.text;
+                  textContainer.innerHTML = renderMarkdownAndMath(fullAnswer);
+                  scrollToBottom();
+                } else if (eventType === 'done') {
+                  if (!firstTokenReceived) {
+                    const thinkSecs = ((performance.now() - startTime) / 1000).toFixed(1);
+                    if (thinkingIcon) thinkingIcon.classList.remove('animate-pulse');
+                    if (thinkingLabel) thinkingLabel.textContent = `Pensó durante ${thinkSecs}s`;
+                  }
+                  textContainer.innerHTML = renderMarkdownAndMath(fullAnswer);
+                  renderMermaidBlocks(textContainer);
+                  if (botActions) {
+                    botActions.classList.remove('hidden');
+                    assistantMsg.dataset.rawAnswer = fullAnswer;
+                  }
+                  chatHistory.push({ role: 'user', content: query });
+                  chatHistory.push({ role: 'assistant', content: fullAnswer });
+                  await loadChatHistory();
+                } else if (eventType === 'error') {
+                  if (thinkingIcon) thinkingIcon.classList.remove('animate-pulse');
+                  if (thinkingLabel) thinkingLabel.textContent = `Error en consulta`;
+                  textContainer.innerHTML += `<div class="p-3.5 my-2 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200 text-xs">${parsed.error}</div>`;
+                }
+              } catch (parseErr) {
+                console.warn("Fragmento parcial SSE:", parseErr, eventData);
+              }
+            }
+          }
+        }
+
+      } catch (err) {
+        if (thinkingIcon) thinkingIcon.classList.remove('animate-pulse');
+        if (thinkingLabel) thinkingLabel.textContent = `Error de conexión`;
+        textContainer.innerHTML = `<div class="text-rose-600 dark:text-rose-400 text-sm">❌ Error al conectar con el asistente: ${err.message}</div>`;
+      } finally {
+        setStreamingState(false);
+        scrollToBottom();
+      }
+    }
+
+    // ========================================================
+    // HELPERS DEL DOM Y RENDERIZADO
+    // ========================================================
+    function appendUserMessage(text) {
+      const container = document.getElementById('messagesList');
+      const div = document.createElement('div');
+      div.className = "flex justify-end animate-m3FadeIn";
+      div.innerHTML = `
+        <div class="user-bubble max-w-[85%] sm:max-w-[75%] bg-[#0F172A] dark:bg-[#27272A] border border-transparent dark:border-[#3F3F46] text-white dark:text-[#F4F4F5] rounded-[20px] rounded-tr-[4px] px-5 py-3 text-sm shadow-elevation-1 leading-relaxed">
+          ${text.replace(/\n/g, '<br>')}
+        </div>
+      `;
+      container.appendChild(div);
+      scrollToBottom();
+    }
+
+    function createAssistantMessagePlaceholder() {
+      const container = document.getElementById('messagesList');
+      const div = document.createElement('div');
+      div.className = "flex space-x-3.5 items-start animate-m3FadeIn";
+      div.innerHTML = `
+        <div class="bot-avatar w-8 h-8 rounded-full bg-[#0F172A] dark:bg-[#27272A] border border-transparent dark:border-[#3F3F46] text-white dark:text-[#FFFFFF] flex-shrink-0 flex items-center justify-center shadow-xs mt-0.5">
+          <span class="material-symbols-outlined filled text-sm">auto_awesome</span>
+        </div>
+        <div class="flex-1 min-w-0 space-y-2">
+          <!-- Indicador de pensamiento estilo Antigravity CLI / Gemini -->
+          <div class="bot-thinking-badge inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-[#444746] dark:text-[#A1A1AA] bg-[#F0F4F9] dark:bg-[#18181B] border border-[#E0E2EC] dark:border-[#27272A] mb-1 select-none shadow-2xs">
+            <span class="material-symbols-outlined text-[15px] text-[#0F172A] dark:text-[#E2E8F0] animate-pulse thinking-icon">psychology</span>
+            <span class="thinking-label text-[11px]">Pensando...</span>
+          </div>
+
+          <div class="bot-text prose-custom text-sm text-[#1F1F1F] dark:text-[#F4F4F5] leading-relaxed">
+            <div class="flex items-center space-x-2 text-[#747775] dark:text-[#A1A1AA] text-xs py-1">
+              <div class="w-3.5 h-3.5 border-2 border-[#0F172A] dark:border-[#FFFFFF] border-t-transparent dark:border-t-transparent rounded-full animate-spin"></div>
+              <span>Consultando diapositivas de clase...</span>
+            </div>
+          </div>
+          <div class="bot-sources hidden pt-2"></div>
+
+          <!-- Barra de Acciones del Asistente (Botón Copiar) -->
+          <div class="bot-actions hidden pt-2 flex items-center space-x-2 select-none">
+            <button
+              type="button"
+              onclick="copyAssistantResponse(this)"
+              class="copy-btn inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-[8px] text-[#747775] dark:text-[#A1A1AA] hover:text-[#0F172A] dark:hover:text-[#FFFFFF] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] border border-transparent hover:border-[#E0E2EC] dark:hover:border-[#3F3F46] transition text-xs cursor-pointer group"
+              title="Copiar respuesta"
+            >
+              <span class="material-symbols-outlined text-[16px] transition-transform group-hover:scale-110">content_copy</span>
+              <span class="copy-label text-[11px] font-medium">Copiar</span>
+            </button>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+      return div;
+    }
+
+    function copyAssistantResponse(btn) {
+      const msg = btn.closest('.animate-m3FadeIn');
+      const textToCopy = msg?.dataset?.rawAnswer || msg?.querySelector('.bot-text')?.innerText || '';
+      if (!textToCopy) return;
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const icon = btn.querySelector('.material-symbols-outlined');
+        const label = btn.querySelector('.copy-label');
+        if (!icon || !label) return;
+        const originalIcon = icon.innerText;
+        const originalLabel = label.innerText;
+
+        icon.innerText = 'check';
+        icon.classList.add('text-emerald-600', 'dark:text-emerald-400');
+        label.innerText = 'Copiado';
+        label.classList.add('text-emerald-600', 'dark:text-emerald-400');
+
+        setTimeout(() => {
+          icon.innerText = originalIcon;
+          icon.classList.remove('text-emerald-600', 'dark:text-emerald-400');
+          label.innerText = originalLabel;
+          label.classList.remove('text-emerald-600', 'dark:text-emerald-400');
+        }, 2000);
+      }).catch(err => {
+        console.warn("Fallo al copiar texto:", err);
+      });
+    }
+
+    function renderSourcesList(container, sources) {
+      if (!sources || sources.length === 0) return;
+      container.classList.remove('hidden');
+      container.innerHTML = `
+        <details class="group cursor-pointer">
+          <summary class="source-summary text-xs font-medium text-[#444746] dark:text-[#A1A1AA] hover:text-[#1F1F1F] dark:hover:text-[#FFFFFF] list-none flex items-center space-x-1.5 transition">
+            <span class="material-symbols-outlined text-sm">search</span>
+            <span>Fuentes consultadas (${sources.length} diapositivas)</span>
+            <span class="source-pill text-[10px] bg-[#E2E8F0] dark:bg-[#27272A] border border-transparent dark:border-[#3F3F46] text-[#0F172A] dark:text-[#FFFFFF] px-2 py-0.5 rounded-full ml-1 font-medium">Ver</span>
+          </summary>
+          <div class="grid grid-cols-1 gap-2 pt-2.5">
+            ${sources.map(s => `
+              <div class="source-item-card p-3 rounded-[14px] bg-[#F0F4F9] dark:bg-[#18181B] border border-[#E0E2EC] dark:border-[#27272A] text-xs">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="source-item-title font-medium text-[#1F1F1F] dark:text-[#FFFFFF] truncate max-w-[70%]">${s.archivo}</span>
+                  <span class="source-pill px-2 py-0.5 rounded-full bg-[#E2E8F0] dark:bg-[#27272A] border border-transparent dark:border-[#3F3F46] text-[#0F172A] dark:text-[#FFFFFF] font-medium text-[10px]">Slide ${s.slide}</span>
+                </div>
+                <p class="source-item-extract text-[#444746] dark:text-[#A1A1AA] text-[11px] line-clamp-2 italic">${s.extracto}</p>
+              </div>
+            `).join('')}
+          </div>
+        </details>
+      `;
+    }
+
+    async function renderMermaidBlocks(container) {
+      const isDark = document.documentElement.classList.contains('dark');
+      initMermaid(isDark);
+      const codeBlocks = container.querySelectorAll('pre code');
+      for (const block of codeBlocks) {
+        if (block.innerText.startsWith('mermaid') || block.classList.contains('language-mermaid')) {
+          const rawMermaid = block.innerText.replace(/^mermaid\n?/, '').trim();
+          const mermaidCard = document.createElement('div');
+          mermaidCard.className = 'mermaid-card my-4 p-5 bg-[#F8FAFC] dark:bg-[#18181B] border border-[#E2E8F0] dark:border-[#27272A] rounded-[16px] overflow-x-auto flex justify-center items-center shadow-xs';
+          mermaidCard.setAttribute('data-mermaid-src', rawMermaid);
+          const mermaidDiv = document.createElement('div');
+          mermaidDiv.className = 'mermaid w-full text-center flex justify-center';
+          mermaidDiv.textContent = rawMermaid;
+          mermaidCard.appendChild(mermaidDiv);
+          block.parentElement.replaceWith(mermaidCard);
+        }
+      }
+      try {
+        await mermaid.run();
+      } catch (e) {
+        console.warn("Mermaid render note:", e);
+      }
+    }
+
+    const CODE_LANG_NAMES = {
+      py: 'python', python: 'python', python3: 'python',
+      js: 'javascript', javascript: 'javascript', ts: 'typescript', typescript: 'typescript',
+      sh: 'bash', bash: 'bash', shell: 'bash', console: 'bash',
+      c: 'c', cpp: 'c++', 'c++': 'c++', java: 'java', json: 'json', html: 'html', css: 'css',
+      sql: 'sql', txt: 'texto', text: 'texto', plaintext: 'texto'
+    };
+
+    function wrapCodeBlocks(html) {
+      return html.replace(/<pre><code(?: class="language-([^"]+)")?>([\s\S]*?)<\/code><\/pre>/g, (match, lang, body) => {
+        const key = (lang || '').toLowerCase();
+        if (key === 'mermaid' || /^mermaid\b/.test(body)) return match;   // los diagramas se renderizan aparte
+        const label = CODE_LANG_NAMES[key] || key || 'código';
+        return `<div class="code-block">` +
+          `<div class="code-block-header"><span class="code-lang">${escapeText(label)}</span>` +
+          `<button type="button" class="code-copy" onclick="copyCodeBlock(this)" title="Copiar código">` +
+          `<span class="material-symbols-outlined">content_copy</span><span class="code-copy-label">Copiar</span></button></div>` +
+          match +
+          `</div>`;
+      });
+    }
+
+    // Marca como "stuck" la barra de lenguaje del bloque de código cuando queda pegada arriba
+    (function initStickyCodeHeaders() {
+      let ticking = false;
+      function update() {
+        ticking = false;
+        const scroller = document.getElementById('chatContainer');
+        if (!scroller) return;
+        const top = scroller.getBoundingClientRect().top;
+        scroller.querySelectorAll('.code-block').forEach(block => {
+          const header = block.querySelector('.code-block-header');
+          if (!header) return;
+          const r = block.getBoundingClientRect();
+          // pegada: el bloque empezó por encima del borde superior y aún no termina
+          const stuck = r.top < top - 0.5 && r.bottom > top + header.offsetHeight;
+          header.classList.toggle('stuck', stuck);
+        });
+      }
+      function onScroll() {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        const scroller = document.getElementById('chatContainer');
+        if (scroller) scroller.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+      });
+    })();
+
+    function copyCodeBlock(btn) {
+      const block = btn.closest('.code-block');
+      const code = block ? block.querySelector('pre code') : null;
+      if (!code) return;
+      // En el celular (http://IP-local) no existe navigator.clipboard: usar respaldo
+      const write = (navigator.clipboard && window.isSecureContext)
+        ? navigator.clipboard.writeText(code.innerText)
+        : new Promise((resolve, reject) => {
+            const ta = document.createElement('textarea');
+            ta.value = code.innerText;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy') ? resolve() : reject(new Error('copy failed')); }
+            catch (e) { reject(e); }
+            finally { ta.remove(); }
+          });
+      write.then(() => {
+        const label = btn.querySelector('.code-copy-label');
+        const icon = btn.querySelector('.material-symbols-outlined');
+        if (label) label.textContent = 'Copiado';
+        if (icon) icon.textContent = 'check';
+        setTimeout(() => {
+          if (label) label.textContent = 'Copiar';
+          if (icon) icon.textContent = 'content_copy';
+        }, 1500);
+      }).catch(err => console.warn('No se pudo copiar el código:', err));
+    }
+
+    function renderMarkdownAndMath(rawMarkdown) {
+      if (!rawMarkdown) return '';
+      const displayMath = [];
+      const inlineMath = [];
+
+      // 1. Proteger fórmulas display $$ ... $$
+      let protectedText = rawMarkdown.replace(/\$\$([\s\S]+?)\$\$/g, (match, formula) => {
+        displayMath.push(formula.trim());
+        return `@@DISPLAYMATH_${displayMath.length - 1}@@`;
+      });
+
+      // 2. Proteger fórmulas en línea $ ... $
+      protectedText = protectedText.replace(/\$([^\$\n\r]+?)\$/g, (match, formula) => {
+        inlineMath.push(formula.trim());
+        return `@@INLINEMATH_${inlineMath.length - 1}@@`;
+      });
+
+      // 3. Parsear Markdown
+      let html = marked.parse(protectedText);
+
+      // 3.1 Bloques de código: barra superior con el lenguaje (sticky) + botón copiar
+      html = wrapCodeBlocks(html);
+
+      // Limpiar párrafos envolventes alrededor de bloques de matemáticas display
+      html = html.replace(/<p>\s*(@@DISPLAYMATH_\d+@@)\s*<\/p>/g, '$1');
+
+      // 4. Inyectar KaTeX
+      html = html.replace(/@@DISPLAYMATH_(\d+)@@/g, (match, idx) => {
+        const formula = displayMath[parseInt(idx, 10)] || '';
+        if (window.katex) {
+          try {
+            return `<div class="katex-display my-3 text-center overflow-x-auto shadow-2xs">${katex.renderToString(formula, { displayMode: true, throwOnError: false })}</div>`;
+          } catch (e) {
+            return `<div class="katex-display my-2 text-center text-[#0F172A] dark:text-[#FFFFFF] font-mono shadow-2xs">$$${formula}$$</div>`;
+          }
+        }
+        return `<div class="katex-display my-2 text-center text-[#0F172A] dark:text-[#FFFFFF] font-mono shadow-2xs">$$${formula}$$</div>`;
+      });
+
+      html = html.replace(/@@INLINEMATH_(\d+)@@/g, (match, idx) => {
+        const formula = inlineMath[parseInt(idx, 10)] || '';
+        if (window.katex) {
+          try {
+            return katex.renderToString(formula, { displayMode: false, throwOnError: false });
+          } catch (e) {
+            return `<span class="font-mono text-[#0F172A] dark:text-[#FFFFFF]">$${formula}$</span>`;
+          }
+        }
+        return `<span class="font-mono text-[#0F172A] dark:text-[#FFFFFF]">$${formula}$</span>`;
+      });
+
+      return html;
+    }
+
+    function setStreamingState(streaming) {
+      isStreaming = streaming;
+      document.getElementById('sendIcon').classList.toggle('hidden', streaming);
+      document.getElementById('spinIcon').classList.toggle('hidden', !streaming);
+      document.getElementById('sendBtn').disabled = streaming;
+    }
+
+    function scrollToBottom() {
+      const main = document.getElementById('chatContainer');
+      main.scrollTo({ top: main.scrollHeight, behavior: 'smooth' });
+    }
+
+    // ========================================================
+    // LÓGICA DEL SIMULADOR DE QUIZ M3 (PARAMETRIZADO)
+    // ========================================================
+    function openQuizModal() {
+      document.getElementById('quizModal').classList.remove('hidden');
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quizModal').classList.add('hidden');
+      resetQuizSetup();
+    }
+
+    function resetQuizSetup() {
+      const setup = document.getElementById('quizSetup');
+      const questionsContainer = document.getElementById('quizQuestionsContainer');
+      const footer = document.getElementById('quizFooter');
+      const progressWrapper = document.getElementById('quizProgressWrapper');
+      if (setup) setup.classList.remove('hidden');
+      if (questionsContainer) {
+        questionsContainer.classList.add('hidden');
+        questionsContainer.innerHTML = '';
+      }
+      if (footer) footer.classList.add('hidden');
+      if (progressWrapper) progressWrapper.classList.add('hidden');
+    }
+
+    function setQuizDifficulty(diff) {
+      document.getElementById('quizDifficulty').value = diff;
+      const diffs = ['facil', 'medio', 'dificil'];
+      diffs.forEach(d => {
+        const btn = document.getElementById(`quizDiff_${d}`);
+        if (!btn) return;
+        if (d === diff) {
+          btn.className = "quiz-diff-chip py-2 px-3 rounded-[14px] text-xs font-semibold bg-[#0F172A] dark:bg-[#FFFFFF] text-white dark:text-[#121214] border border-transparent transition text-center flex items-center justify-center space-x-1 shadow-2xs cursor-pointer";
+        } else {
+          btn.className = "quiz-diff-chip py-2 px-3 rounded-[14px] text-xs font-medium border border-[#E0E2EC] dark:border-[#27272A] text-[#444746] dark:text-[#A1A1AA] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] transition text-center flex items-center justify-center space-x-1 cursor-pointer";
+        }
+      });
+    }
+
+    function setQuizCount(count) {
+      document.getElementById('quizCount').value = count;
+      const counts = [5, 10, 15];
+      counts.forEach(c => {
+        const btn = document.getElementById(`quizCount_${c}`);
+        if (!btn) return;
+        if (c === count) {
+          btn.className = "quiz-count-chip py-2 px-3 rounded-[14px] text-xs font-semibold bg-[#0F172A] dark:bg-[#FFFFFF] text-white dark:text-[#121214] border border-transparent transition text-center shadow-2xs cursor-pointer";
+        } else {
+          btn.className = "quiz-count-chip py-2 px-3 rounded-[14px] text-xs font-medium border border-[#E0E2EC] dark:border-[#27272A] text-[#444746] dark:text-[#A1A1AA] hover:bg-[#F0F4F9] dark:hover:bg-[#27272A] transition text-center cursor-pointer";
+        }
+      });
+    }
+
+    async function startQuiz() {
+      const topic = document.getElementById('quizTopic').value;
+      const count = parseInt(document.getElementById('quizCount').value) || 5;
+      const diff = document.getElementById('quizDifficulty').value || 'medio';
+      const btn = document.getElementById('startQuizBtn');
+      const setup = document.getElementById('quizSetup');
+      const questionsContainer = document.getElementById('quizQuestionsContainer');
+      const footer = document.getElementById('quizFooter');
+      const progressWrapper = document.getElementById('quizProgressWrapper');
+      const progressBar = document.getElementById('quizProgressBar');
+
+      btn.disabled = true;
+      btn.innerText = `⏳ Generando ${count} preguntas (${diff.toUpperCase()})...`;
+
+      try {
+        const res = await fetch('/api/quiz/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tema: topic, num_preguntas: count, dificultad: diff })
+        });
+        const questions = await res.json();
+
+        if (!Array.isArray(questions) || questions.length === 0) {
+          throw new Error("No se recibieron preguntas del servidor.");
+        }
+
+        setup.classList.add('hidden');
+        questionsContainer.classList.remove('hidden');
+        footer.classList.remove('hidden');
+        if (progressWrapper) progressWrapper.classList.remove('hidden');
+        if (progressBar) progressBar.style.width = '0%';
+
+        window.currentQuizState = { total: questions.length, answered: 0, correct: 0 };
+        document.getElementById('quizScoreText').innerText = `Aciertos: 0 / ${questions.length} (0%)`;
+        document.getElementById('quizProgressLabel').innerText = `Preguntas respondidas: 0 / ${questions.length}`;
+        document.getElementById('quizLiveAccuracy').innerText = `0% precisión`;
+
+        questionsContainer.innerHTML = questions.map((q, idx) => `
+          <div class="p-4 rounded-[20px] bg-[#F0F4F9] dark:bg-[#141416] border border-[#E0E2EC] dark:border-[#27272A] space-y-3" id="quizCard_${q.id}">
+            <div class="flex items-start justify-between">
+              <span class="text-xs font-bold text-[#0F172A] dark:text-[#FFFFFF]">Pregunta ${idx + 1} de ${questions.length} • Nivel ${diff.toUpperCase()}</span>
+              <span class="text-[10px] text-[#747775] dark:text-[#A1A1AA] font-medium">${q.fuente}</span>
+            </div>
+            <p class="text-sm font-semibold text-[#1F1F1F] dark:text-[#F4F4F5]">${q.pregunta}</p>
+            <div class="space-y-2">
+              ${q.opciones.map(opt => `
+                <button
+                  type="button"
+                  onclick="selectQuizOption(${q.id}, '${opt.charAt(0)}', '${q.respuesta_correcta}', '${escapeHtml(q.explicacion)}')"
+                  class="quiz-opt-btn w-full text-left p-3 rounded-[14px] bg-white dark:bg-[#27272A] border border-[#E0E2EC] dark:border-[#3F3F46] hover:border-slate-400 dark:hover:border-zinc-400 hover:bg-slate-50 dark:hover:bg-[#323236] text-xs text-[#1F1F1F] dark:text-[#F4F4F5] transition shadow-xs cursor-pointer flex items-center justify-between"
+                  data-qid="${q.id}"
+                  data-letter="${opt.charAt(0)}"
+                >
+                  <span class="quiz-opt-text flex-1">${opt}</span>
+                  <span class="quiz-opt-badge hidden text-[11px] font-semibold px-2 py-0.5 rounded-full ml-2 flex-shrink-0"></span>
+                </button>
+              `).join('')}
+            </div>
+            <div id="feedback_${q.id}" class="hidden text-xs p-3.5 rounded-[14px] leading-relaxed"></div>
+          </div>
+        `).join('') + `
+          <div id="quizSummaryCard" class="hidden p-5 rounded-[22px] bg-gradient-to-br from-[#0F172A] to-[#1E293B] dark:from-[#18181B] dark:to-[#27272A] text-white border border-white/10 shadow-elevation-2 space-y-3 animate-m3FadeIn">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <span class="material-symbols-outlined text-amber-400 text-2xl">emoji_events</span>
+                <h4 class="font-bold text-sm tracking-tight">Evaluación Completada</h4>
+              </div>
+              <span id="summaryBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-white/15 backdrop-blur-xs">100% Dominio</span>
+            </div>
+            <p id="summaryText" class="text-xs text-gray-200 leading-relaxed"></p>
+            <div class="pt-2 flex items-center justify-end space-x-2">
+              <button onclick="resetQuizSetup()" class="px-4 py-2 rounded-full bg-white text-[#0F172A] text-xs font-bold hover:bg-gray-100 transition shadow-xs cursor-pointer">
+                🔄 Intentar otra evaluación
+              </button>
+            </div>
+          </div>
+        `;
+
+      } catch (err) {
+        alert("Falla al generar quiz: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "🚀 Iniciar Evaluación";
+      }
+    }
+
+    function selectQuizOption(qid, chosenLetter, correctLetter, explanation) {
+      const card = document.getElementById(`quizCard_${qid}`);
+      if (!card) return;
+      const buttons = card.querySelectorAll('.quiz-opt-btn');
+      const feedback = document.getElementById(`feedback_${qid}`);
+
+      const isCorrect = (chosenLetter.toUpperCase() === correctLetter.toUpperCase());
+
+      buttons.forEach(b => {
+        b.disabled = true;
+        b.classList.remove('hover:border-slate-400', 'dark:hover:border-zinc-400', 'hover:bg-slate-50', 'dark:hover:bg-[#323236]', 'cursor-pointer');
+        b.classList.add('cursor-default');
+
+        const bLetter = (b.getAttribute('data-letter') || '').toUpperCase();
+        const badge = b.querySelector('.quiz-opt-badge');
+
+        if (bLetter === correctLetter.toUpperCase()) {
+          // La correcta SIEMPRE en verde
+          b.className = "quiz-opt-btn w-full text-left p-3 rounded-[14px] bg-emerald-50 dark:bg-emerald-950/50 border-2 border-emerald-500 text-emerald-900 dark:text-emerald-100 font-semibold shadow-xs flex items-center justify-between transition";
+          if (badge) {
+            badge.classList.remove('hidden');
+            badge.className = "quiz-opt-badge text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white ml-2 flex-shrink-0 flex items-center space-x-1";
+            badge.innerHTML = `<span class="material-symbols-outlined text-xs">check</span><span>Correcta</span>`;
+          }
+        } else if (bLetter === chosenLetter.toUpperCase()) {
+          // Si el usuario eligió esta y fue incorrecta, en ROJO
+          b.className = "quiz-opt-btn w-full text-left p-3 rounded-[14px] bg-rose-50 dark:bg-rose-950/50 border-2 border-rose-500 text-rose-900 dark:text-rose-100 font-medium shadow-xs flex items-center justify-between transition";
+          if (badge) {
+            badge.classList.remove('hidden');
+            badge.className = "quiz-opt-badge text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-600 text-white ml-2 flex-shrink-0 flex items-center space-x-1";
+            badge.innerHTML = `<span class="material-symbols-outlined text-xs">close</span><span>Tu elección</span>`;
+          }
+        } else {
+          // Respuestas no seleccionadas: atenuadas
+          b.className = "quiz-opt-btn w-full text-left p-3 rounded-[14px] bg-white/60 dark:bg-[#27272A]/40 border border-[#E0E2EC]/50 dark:border-[#3F3F46]/50 text-xs text-[#747775] dark:text-[#A1A1AA] opacity-45 flex items-center justify-between transition";
+        }
+      });
+
+      if (isCorrect) {
+        window.currentQuizState.correct++;
+        feedback.className = "text-xs p-3.5 rounded-[14px] bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 block animate-m3FadeIn";
+        feedback.innerHTML = `<div class="flex items-start space-x-2"><span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-base flex-shrink-0">check_circle</span><div><b>¡Excelente respuesta!</b><br><span class="mt-1 block leading-relaxed">${explanation}</span></div></div>`;
+      } else {
+        feedback.className = "text-xs p-3.5 rounded-[14px] bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200 block animate-m3FadeIn";
+        feedback.innerHTML = `<div class="flex items-start space-x-2"><span class="material-symbols-outlined text-rose-600 dark:text-rose-400 text-base flex-shrink-0">cancel</span><div><b>Respuesta incorrecta.</b> La opción correcta es <b>(${correctLetter})</b>.<br><span class="mt-1 block leading-relaxed opacity-90">${explanation}</span></div></div>`;
+      }
+
+      window.currentQuizState.answered++;
+      updateQuizProgress();
+    }
+
+    function updateQuizProgress() {
+      const state = window.currentQuizState;
+      if (!state) return;
+
+      const progressPct = Math.round((state.answered / state.total) * 100);
+      const accuracyPct = state.answered > 0 ? Math.round((state.correct / state.answered) * 100) : 0;
+
+      const bar = document.getElementById('quizProgressBar');
+      const progressLabel = document.getElementById('quizProgressLabel');
+      const liveAccuracy = document.getElementById('quizLiveAccuracy');
+      const scoreText = document.getElementById('quizScoreText');
+
+      if (bar) bar.style.width = `${progressPct}%`;
+      if (progressLabel) progressLabel.innerText = `Preguntas respondidas: ${state.answered} / ${state.total}`;
+      if (liveAccuracy) liveAccuracy.innerText = `${accuracyPct}% precisión`;
+      if (scoreText) scoreText.innerText = `Aciertos: ${state.correct} / ${state.total} (${accuracyPct}%)`;
+
+      // Si se completaron todas las preguntas, mostrar el banner de resumen final
+      if (state.answered === state.total) {
+        const summaryCard = document.getElementById('quizSummaryCard');
+        const summaryBadge = document.getElementById('summaryBadge');
+        const summaryText = document.getElementById('summaryText');
+
+        if (summaryCard && summaryBadge && summaryText) {
+          summaryBadge.innerText = `${accuracyPct}% Dominio (${state.correct}/${state.total})`;
+          if (accuracyPct === 100) {
+            summaryText.innerHTML = "🏆 <b>¡Puntaje Perfecto!</b> Demuestras un dominio sobresaliente de los conceptos oficiales evaluados.";
+          } else if (accuracyPct >= 70) {
+            summaryText.innerHTML = "🎉 <b>¡Excelente trabajo!</b> Has aprobado con solvencia la evaluación académica sobre este tema.";
+          } else if (accuracyPct >= 50) {
+            summaryText.innerHTML = "📚 <b>¡Buen esfuerzo!</b> Superaste la mitad de los reactivos. Te sugerimos repasar los puntos clave en el chat con AulaIA.";
+          } else {
+            summaryText.innerHTML = "💡 <b>¡Sigue practicando!</b> Te recomendamos consultar a AulaIA en <i>Modo Intuitivo</i> para afianzar estos conceptos antes de la próxima evaluación.";
+          }
+          summaryCard.classList.remove('hidden');
+          summaryCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    }
+
+    function escapeText(str) {
+      return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>

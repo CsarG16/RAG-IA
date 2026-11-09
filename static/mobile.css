@@ -1,0 +1,250 @@
+/* ==========================================================================
+   📱 AulaIA — Adaptación responsive para celulares y tablets
+   Se carga después de los estilos de cada página, por eso puede sobrescribirlos.
+   ========================================================================== */
+
+/* --- Común: evitar scroll horizontal accidental y respetar el notch --- */
+html, body {
+  max-width: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* En pantallas táctiles no existe "hover": mostrar siempre renombrar/borrar chat */
+@media (hover: none) {
+  .group\/chat-item button {
+    opacity: 1 !important;
+  }
+}
+
+/* ==========================================================================
+   CHAT (/chat)
+   ========================================================================== */
+
+/* El botón hamburguesa (lo inserta mobile.js) solo existe en celular */
+#mobileMenuBtn {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  /* Altura real visible (descuenta barras del navegador móvil) */
+  body.aulaia-chat {
+    height: 100dvh !important;
+    width: 100vw !important;
+  }
+  body.aulaia-chat #canvasPrincipal {
+    height: 100dvh !important;
+  }
+
+  /* --- Sidebar como drawer deslizable --- */
+  body.aulaia-chat aside#sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100dvh !important;
+    width: min(85vw, 300px) !important;
+    z-index: 40 !important;
+    transform: translateX(-105%);
+    transition: transform 0.25s ease, background-color 0.2s ease !important;
+    background-color: var(--md-sys-color-surface-container, #F8FAFC) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+  }
+  html.dark body.aulaia-chat aside#sidebar {
+    background-color: #18181B !important;
+  }
+  body.aulaia-chat aside#sidebar.sidebar-expanded {
+    transform: translateX(0);
+  }
+  /* El overlay oscuro va debajo del drawer */
+  body.aulaia-chat #sidebarOverlay {
+    z-index: 35 !important;
+  }
+
+  /* Menús que en escritorio salen a la derecha del sidebar: en celular, debajo del botón */
+  body.aulaia-chat #modeDropdownMenu {
+    left: 0 !important;
+    top: calc(100% + 6px) !important;
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* --- Botón hamburguesa --- */
+  #mobileMenuBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    color: #1F1F1F;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  #mobileMenuBtn:active {
+    background-color: #E5E7EB;
+  }
+  html.dark #mobileMenuBtn {
+    color: #F4F4F5;
+  }
+  html.dark #mobileMenuBtn:active {
+    background-color: #27272A;
+  }
+  body.aulaia-chat #topNavbar {
+    height: 52px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  /* --- Área de mensajes --- */
+  body.aulaia-chat #chatContainer {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    padding-top: 0 !important;
+    padding-bottom: 190px !important;
+  }
+  body.aulaia-chat #welcomeView {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* --- Barra de entrada fija abajo --- */
+  body.aulaia-chat footer.gemini-floating-footer {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+  }
+  /* 16px evita el zoom automático de iOS al enfocar el campo */
+  body.aulaia-chat #userInput,
+  body.aulaia-chat input,
+  body.aulaia-chat select,
+  body.aulaia-chat textarea {
+    font-size: 16px !important;
+  }
+  body.aulaia-chat #chatForm {
+    padding-left: 14px !important;
+    padding-right: 8px !important;
+    border-radius: 24px !important;
+  }
+  body.aulaia-chat #topicDropdownMenu {
+    width: calc(100vw - 24px) !important;
+    max-width: 360px !important;
+    max-height: 55dvh !important;
+  }
+
+  /* --- Contenido de las respuestas: nada debe romper el ancho --- */
+  body.aulaia-chat .prose-custom {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+  body.aulaia-chat .prose-custom table {
+    display: block !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap;
+  }
+  body.aulaia-chat .prose-custom pre,
+  body.aulaia-chat .katex-display,
+  body.aulaia-chat .mermaid-card {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  body.aulaia-chat .mermaid-card svg {
+    max-width: none !important;
+  }
+  /* Avatares un poco más pequeños para ganar ancho */
+  body.aulaia-chat .bot-avatar {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  /* --- Quiz a pantalla completa --- */
+  body.aulaia-chat #quizModal {
+    padding: 0 !important;
+    align-items: stretch !important;
+  }
+  body.aulaia-chat #quizModal > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* ==========================================================================
+   LANDING (/)
+   ========================================================================== */
+@media (max-width: 480px) {
+  body.aulaia-landing header .max-w-7xl {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  /* Badge "v2.0 RAG" y subtítulo ocupan espacio que en celular no hay */
+  body.aulaia-landing header a[href="/"] .rounded-full,
+  body.aulaia-landing header a[href="/"] .leading-none {
+    display: none !important;
+  }
+  body.aulaia-landing header a[href="/chat"] {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
+  body.aulaia-landing h1 {
+    font-size: 2rem !important;
+    line-height: 1.15 !important;
+    word-break: break-word;
+  }
+  body.aulaia-landing section {
+    overflow-x: hidden;
+  }
+  body.aulaia-landing pre,
+  body.aulaia-landing table {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* ==========================================================================
+   Indicador de "arrastrar para recargar" (lo inserta mobile.js)
+   ========================================================================== */
+#pullRefreshIndicator {
+  position: fixed;
+  top: calc(8px + env(safe-area-inset-top));
+  left: 50%;
+  z-index: 60;
+  width: 38px;
+  height: 38px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+  opacity: 0;
+  transform: translate(-50%, -48px);
+  pointer-events: none;
+}
+#pullRefreshIndicator .material-symbols-outlined { font-size: 22px; }
+#pullRefreshIndicator.ready { color: #0F172A; border-color: #94A3B8; }
+#pullRefreshIndicator.spinning .material-symbols-outlined { animation: aulaiaPullSpin 0.7s linear infinite; }
+html.dark #pullRefreshIndicator {
+  background: #18181B;
+  color: #A1A1AA;
+  border-color: #3F3F46;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+html.dark #pullRefreshIndicator.ready { color: #FFFFFF; border-color: #71717A; }
+@keyframes aulaiaPullSpin { to { transform: rotate(360deg); } }
+
+/* En celular se oculta el texto de ayuda bajo el cuadro de preguntas */
+@media (max-width: 767px) {
+  body.aulaia-chat #footerHint {
+    display: none !important;
+  }
+}
